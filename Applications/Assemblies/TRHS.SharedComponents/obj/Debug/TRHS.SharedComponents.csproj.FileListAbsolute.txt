@@ -1,0 +1,5 @@
+C:\Users\User\Documents\GitHub\TRHS\Applications\Assemblies\TRHS.SharedComponents\bin\Debug\TRHS.SharedComponents.dll
+C:\Users\User\Documents\GitHub\TRHS\Applications\Assemblies\TRHS.SharedComponents\bin\Debug\TRHS.SharedComponents.pdb
+C:\Users\User\Documents\GitHub\TRHS\Applications\Assemblies\TRHS.SharedComponents\obj\Debug\TRHS.SharedComponents.csprojResolveAssemblyReference.cache
+C:\Users\User\Documents\GitHub\TRHS\Applications\Assemblies\TRHS.SharedComponents\obj\Debug\TRHS.SharedComponents.dll
+C:\Users\User\Documents\GitHub\TRHS\Applications\Assemblies\TRHS.SharedComponents\obj\Debug\TRHS.SharedComponents.pdb

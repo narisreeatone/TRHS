@@ -1,0 +1,160 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="TRHS" Class="TravelRequestHandlingDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Table Name="dbo.tCompanyDetails" Member="tCompanyDetails">
+    <Type Name="tCompanyDetail">
+      <Column Name="CompanyId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="CompanyName" Type="System.String" DbType="VarChar(200) NOT NULL" CanBeNull="false" />
+      <Column Name="CompanyUrl" Type="System.String" DbType="VarChar(200)" CanBeNull="true" />
+      <Column Name="CompanyAddress" Type="System.String" DbType="VarChar(2000) NOT NULL" CanBeNull="false" />
+      <Column Name="CompanyPhone" Type="System.String" DbType="VarChar(30)" CanBeNull="true" />
+      <Column Name="CompanyFax" Type="System.String" DbType="VarChar(30)" CanBeNull="true" />
+      <Column Name="ActionDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.tDepartments" Member="tDepartments">
+    <Type Name="tDepartment">
+      <Column Name="DepartmentId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="DepartmentName" Type="System.String" DbType="VarChar(200) NOT NULL" CanBeNull="false" />
+      <Column Name="ActionDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="tDepartment_tEmployeeDetail" Member="tEmployeeDetails" ThisKey="DepartmentId" OtherKey="DepartmentId" Type="tEmployeeDetail" />
+    </Type>
+  </Table>
+  <Table Name="dbo.tDesignation" Member="tDesignations">
+    <Type Name="tDesignation">
+      <Column Name="DesignationId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="DesignationName" Type="System.String" DbType="VarChar(200) NOT NULL" CanBeNull="false" />
+      <Column Name="ActionDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="tDesignation_tEmployeeDetail" Member="tEmployeeDetails" ThisKey="DesignationId" OtherKey="DesignationId" Type="tEmployeeDetail" />
+    </Type>
+  </Table>
+  <Table Name="dbo.tEmployeeAccessRights" Member="tEmployeeAccessRights">
+    <Type Name="tEmployeeAccessRight">
+      <Column Name="EmployeeAccessRightsId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="EmployeeDetailsId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="EmployeeRoleId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="ActionDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="tEmployeeDetail_tEmployeeAccessRight" Member="tEmployeeDetail" ThisKey="EmployeeDetailsId" OtherKey="EmployeeDetailsId" Type="tEmployeeDetail" IsForeignKey="true" />
+      <Association Name="tEmployeeRole_tEmployeeAccessRight" Member="tEmployeeRole" ThisKey="EmployeeRoleId" OtherKey="EmployeeRoleId" Type="tEmployeeRole" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.tEmployeeDetails" Member="tEmployeeDetails">
+    <Type Name="tEmployeeDetail">
+      <Column Name="EmployeeDetailsId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="EmployeeId" Type="System.String" DbType="VarChar(200) NOT NULL" CanBeNull="false" />
+      <Column Name="EmployeeName" Type="System.String" DbType="VarChar(200) NOT NULL" CanBeNull="false" />
+      <Column Name="EmployeeShortName" Type="System.String" DbType="VarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="EmailId" Type="System.String" DbType="VarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="MobileNumber" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="LandlineNumber" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="ExtnNumber" Type="System.String" DbType="VarChar(20)" CanBeNull="true" />
+      <Column Name="DateOfBirth" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="DesignationId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="DepartmentId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="ActionDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="tEmployeeDetail_tEmployeeAccessRight" Member="tEmployeeAccessRights" ThisKey="EmployeeDetailsId" OtherKey="EmployeeDetailsId" Type="tEmployeeAccessRight" />
+      <Association Name="tEmployeeDetail_tEmployeeTravelMode" Member="tEmployeeTravelModes" ThisKey="EmployeeDetailsId" OtherKey="EmployeeDetailsId" Type="tEmployeeTravelMode" />
+      <Association Name="tEmployeeDetail_tLogin" Member="tLogins" ThisKey="EmployeeDetailsId" OtherKey="EmployeeDetailsId" Type="tLogin" />
+      <Association Name="tEmployeeDetail_tTravelRequestComment" Member="tTravelRequestComments" ThisKey="EmployeeDetailsId" OtherKey="ReceiverId" Type="tTravelRequestComment" />
+      <Association Name="tEmployeeDetail_tTravelRequestComment1" Member="tTravelRequestComments1" ThisKey="EmployeeDetailsId" OtherKey="SenderId" Type="tTravelRequestComment" />
+      <Association Name="tEmployeeDetail_tTravelRequestMaster" Member="tTravelRequestMasters" ThisKey="EmployeeDetailsId" OtherKey="EmployeeDetailsId" Type="tTravelRequestMaster" />
+      <Association Name="tEmployeeDetail_tTravelRequestVersion" Member="tTravelRequestVersions" ThisKey="EmployeeDetailsId" OtherKey="TravelApproverId" Type="tTravelRequestVersion" />
+      <Association Name="tDepartment_tEmployeeDetail" Member="tDepartment" ThisKey="DepartmentId" OtherKey="DepartmentId" Type="tDepartment" IsForeignKey="true" />
+      <Association Name="tDesignation_tEmployeeDetail" Member="tDesignation" ThisKey="DesignationId" OtherKey="DesignationId" Type="tDesignation" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.tEmployeeRoles" Member="tEmployeeRoles">
+    <Type Name="tEmployeeRole">
+      <Column Name="EmployeeRoleId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="EmployeeRoleName" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="ActionDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="tEmployeeRole_tEmployeeAccessRight" Member="tEmployeeAccessRights" ThisKey="EmployeeRoleId" OtherKey="EmployeeRoleId" Type="tEmployeeAccessRight" />
+    </Type>
+  </Table>
+  <Table Name="dbo.tEmployeeTravelModes" Member="tEmployeeTravelModes">
+    <Type Name="tEmployeeTravelMode">
+      <Column Name="EmployeeTravelModeId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="EmployeeDetailsId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="TravelModeId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="IsActive" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="ActionDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="tEmployeeDetail_tEmployeeTravelMode" Member="tEmployeeDetail" ThisKey="EmployeeDetailsId" OtherKey="EmployeeDetailsId" Type="tEmployeeDetail" IsForeignKey="true" />
+      <Association Name="tTravelMode_tEmployeeTravelMode" Member="tTravelMode" ThisKey="TravelModeId" OtherKey="TravelModeId" Type="tTravelMode" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.tLogin" Member="tLogins">
+    <Type Name="tLogin">
+      <Column Name="LoginId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="UserName" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="LoginPassword" Type="System.String" DbType="VarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="EmployeeDetailsId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="LastLoginDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="IsRandomPwd" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="IsActive" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Association Name="tEmployeeDetail_tLogin" Member="tEmployeeDetail" ThisKey="EmployeeDetailsId" OtherKey="EmployeeDetailsId" Type="tEmployeeDetail" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.tTravelLog" Member="tTravelLogs">
+    <Type Name="tTravelLog">
+      <Column Name="TravelLogId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="LogMessage" Type="System.String" DbType="VarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="DetailException" Type="System.String" DbType="VarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="InnerException" Type="System.String" DbType="VarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="ClassName" Type="System.String" DbType="VarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="MethodName" Type="System.String" DbType="VarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ActionDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.tTravelModes" Member="tTravelModes">
+    <Type Name="tTravelMode">
+      <Column Name="TravelModeId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="TravelModeName" Type="System.String" DbType="VarChar(30) NOT NULL" CanBeNull="false" />
+      <Column Name="ActionDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="tTravelMode_tEmployeeTravelMode" Member="tEmployeeTravelModes" ThisKey="TravelModeId" OtherKey="TravelModeId" Type="tEmployeeTravelMode" />
+    </Type>
+  </Table>
+  <Table Name="dbo.tTravelRequestComments" Member="tTravelRequestComments">
+    <Type Name="tTravelRequestComment">
+      <Column Name="TravelRequestCommentsId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="TravelRequestVersionId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="SenderId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="ReceiverId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="Comments" Type="System.String" DbType="VarChar(3000) NOT NULL" CanBeNull="false" />
+      <Column Name="ActionDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="tEmployeeDetail_tTravelRequestComment" Member="tEmployeeDetail" ThisKey="ReceiverId" OtherKey="EmployeeDetailsId" Type="tEmployeeDetail" IsForeignKey="true" />
+      <Association Name="tEmployeeDetail_tTravelRequestComment1" Member="tEmployeeDetail1" ThisKey="SenderId" OtherKey="EmployeeDetailsId" Type="tEmployeeDetail" IsForeignKey="true" />
+      <Association Name="tTravelRequestVersion_tTravelRequestComment" Member="tTravelRequestVersion" ThisKey="TravelRequestVersionId" OtherKey="TravelRequestVersionId" Type="tTravelRequestVersion" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.tTravelRequestMaster" Member="tTravelRequestMasters">
+    <Type Name="tTravelRequestMaster">
+      <Column Name="TravelRequestMasterId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="RequestNumber" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="EmployeeDetailsId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="AttachmentPath" Type="System.String" DbType="VarChar(100)" CanBeNull="true" />
+      <Column Name="TravelRequestStatusId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="ActionDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="tTravelRequestMaster_tTravelRequestVersion" Member="tTravelRequestVersions" ThisKey="TravelRequestMasterId" OtherKey="TravelRequestMasterId" Type="tTravelRequestVersion" />
+      <Association Name="tEmployeeDetail_tTravelRequestMaster" Member="tEmployeeDetail" ThisKey="EmployeeDetailsId" OtherKey="EmployeeDetailsId" Type="tEmployeeDetail" IsForeignKey="true" />
+      <Association Name="tTravelRequestStatus_tTravelRequestMaster" Member="tTravelRequestStatus" ThisKey="TravelRequestStatusId" OtherKey="TravelRequestStatusId" Type="tTravelRequestStatus" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.tTravelRequestStatus" Member="tTravelRequestStatus">
+    <Type Name="tTravelRequestStatus">
+      <Column Name="TravelRequestStatusId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="TravelRequestName" Type="System.String" DbType="VarChar(20) NOT NULL" CanBeNull="false" />
+      <Column Name="ActionDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="tTravelRequestStatus_tTravelRequestMaster" Member="tTravelRequestMasters" ThisKey="TravelRequestStatusId" OtherKey="TravelRequestStatusId" Type="tTravelRequestMaster" />
+    </Type>
+  </Table>
+  <Table Name="dbo.tTravelRequestVersion" Member="tTravelRequestVersions">
+    <Type Name="tTravelRequestVersion">
+      <Column Name="TravelRequestVersionId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="TravelRequestMasterId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="TravelApproverId" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="ApproverOrder" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="ActionDate" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="tTravelRequestVersion_tTravelRequestComment" Member="tTravelRequestComments" ThisKey="TravelRequestVersionId" OtherKey="TravelRequestVersionId" Type="tTravelRequestComment" />
+      <Association Name="tTravelRequestMaster_tTravelRequestVersion" Member="tTravelRequestMaster" ThisKey="TravelRequestMasterId" OtherKey="TravelRequestMasterId" Type="tTravelRequestMaster" IsForeignKey="true" />
+      <Association Name="tEmployeeDetail_tTravelRequestVersion" Member="tEmployeeDetail" ThisKey="TravelApproverId" OtherKey="EmployeeDetailsId" Type="tEmployeeDetail" IsForeignKey="true" />
+    </Type>
+  </Table>
+</Database>

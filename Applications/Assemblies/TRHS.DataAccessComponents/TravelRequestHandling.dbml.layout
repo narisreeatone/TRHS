@@ -1,0 +1,188 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 14.25, 19.25" name="TravelRequestHandling">
+  <DataContextMoniker Name="/TravelRequestHandlingDataContext" />
+  <nestedChildShapes>
+    <classShape Id="30de2514-057b-4b4e-b758-b69ab61b1aa4" absoluteBounds="8.75, 3.75, 2, 2.1554996744791666">
+      <DataClassMoniker Name="/TravelRequestHandlingDataContext/tCompanyDetail" />
+      <nestedChildShapes>
+        <elementListCompartment Id="3834d052-3c9b-4cb6-bf0d-cdfc0a5e9efa" absoluteBounds="8.765, 4.21, 1.9700000000000002, 1.5954996744791665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="7d739566-448d-4487-b52c-759e90e21b21" absoluteBounds="0.75, 7, 2, 1.3862939453124996">
+      <DataClassMoniker Name="/TravelRequestHandlingDataContext/tDepartment" />
+      <nestedChildShapes>
+        <elementListCompartment Id="6341fb20-f536-41cf-bb69-29ede32a2733" absoluteBounds="0.765, 7.46, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="afe6f534-c977-47e5-a64c-6502cb4f81ff" absoluteBounds="0.75, 4, 2, 1.3862939453125005">
+      <DataClassMoniker Name="/TravelRequestHandlingDataContext/tDesignation" />
+      <nestedChildShapes>
+        <elementListCompartment Id="264e8195-8828-4c18-b406-2e84524d164e" absoluteBounds="0.765, 4.46, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="e17810a6-72bc-4895-8fdd-7be32d1ced77" absoluteBounds="6.25, 6.875, 2, 1.5785953776041657">
+      <DataClassMoniker Name="/TravelRequestHandlingDataContext/tEmployeeAccessRight" />
+      <nestedChildShapes>
+        <elementListCompartment Id="22284caa-2b7d-428b-8ff3-a537e5f07354" absoluteBounds="6.265, 7.335, 1.9700000000000002, 1.0185953776041665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="e24efe88-daed-4a68-85b8-b688bb6e8c0d" absoluteBounds="3.5, 6.125, 2, 3.1170068359375005">
+      <DataClassMoniker Name="/TravelRequestHandlingDataContext/tEmployeeDetail" />
+      <nestedChildShapes>
+        <elementListCompartment Id="bee093ac-28d5-4abc-beb7-c6ac51f32046" absoluteBounds="3.515, 6.585, 1.9700000000000002, 2.5570068359375" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="979bc607-322b-4688-b304-306a75ee0b00" absoluteBounds="3.5, 11, 2, 1.3862939453124987">
+      <DataClassMoniker Name="/TravelRequestHandlingDataContext/tEmployeeRole" />
+      <nestedChildShapes>
+        <elementListCompartment Id="3bafbfb9-07dd-4303-a95a-edbdbf8bcb44" absoluteBounds="3.515, 11.46, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="c9e8e631-ca40-43c9-b03a-c8072d46695a" absoluteBounds="6.25, 3.75, 2, 1.7708968098958327">
+      <DataClassMoniker Name="/TravelRequestHandlingDataContext/tEmployeeTravelMode" />
+      <nestedChildShapes>
+        <elementListCompartment Id="2372d160-fb92-4ca9-860c-0acf1f62ff83" absoluteBounds="6.265, 4.21, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="dffb69f6-8b5c-4127-8b32-0c9194016fdd" absoluteBounds="6.25, 16.875, 2, 2.1554996744791666">
+      <DataClassMoniker Name="/TravelRequestHandlingDataContext/tLogin" />
+      <nestedChildShapes>
+        <elementListCompartment Id="e5157515-2427-4271-b6c5-68e13bd77f9d" absoluteBounds="6.265, 17.335, 1.9700000000000002, 1.5954996744791665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="e96da82b-7928-46fb-ad4a-a493a86f797d" absoluteBounds="9.75, 0.75, 2, 2.1554996744791666">
+      <DataClassMoniker Name="/TravelRequestHandlingDataContext/tTravelLog" />
+      <nestedChildShapes>
+        <elementListCompartment Id="09bad0bb-26f7-4247-b42f-9c87b458d651" absoluteBounds="9.765, 1.21, 1.9700000000000002, 1.5954996744791665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="97f4330d-308e-45a8-a024-10732f264ab5" absoluteBounds="3.5, 3, 2, 1.3862939453125005">
+      <DataClassMoniker Name="/TravelRequestHandlingDataContext/tTravelMode" />
+      <nestedChildShapes>
+        <elementListCompartment Id="95b5da75-e60d-4a9a-b9bf-c15a5b2e9b54" absoluteBounds="3.515, 3.46, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="b12d3080-2dd8-4076-b80f-ca7004db5344" absoluteBounds="6.25, 9.625, 2, 1.9631982421874987">
+      <DataClassMoniker Name="/TravelRequestHandlingDataContext/tTravelRequestComment" />
+      <nestedChildShapes>
+        <elementListCompartment Id="ac27a1a4-ea8e-4ae0-ac61-0fe46c9f377e" absoluteBounds="6.265, 10.085, 1.9700000000000002, 1.4031982421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="f6c259cb-156c-47b6-9087-a6aeb07bbd43" absoluteBounds="9.25, 6.625, 2, 1.9631982421875005">
+      <DataClassMoniker Name="/TravelRequestHandlingDataContext/tTravelRequestMaster" />
+      <nestedChildShapes>
+        <elementListCompartment Id="d69dbfe3-5b9f-4111-b2b2-d2139de409cb" absoluteBounds="9.265, 7.085, 1.9700000000000002, 1.4031982421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="6375417b-7f45-4c88-bbfa-e80e0355b11d" absoluteBounds="6.5, 1, 2, 1.3862939453125003">
+      <DataClassMoniker Name="/TravelRequestHandlingDataContext/tTravelRequestStatus" />
+      <nestedChildShapes>
+        <elementListCompartment Id="ac9b5704-4026-4c20-bde0-0f9d2969e767" absoluteBounds="6.515, 1.46, 1.9700000000000002, 0.8262939453125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="b308fd68-8d34-4c8d-9fa8-f35c0090ed95" absoluteBounds="12, 6.75, 2, 1.7708968098958327">
+      <DataClassMoniker Name="/TravelRequestHandlingDataContext/tTravelRequestVersion" />
+      <nestedChildShapes>
+        <elementListCompartment Id="106ef934-b4b6-486b-8f01-e37ba6ed7926" absoluteBounds="12.015, 7.21, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(5.5 : 7.66429768880208); (6.25 : 7.66429768880208)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/TravelRequestHandlingDataContext/tEmployeeDetail/tEmployeeDetail_tEmployeeAccessRight" />
+      <nodes>
+        <classShapeMoniker Id="e24efe88-daed-4a68-85b8-b688bb6e8c0d" />
+        <classShapeMoniker Id="e17810a6-72bc-4895-8fdd-7be32d1ced77" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(2.75 : 7.69314697265625); (3.5 : 7.69314697265625)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/TravelRequestHandlingDataContext/tDepartment/tDepartment_tEmployeeDetail" />
+      <nodes>
+        <classShapeMoniker Id="7d739566-448d-4487-b52c-759e90e21b21" />
+        <classShapeMoniker Id="e24efe88-daed-4a68-85b8-b688bb6e8c0d" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(2.75 : 5.3862939453125); (3.125 : 5.7612939453125); (3.125 : 6.87782148632813); (3.5 : 6.87782148632813)]" fixedFrom="NotFixed" fixedTo="Algorithm">
+      <AssociationMoniker Name="/TravelRequestHandlingDataContext/tDesignation/tDesignation_tEmployeeDetail" />
+      <nodes>
+        <classShapeMoniker Id="afe6f534-c977-47e5-a64c-6502cb4f81ff" />
+        <classShapeMoniker Id="e24efe88-daed-4a68-85b8-b688bb6e8c0d" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(5.5 : 11); (5.875 : 10.625); (5.875 : 8.09019853320313); (6.25 : 8.09019853320313)]" fixedFrom="NotFixed" fixedTo="Algorithm">
+      <AssociationMoniker Name="/TravelRequestHandlingDataContext/tEmployeeRole/tEmployeeRole_tEmployeeAccessRight" />
+      <nodes>
+        <classShapeMoniker Id="979bc607-322b-4688-b304-306a75ee0b00" />
+        <classShapeMoniker Id="e17810a6-72bc-4895-8fdd-7be32d1ced77" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(5.5 : 6.125); (5.875 : 5.75); (5.875 : 5.89589680989583); (6.25 : 5.52089680989583)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <AssociationMoniker Name="/TravelRequestHandlingDataContext/tEmployeeDetail/tEmployeeDetail_tEmployeeTravelMode" />
+      <nodes>
+        <classShapeMoniker Id="e24efe88-daed-4a68-85b8-b688bb6e8c0d" />
+        <classShapeMoniker Id="c9e8e631-ca40-43c9-b03a-c8072d46695a" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(5.45076923076923 : 9.2420068359375); (5.81607443490112 : 9.60731204006939 : JumpStart); (5.93392556509888 : 9.72516317026715 : JumpEnd); (6.0625 : 9.85373760516827); (6.0625 : 17.9527498372396); (6.25 : 17.9527498372396)]" fixedFrom="NotFixed" fixedTo="Algorithm">
+      <AssociationMoniker Name="/TravelRequestHandlingDataContext/tEmployeeDetail/tEmployeeDetail_tLogin" />
+      <nodes>
+        <classShapeMoniker Id="e24efe88-daed-4a68-85b8-b688bb6e8c0d" />
+        <classShapeMoniker Id="dffb69f6-8b5c-4127-8b32-0c9194016fdd" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(5.5 : 4.06814697265625); (6.25 : 4.06814697265625)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/TravelRequestHandlingDataContext/tTravelMode/tTravelMode_tEmployeeTravelMode" />
+      <nodes>
+        <classShapeMoniker Id="97f4330d-308e-45a8-a024-10732f264ab5" />
+        <classShapeMoniker Id="c9e8e631-ca40-43c9-b03a-c8072d46695a" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(5.5 : 9.19277506670673); (5.6875 : 9.38027506670673); (5.6875 : 9.02927764513221); (5.81607443490112 : 9.15785208003333 : JumpStart); (5.93392556509888 : 9.27570321023109 : JumpEnd); (6.28322235486779 : 9.625)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <AssociationMoniker Name="/TravelRequestHandlingDataContext/tEmployeeDetail/tEmployeeDetail_tTravelRequestComment" />
+      <nodes>
+        <classShapeMoniker Id="e24efe88-daed-4a68-85b8-b688bb6e8c0d" />
+        <classShapeMoniker Id="b12d3080-2dd8-4076-b80f-ca7004db5344" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(5.5 : 9.21123660516827); (5.81607443490112 : 9.52731104006939 : JumpStart); (5.93392556509888 : 9.64516217026715 : JumpEnd); (5.96875 : 9.67998660516827); (5.96875 : 9.3754632023738); (6.25 : 9.6567132023738)]" fixedFrom="NotFixed" fixedTo="NotFixed">
+      <AssociationMoniker Name="/TravelRequestHandlingDataContext/tEmployeeDetail/tEmployeeDetail_tTravelRequestComment1" />
+      <nodes>
+        <classShapeMoniker Id="e24efe88-daed-4a68-85b8-b688bb6e8c0d" />
+        <classShapeMoniker Id="b12d3080-2dd8-4076-b80f-ca7004db5344" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(5.5 : 6.71875); (8.32291666666667 : 6.71875 : JumpStart); (8.48958333333333 : 6.71875 : JumpEnd); (9.25 : 6.71875)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/TravelRequestHandlingDataContext/tEmployeeDetail/tEmployeeDetail_tTravelRequestMaster" />
+      <nodes>
+        <classShapeMoniker Id="e24efe88-daed-4a68-85b8-b688bb6e8c0d" />
+        <classShapeMoniker Id="f6c259cb-156c-47b6-9087-a6aeb07bbd43" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(8.40625 : 2.3862939453125); (8.40625 : 8.55214680989583); (9.25 : 8.55214680989583)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/TravelRequestHandlingDataContext/tTravelRequestStatus/tTravelRequestStatus_tTravelRequestMaster" />
+      <nodes>
+        <classShapeMoniker Id="6375417b-7f45-4c88-bbfa-e80e0355b11d" />
+        <classShapeMoniker Id="f6c259cb-156c-47b6-9087-a6aeb07bbd43" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(13 : 8.52089680989583); (13 : 10.6065991210937); (8.25 : 10.6065991210937)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/TravelRequestHandlingDataContext/tTravelRequestVersion/tTravelRequestVersion_tTravelRequestComment" />
+      <nodes>
+        <classShapeMoniker Id="b308fd68-8d34-4c8d-9fa8-f35c0090ed95" />
+        <classShapeMoniker Id="b12d3080-2dd8-4076-b80f-ca7004db5344" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(11.25 : 7.63544840494792); (12 : 7.63544840494792)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/TravelRequestHandlingDataContext/tTravelRequestMaster/tTravelRequestMaster_tTravelRequestVersion" />
+      <nodes>
+        <classShapeMoniker Id="f6c259cb-156c-47b6-9087-a6aeb07bbd43" />
+        <classShapeMoniker Id="b308fd68-8d34-4c8d-9fa8-f35c0090ed95" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(5.5 : 8.89048415444712); (5.79166666666667 : 8.89048415444712 : JumpStart); (5.95833333333333 : 8.89048415444712 : JumpEnd); (12.4687475 : 8.89048415444712); (12.4687475 : 8.52089680989583)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/TravelRequestHandlingDataContext/tEmployeeDetail/tEmployeeDetail_tTravelRequestVersion" />
+      <nodes>
+        <classShapeMoniker Id="e24efe88-daed-4a68-85b8-b688bb6e8c0d" />
+        <classShapeMoniker Id="b308fd68-8d34-4c8d-9fa8-f35c0090ed95" />
+      </nodes>
+    </associationConnector>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>

@@ -1,0 +1,8 @@
+C:\Users\User\Documents\GitHub\TRHS\Applications\Assemblies\TRHS.DataAccessComponents\bin\Debug\TRHS.DataAccessComponents.dll
+C:\Users\User\Documents\GitHub\TRHS\Applications\Assemblies\TRHS.DataAccessComponents\bin\Debug\TRHS.DataAccessComponents.pdb
+C:\Users\User\Documents\GitHub\TRHS\Applications\Assemblies\TRHS.DataAccessComponents\obj\Debug\TRHS.DataAccessComponents.csprojResolveAssemblyReference.cache
+C:\Users\User\Documents\GitHub\TRHS\Applications\Assemblies\TRHS.DataAccessComponents\obj\Debug\TRHS.DataAccessComponents.dll
+C:\Users\User\Documents\GitHub\TRHS\Applications\Assemblies\TRHS.DataAccessComponents\obj\Debug\TRHS.DataAccessComponents.pdb
+C:\Users\User\Documents\GitHub\TRHS\Applications\Assemblies\TRHS.DataAccessComponents\bin\Debug\TRHS.DataAccessComponents.dll.config
+C:\Users\User\Documents\GitHub\TRHS\Applications\Assemblies\TRHS.DataAccessComponents\bin\Debug\TRHS.SharedComponents.dll
+C:\Users\User\Documents\GitHub\TRHS\Applications\Assemblies\TRHS.DataAccessComponents\bin\Debug\TRHS.SharedComponents.pdb

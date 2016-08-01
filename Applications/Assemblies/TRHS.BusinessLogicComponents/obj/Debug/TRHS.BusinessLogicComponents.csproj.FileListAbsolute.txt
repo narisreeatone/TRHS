@@ -1,0 +1,5 @@
+C:\Users\User\Documents\GitHub\TRHS\Applications\Assemblies\TRHS.BusinessLogicComponents\bin\Debug\TRHS.BusinessLogicComponents.dll
+C:\Users\User\Documents\GitHub\TRHS\Applications\Assemblies\TRHS.BusinessLogicComponents\bin\Debug\TRHS.BusinessLogicComponents.pdb
+C:\Users\User\Documents\GitHub\TRHS\Applications\Assemblies\TRHS.BusinessLogicComponents\obj\Debug\TRHS.BusinessLogicComponents.csprojResolveAssemblyReference.cache
+C:\Users\User\Documents\GitHub\TRHS\Applications\Assemblies\TRHS.BusinessLogicComponents\obj\Debug\TRHS.BusinessLogicComponents.dll
+C:\Users\User\Documents\GitHub\TRHS\Applications\Assemblies\TRHS.BusinessLogicComponents\obj\Debug\TRHS.BusinessLogicComponents.pdb
