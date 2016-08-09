@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" id="WebApp_ID" version="3.0">
+  <display-name>NagApp</display-name>
+  <welcome-file-list>
+    <welcome-file>login.jsp</welcome-file>
+  </welcome-file-list>
+  <context-param>
+    <param-name>driver</param-name>
+    <param-value>oracle.jdbc.OracleDriver</param-value>
+ </context-param> 
+ <context-param>
+    <param-name>con_string</param-name>
+    <param-value>jdbc:oracle:thin:@localhost:1521:XE</param-value>
+ </context-param> 
+ <context-param>
+    <param-name>username</param-name>
+    <param-value>nagarjuna</param-value>
+  </context-param>
+  <context-param>
+    <param-name>password</param-name>
+    <param-value>nagarjuna</param-value>
+  </context-param>
+  
+  
+  
+	
+  <!--<servlet>
+    <servlet-name>LoginServlet</servlet-name>
+    <servlet-class>LoginServlet</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>LoginServlet</servlet-name>
+    <url-pattern>/LoginServlet</url-pattern>
+  </servlet-mapping>
+  
+  <servlet>
+    <servlet-name>StoreTravelRequest</servlet-name>
+    <servlet-class>StoreTravelRequest</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>StoreTravelRequest</servlet-name>
+    <url-pattern>/StoreTravelRequest</url-pattern>
+  </servlet-mapping> -->
+</web-app>
