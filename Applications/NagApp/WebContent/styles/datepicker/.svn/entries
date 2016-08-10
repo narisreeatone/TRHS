@@ -1,0 +1,40 @@
+8
+
+dir
+9799
+http://10.180.1.22:8081/svn/tek-repository/Chatr/trunk/portalWeb/WebContent/resources/css/datepicker
+http://10.180.1.22:8081/svn/tek-repository
+
+
+
+2012-02-20T09:49:02.093388Z
+5892
+rami.reddy
+
+
+svn:special svn:externals svn:needs-lock
+
+
+
+
+
+
+
+
+
+
+
+89c3451c-abb2-da46-8ae1-ffeca62d2ccd
+
+jquery.ui.datepicker.css
+file
+
+
+
+
+2015-06-25T09:23:26.027836Z
+2d0e1a3cbb4c095865d1d65a35421187
+2012-02-20T09:49:02.093388Z
+5892
+rami.reddy
+

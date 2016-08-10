@@ -12,5 +12,7 @@
 	<classpathentry kind="lib" path="D:/ProgramFiles/oracle/app/oracle/product/11.2.0/server/jdbc/lib/ojdbc6.jar"/>
 	<classpathentry kind="lib" path="D:/Nagarjuna/drivers/jstl.jar"/>
 	<classpathentry kind="lib" path="D:/Nagarjuna/drivers/mail.jar"/>
+	<classpathentry kind="lib" path="D:/Nagarjuna/drivers/commons-lang-2.4.jar"/>
+	<classpathentry kind="lib" path="D:/Nagarjuna/drivers/gson-1.3.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

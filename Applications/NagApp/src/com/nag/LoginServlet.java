@@ -44,22 +44,20 @@ public class LoginServlet extends HttpServlet {
 		// TODO Auto-generated method stub		
 		DataBaseConnection dbHandler = new DataBaseConnection();
 		ServletContext application = getServletContext();
-		HttpSession session = request.getSession();	
+		HttpSession session = request.getSession(true);	
 		RequestDispatcher rd;
-		
-		System.out.println("Login servlet");		
 		
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");				
-		EmployeeDetails empDetails = dbHandler.getEmployeeDetails(username, password);
+		EmployeeDetails empDetails = dbHandler.getEmployeeDetailsByLogin(username, password);
 		
-		if(empDetails != null){
-			System.out.println("11111111111");
+		if(empDetails != null){			
 			rd = request.getRequestDispatcher("employeeHome.jsp");
-			session.setAttribute("empDetails", empDetails);
+			session.setAttribute("loginUserDetails", empDetails);
+			session.setAttribute("isUserLoggedIn", "true");
+			session.setAttribute("isAdmin", false);
 			rd.forward(request,response);
-		}else{
-			System.out.println("2222222222");
+		}else{			
 			rd = request.getRequestDispatcher("login.jsp");
 			rd.forward(request,response);
 		}

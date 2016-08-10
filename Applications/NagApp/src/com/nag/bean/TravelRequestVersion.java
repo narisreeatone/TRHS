@@ -9,6 +9,8 @@ public class TravelRequestVersion {
 	private String travelApproverId;
 	private String approverOrder;
 	private Date approvedDate;
+	private Date createdDate;
+	
 	public String getTravelRequestVersionId() {
 		return travelRequestVersionId;
 	}
@@ -39,6 +41,11 @@ public class TravelRequestVersion {
 	public void setApprovedDate(Date approvedDate) {
 		this.approvedDate = approvedDate;
 	}
-
-	
+	public Date getCreatedDate() {
+		return createdDate;
+	}
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate = createdDate;
+	}
+		
 }
