@@ -41,13 +41,13 @@
 			<div class="container">
 				<div class="menuSection">						
 					<ul class="menuItems">
-						<li><a href="">Employee Profile</a></li>
+						<li><a href="employeeHome.jsp">Employee Profile</a></li>
 						<li><a href="NewTravelRequest.jsp">New Travel Request</a></li>
-						<li><a href="">Travel Request Approved</a></li>
+						<li><a href="GetApprovedRequest">Travel Request Approved</a></li>
 						<li><a href="GetPendingRequest">Travel Request Pending</a></li>
-						<li><a href="">Travel Request Rejected</a></li>
-						<li><a href="">Approve Travel Request</a></li>
-						<li><a href="">Approved Travel Requests by you</a></li>
+						<li><a href="GetRejectedRequest">Travel Request Rejected</a></li>
+						<li><a href="GetApproveRequest">Approve Travel Request</a></li>
+						<li><a href="GetApprovedReqByEmp">Approved Travel Requests by you</a></li>
 						<li><a href="LogOut">Log out</a></li>
 					</ul>						
 				</div>

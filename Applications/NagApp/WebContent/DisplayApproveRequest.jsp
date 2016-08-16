@@ -28,11 +28,6 @@
 	text-align:center;
 	padding-top:30px;
 }
-.pedningReqTable{
-	float:left;
-	width:100%;
-	
-}
 .HeaderTd{
 	font-weight:bold;
 	padding:5px 5px 5px 0;
@@ -63,29 +58,29 @@
 				</div>
 				
 				<div class="contentSection">
-					<div class="heading">Pending Requests</div>
 					<div class="">
 						<table class="pedningReqTable">
 							<tbody>
 								<tr>
 									<td class="HeaderTd" style="width:8%;">S No</td>
+									<td class="HeaderTd">Requested By</td>
 									<td class="HeaderTd">Source</td>
 									<td class="HeaderTd">Destination</td>
-									<td class="HeaderTd">Travel Date</td>
-									<td class="HeaderTd">Travel Mode</td>
+									<td class="HeaderTd">Travel Date</td>									
 									<td class="HeaderTd">Expenses</td>
 									<td class="HeaderTd">Date</td>																		
 								</tr>
 								<c:set var="count" value="0"></c:set>
-								<c:forEach items="${pendingRequestMap}" var="pendingRequest" varStatus="status">
+								<c:forEach items="${approveRequestMap}" var="approveRequest" varStatus="status">
 								<tr>
 									<td class="dataTd">${count + 1}</td>	
-									<td class="dataTd">${pendingRequest.value.source}</td>
-									<td class="dataTd">${pendingRequest.value.destination}</td>
-									<td class="dataTd">${pendingRequest.value.travelDate}</td>
-									<td class="dataTd">${pendingRequest.value.travelModeId}</td>
-									<td class="dataTd">${pendingRequest.value.expenses}</td>
-									<td class="dataTd">${pendingRequest.value.createdDate}</td>																
+									<td class="dataTd">${approveRequest.value.requestedEmpDetails.employeeName}</td>
+									<td class="dataTd">${approveRequest.value.source}</td>
+									<td class="dataTd">${approveRequest.value.destination}</td>
+									<td class="dataTd">${approveRequest.value.travelDate}</td>									
+									<td class="dataTd">${approveRequest.value.expenses}</td>
+									<td class="dataTd">${approveRequest.value.createdDate}</td>
+									<td class="dataTd"><a href="TravelRequestDetails?travelRequestMasterId=${approveRequest.value.travelRequestMasterId}">Details</a></td>					
 								</tr>
 								</c:forEach>
 							</tbody>

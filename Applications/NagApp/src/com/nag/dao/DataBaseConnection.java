@@ -9,7 +9,7 @@ import com.nag.formbean.*;
 
 public class DataBaseConnection {
 	private Connection conn = null;
-	
+	RequestStatus requestStatus = new RequestStatus();
 	public Connection getDBConnection(){		
 		try{
 			/*Driver myDriver = new oracle.jdbc.driver.OracleDriver();
@@ -92,7 +92,7 @@ public class DataBaseConnection {
 		return empDetails;
 	}
 	
-	public Map<String, Object> getEmployeesDetails(){
+	public Map<String, Object> getAllEmployeesDetails(){
 		conn = getDBConnection();
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
@@ -133,7 +133,7 @@ public class DataBaseConnection {
 		return map;
 	}
 	
-	public List<String> getEmployeeDetailsByName(String empName){
+	public List<String> getEmployeeName(String empName){
 		conn = getDBConnection();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
@@ -161,9 +161,54 @@ public class DataBaseConnection {
 		return empNamesList;
 	}
 	
+	public EmployeeDetails getEmployeeDetailsById(String empDetailsId){
+		System.out.println("emp details By id:::"+empDetailsId);
+		conn = getDBConnection();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		EmployeeDetails empDetails = null;	
+		if( empDetailsId != null){
+			try{
+				ps=conn.prepareStatement("select Emp.*, Dept.DEPARTMENTNAME, Desi.DESIGNATIONNAME   from TEMPLOYEEDETAILS Emp, TDEPARTMENTS Dept, TDESIGNATION Desi where Emp.DESIGNATIONID = Desi.DESIGNATIONID AND Emp.DEPARTMENTID = Dept.DEPARTMENTID and EMPLOYEEDETAILSID = ?");
+				ps.setString(1, empDetailsId);			
+				rs = ps.executeQuery();				
+				while(rs.next()){
+					empDetails = new EmployeeDetails();
+					empDetails.setEmployeeId(rs.getString("EMPLOYEEID"));					
+					empDetails.setEmployeeDetailsId(rs.getString("EMPLOYEEDETAILSID"));					
+					empDetails.setEmployeeName(rs.getString("EMPLOYEENAME"));					
+					empDetails.setEmailId(rs.getString("EMAILID"));					
+					empDetails.setMobileNumber(rs.getString("MOBILENUMBER"));					
+					empDetails.setLandLineNumber(rs.getString("LANDLINENUMBER"));
+					empDetails.setExtNumber(rs.getString("EXTNNUMBER"));					
+					empDetails.setDesignitionId(rs.getString("DESIGNATIONID"));
+					empDetails.setDeptId(rs.getString("DEPARTMENTID"));
+					empDetails.setDepartmentName(rs.getString("DEPARTMENTNAME"));
+					empDetails.setDesignationName(rs.getString("DESIGNATIONNAME"));
+					
+					empDetails.setDob(rs.getDate("DATEOFBIRTH"));
+					empDetails.setCreatedDate(rs.getDate("ACTIONDATE"));					
+				}
+			}catch(Exception e){
+				System.out.println("exception in get employee query:::"+e.getMessage());
+			}
+			finally{
+				try{
+					ps.close();
+					rs.close();
+					conn.close();
+				}catch(Exception e){}
+			}			
+		}
+		return empDetails;
+	}
+	
+	
+	@SuppressWarnings("resource")
 	public boolean saveTravelRequestForm(TravelRequestForm requestForm){
 		System.out.println("saving travel request form");
 		PreparedStatement ps = null;
+		PreparedStatement ps1 = null;
 		PreparedStatement ps2 = null;
 		ResultSet rs = null;
 		boolean status = false;
@@ -186,27 +231,31 @@ public class DataBaseConnection {
 			ps.setString(6, requestForm.getPurpose());
 			ps.setString(7, requestForm.getEmployeeId());
 			ps.setString(8, requestForm.getAttachmentPath());
-			ps.setString(9, "N");
+			ps.setString(9, "3");
 			ps.setDate(10, new java.sql.Date(requestForm.getTravelDate().getTime()));
 			ps.executeQuery();		
 			System.out.println("saving travel request master data");
 			
 			//insert data into travel version table
-			PreparedStatement ps1 = conn.prepareStatement("select max(TRAVELREQUESTVERSIONID) from TTRAVELREQUESTVERSION");
+			ps1 = conn.prepareStatement("select max(TRAVELREQUESTVERSIONID) from TTRAVELREQUESTVERSION");
 			ResultSet rs1 = ps1.executeQuery();
 			Integer requestVersionId = 0;
 			if(rs1.next()){
 				if(rs1.getString(1) != null)
 					requestVersionId = Integer.parseInt(rs1.getString(1));
 			}
-			String aproveEmpIds[] = requestForm.getApproveEmpId();
-			ps2 = conn.prepareStatement("insert into TTRAVELREQUESTVERSION(TRAVELREQUESTVERSIONID,TRAVELREQUESTMASTERID,TRAVELAPPROVERID,APPROVERORDER,ACTIONDATE) values (?,?,?,?,sysdate)");
-			for(int i=0; i < aproveEmpIds.length; i++){
+			String aproveEmpOrder[] = requestForm.getApproveEmpOrder();
+			ps2 = conn.prepareStatement("insert into TTRAVELREQUESTVERSION(TRAVELREQUESTVERSIONID,TRAVELREQUESTMASTERID,TRAVELAPPROVERID,APPROVERORDER,REQSTATUSID,ACTIONDATE) values (?,?,?,?,?,sysdate)");
+			//while()
+			for(int i=0; i < aproveEmpOrder.length; i++){
+				String[] empIdAndOrder = aproveEmpOrder[i].split("-");
 				requestVersionId= requestVersionId + 1;
 				ps2.setString(1, requestVersionId.toString());
 				ps2.setString(2, requestMasterId.toString());
-				ps2.setString(3, aproveEmpIds[i]);
-				ps2.setInt(4, 0);
+				ps2.setString(3, empIdAndOrder[0]);
+				System.out.println("emp appove order:::"+empIdAndOrder[1]);
+				ps2.setInt(4, Integer.parseInt(empIdAndOrder[1]));
+				ps2.setString(5, "3");
 				ps2.executeQuery();
 			}
 			System.out.println("saving travel request version");
@@ -217,6 +266,7 @@ public class DataBaseConnection {
 		finally{
 			try{
 				ps.close();
+				ps1.close();
 				ps2.close();
 				conn.close();
 			}catch(Exception e){}
@@ -224,19 +274,19 @@ public class DataBaseConnection {
 		return status;
 	}
 	
-	public TravelRequestMaster getPendingRequest(String empDetailsId){
-		Map<String, Object> map = new HashMap<String, Object>();
+	public Map<String, TravelRequestMaster> getPendingRequestForEmployee(String empDetailsId){
+		Map<String, TravelRequestMaster> reqMasterMap = new HashMap<String, TravelRequestMaster>();
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		TravelRequestMaster reqMaster = null;
 		System.out.println("begin - get pending req db query:::empDetailsId:::"+empDetailsId);
 		try{
 			conn = getDBConnection();
-			ps = conn.prepareStatement("select * from TTRAVELREQUESTMASTER where TRAVELREQUESTSTATUS = 'N' and EMPLOYEEDETAILSID = ?");
-			//PreparedStatement ps=conn.prepareStatement("select TRAVELREQUESTMASTERID from TTRAVELREQUESTMASTER");
-			ps.setString(1, empDetailsId);			
+			ps = conn.prepareStatement("select * from TTRAVELREQUESTMASTER where TRAVELREQUESTSTATUS = '3' and EMPLOYEEDETAILSID = ? ORDER BY ACTIONDATE");			
+ 			ps.setString(1, empDetailsId);			
 			rs = ps.executeQuery();				
 			while(rs.next()){
+				reqMaster = new TravelRequestMaster();
 				String reqMasterId = rs.getString("TRAVELREQUESTMASTERID");
 				reqMaster = new TravelRequestMaster();
 				reqMaster.setTravelRequestMasterId(reqMasterId);
@@ -255,7 +305,7 @@ public class DataBaseConnection {
 				
 				TravelRequestVersion reqVersion = null;
 				PreparedStatement ps1 = conn.prepareStatement("select * from TTRAVELREQUESTVERSION where TRAVELREQUESTMASTERID = ?");
-				ps.setString(1, reqMasterId);			
+				ps1.setString(1, reqMasterId);			
 				ResultSet rs1 = ps1.executeQuery();	
 				List<TravelRequestVersion> reqVersionList = new ArrayList<TravelRequestVersion>();
 				while(rs1.next()){
@@ -264,11 +314,12 @@ public class DataBaseConnection {
 					reqVersion.setTravelRequestMasterId(reqMasterId);
 					reqVersion.setTravelApproverId(rs1.getString("TRAVELAPPROVERID"));
 					reqVersion.setApproverOrder(rs1.getString("APPROVERORDER"));
-					reqVersion.setApprovedDate(rs.getDate("APPROVEDDATE"));
-					reqVersion.setCreatedDate(rs1.getTimestamp("ACTIONDATE"));
+					reqVersion.setActionDate(rs1.getDate("ACTIONDATE"));
+					reqVersion.setStatusId(rs1.getString("REQSTATUSID"));
 					reqVersionList.add(reqVersion);
 				}
 				reqMaster.setReqVersionList(reqVersionList);
+				reqMasterMap.put(reqMasterId, reqMaster);
 			}
 		}catch(Exception e){
 			System.out.println("exception in get req master table query:::"+e.getMessage());
@@ -281,10 +332,191 @@ public class DataBaseConnection {
 			}catch(Exception e){}
 		}	
 		System.out.println("end - get pending req db query");
+		return reqMasterMap;
+	}
+	
+	public Map<String, TravelRequestMaster> getApproveRequestForEmployee(String empDetailsId){
+		Map<String, TravelRequestMaster> reqMasterMap = new HashMap<String, TravelRequestMaster>();
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		TravelRequestMaster reqMaster = null;
+		System.out.println("begin - get approve req db query:::empDetailsId:::"+empDetailsId);
+		try{
+			conn = getDBConnection();
+			ps = conn.prepareStatement("select TM.* from TTRAVELREQUESTMASTER TM, TTRAVELREQUESTVERSION TV where TM.TRAVELREQUESTSTATUS = '3' and TV.TRAVELREQUESTMASTERID = TM.TRAVELREQUESTMASTERID and TV.TRAVELAPPROVERID = ? ORDER BY TM.ACTIONDATE");			
+ 			ps.setString(1, empDetailsId);
+ 			ps.setString(2, empDetailsId);
+			rs = ps.executeQuery();				
+						
+			while(rs.next()){
+				reqMaster = new TravelRequestMaster();
+				String reqMasterId = rs.getString("TRAVELREQUESTMASTERID");
+				reqMaster = new TravelRequestMaster();
+				reqMaster.setTravelRequestMasterId(reqMasterId);
+				reqMaster.setSource(rs.getString("SOURCE"));
+				reqMaster.setDestination(rs.getString("DESTINATION"));
+				reqMaster.setTravelModeId(rs.getString("TRAVELMODEID"));
+				reqMaster.setExpenses(rs.getString("EXPENSES"));
+				reqMaster.setPurpose(rs.getString("PURPOSE"));
+				reqMaster.setEmployeeDetailsId(rs.getString("EMPLOYEEDETAILSID"));				
+				reqMaster.setAttachmentPath(rs.getString("ATTACHMENTPATH"));
+				reqMaster.setTravelRequestStatus(rs.getString("TRAVELREQUESTSTATUS"));
+				reqMaster.setCreatedDate(rs.getDate("ACTIONDATE"));
+				reqMaster.setTravelDate(rs.getDate("TRAVELDATE"));
+				
+				/*System.out.println("reqMasterId:::"+reqMasterId);
+				
+				TravelRequestVersion reqVersion = null;
+				PreparedStatement ps1 = conn.prepareStatement("select * from TTRAVELREQUESTVERSION where TRAVELREQUESTMASTERID = ?");
+				ps1.setString(1, reqMasterId);			
+				ResultSet rs1 = ps1.executeQuery();	
+				List<TravelRequestVersion> reqVersionList = new ArrayList<TravelRequestVersion>();
+				while(rs1.next()){
+					reqVersion = new TravelRequestVersion();
+					reqVersion.setTravelRequestVersionId(rs1.getString("TRAVELREQUESTVERSIONID"));
+					reqVersion.setTravelRequestMasterId(reqMasterId);
+					reqVersion.setTravelApproverId(rs1.getString("TRAVELAPPROVERID"));
+					reqVersion.setApproverOrder(rs1.getString("APPROVERORDER"));
+					reqVersion.setActionDate(rs1.getDate("ACTIONDATE"));
+					reqVersion.setStatusId(rs1.getString("REQSTATUSID"));
+					reqVersionList.add(reqVersion);
+				}
+				reqMaster.setReqVersionList(reqVersionList);*/
+				EmployeeDetails empDetails = getEmployeeDetailsById(reqMaster.getEmployeeDetailsId());
+				System.out.println("emp name:::"+empDetails.getEmployeeName());
+				reqMaster.setRequestedEmpDetails(empDetails);
+				reqMasterMap.put(reqMasterId, reqMaster);
+			}
+		}catch(Exception e){
+			System.out.println("exception in get req master table query:::"+e.getMessage());
+		}
+		finally{
+			try{
+				ps.close();
+				rs.close();
+				conn.close();
+			}catch(Exception e){}
+		}	
+		System.out.println("end - get approve req db query");
+		return reqMasterMap;
+	}
+	
+	public TravelRequestMaster getTravelRequestDetails(String travelRequestMasterId){		
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		TravelRequestMaster reqMaster = null;
+		System.out.println("begin - get req details db query:::travelRequestMasterId:::"+travelRequestMasterId);
+		try{
+			conn = getDBConnection();
+			ps = conn.prepareStatement("select * from TTRAVELREQUESTMASTER where TRAVELREQUESTMASTERID = ?");			
+ 			ps.setString(1, travelRequestMasterId);			
+			rs = ps.executeQuery();				
+						
+			while(rs.next()){
+				reqMaster = new TravelRequestMaster();
+				String reqMasterId = rs.getString("TRAVELREQUESTMASTERID");
+				reqMaster = new TravelRequestMaster();
+				reqMaster.setTravelRequestMasterId(reqMasterId);
+				reqMaster.setSource(rs.getString("SOURCE"));
+				reqMaster.setDestination(rs.getString("DESTINATION"));
+				reqMaster.setTravelModeId(rs.getString("TRAVELMODEID"));
+				reqMaster.setExpenses(rs.getString("EXPENSES"));
+				reqMaster.setPurpose(rs.getString("PURPOSE"));
+				reqMaster.setEmployeeDetailsId(rs.getString("EMPLOYEEDETAILSID"));				
+				reqMaster.setAttachmentPath(rs.getString("ATTACHMENTPATH"));
+				reqMaster.setTravelRequestStatus(rs.getString("TRAVELREQUESTSTATUS"));
+				reqMaster.setCreatedDate(rs.getDate("ACTIONDATE"));
+				reqMaster.setTravelDate(rs.getDate("TRAVELDATE"));
+				
+				System.out.println("reqMasterId:::"+reqMasterId);
+				
+				TravelRequestVersion reqVersion = null;
+				PreparedStatement ps1 = conn.prepareStatement("select * from TTRAVELREQUESTVERSION where TRAVELREQUESTMASTERID = ? ORDER BY APPROVERORDER");
+				ps1.setString(1, reqMasterId);			
+				ResultSet rs1 = ps1.executeQuery();	
+				List<TravelRequestVersion> reqVersionList = new ArrayList<TravelRequestVersion>();
+				while(rs1.next()){
+					reqVersion = new TravelRequestVersion();
+					reqVersion.setTravelRequestVersionId(rs1.getString("TRAVELREQUESTVERSIONID"));
+					reqVersion.setTravelRequestMasterId(reqMasterId);
+					String approverEmpId = rs1.getString("TRAVELAPPROVERID");
+					reqVersion.setTravelApproverId(approverEmpId);
+					reqVersion.setApproverOrder(rs1.getString("APPROVERORDER"));
+					reqVersion.setActionDate(rs1.getDate("ACTIONDATE"));
+					reqVersion.setStatusId(rs1.getString("REQSTATUSID"));
+					
+					EmployeeDetails approverEmpDetails = getEmployeeDetailsById(approverEmpId);
+					reqVersion.setApproverEmpDetails(approverEmpDetails);					
+					reqVersionList.add(reqVersion);
+				}
+				reqMaster.setReqVersionList(reqVersionList);
+				EmployeeDetails empDetails = getEmployeeDetailsById(reqMaster.getEmployeeDetailsId());
+				System.out.println("emp name:::"+empDetails.getEmployeeName());
+				reqMaster.setRequestedEmpDetails(empDetails);				
+			}
+		}catch(Exception e){
+			System.out.println("exception in get req master table query:::"+e.getMessage());
+		}
+		finally{
+			try{
+				ps.close();
+				rs.close();
+				conn.close();
+			}catch(Exception e){}
+		}	
+		System.out.println("end - get approve req db query");
 		return reqMaster;
 	}
-	/*public boolean insertTravelRequest(){
-		
-	}*/
-
+	
+	public boolean updateTravelRequest(String action, String travelReqVersionId, String approverEmpId){
+		PreparedStatement ps = null;
+		PreparedStatement ps1 = null;
+		PreparedStatement ps2 = null;
+		ResultSet rs = null;
+		TravelRequestMaster reqMaster = null;
+		boolean updateStatus = false;
+		System.out.println("begin - get req version update db query:::travelReqVersionId:::"+travelReqVersionId);
+		try{
+			conn = getDBConnection();
+			ps = conn.prepareStatement("update TTRAVELREQUESTVERSION set REQSTATUSID = ?, ACTIONDATE = sysdate where TRAVELREQUESTVERSIONID = ?");
+			if("approve".equalsIgnoreCase(action)){
+				ps.setString(1, requestStatus.APPROVED);
+			}else if("reject".equalsIgnoreCase(action)){
+				ps.setString(1, requestStatus.REJECTED);
+			}else{
+				ps.setString(1, requestStatus.PENDING);	
+			} 			
+ 			ps.setString(2, travelReqVersionId);						
+ 			ps.executeQuery();
+ 			
+			ps1 = conn.prepareStatement("select REQSTATUSID, TRAVELREQUESTMASTERID from TTRAVELREQUESTVERSION where TRAVELREQUESTMASTERID = (select TRAVELREQUESTMASTERID from TTRAVELREQUESTVERSION where TRAVELREQUESTVERSIONID = ?)");
+			ps1.setString(1, travelReqVersionId);			
+			rs = ps1.executeQuery();
+			boolean isTravelRequestVersionStatus = false;			
+			while(rs.next()){				
+				if(rs.getString("REQSTATUSID") == requestStatus.APPROVED)
+					isTravelRequestVersionStatus = true;
+				else
+					break;
+			}
+			if(isTravelRequestVersionStatus){
+				ps2 = conn.prepareStatement("update TTRAVELREQUESTMASTER set TRAVELREQUESTSTATUS = ?, ACTIONDATE = sysdate where TRAVELREQUESTMASTERID = (select TRAVELREQUESTMASTERID from TTRAVELREQUESTVERSION where TRAVELREQUESTVERSIONID = ?)");
+				ps2.setString(1, requestStatus.APPROVED);
+				ps2.setString(2, travelReqVersionId);			
+				ps2.executeQuery();
+			}
+			updateStatus = true;
+		}catch(Exception e){
+			System.out.println("exception in updating req master and req version table query:::"+e.getMessage());
+		}
+		finally{
+			try{
+				ps.close();
+				ps1.close();
+				rs.close();
+				conn.close();
+			}catch(Exception e){}
+		}	
+		return updateStatus;
+	}
 }

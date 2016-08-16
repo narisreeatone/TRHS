@@ -10,7 +10,7 @@
 <%
 	EmployeeDetails empDetails = (EmployeeDetails)request.getAttribute("empDetails");
 	DataBaseConnection db = new DataBaseConnection();
-	Map<String, Object> empDetailsMap = db.getEmployeesDetails();
+	Map<String, Object> empDetailsMap = db.getAllEmployeesDetails();
 	request.setAttribute("empDetailsMap", empDetailsMap);
 %>
 <html>
@@ -19,10 +19,10 @@
 <title>Employee Details</title>
 <link href="styles/styles.css" type="text/css" rel="stylesheet">
 <script type="text/javascript" src="javascript/jquery-3.1.0.min.js"></script>
-<link type="text/css" href="styles/datepicker/jquery.ui.datepicker.css" rel="stylesheet" />
-<script src="javascript/datepicker/jquery-ui-1.8b1.custom.min.js" type="text/javascript" charset="utf-8"></script>
+<!--  <link type="text/css" href="styles/datepicker/jquery.ui.datepicker.css" rel="stylesheet" />
+<script src="javascript/datepicker/jquery-ui-1.8b1.custom.min.js" type="text/javascript" charset="utf-8"></script>-->
 <script type='text/javascript'>
-$("document").ready(function(){
+/*$("document").ready(function(){
 	$(function()
 			{
 				// Datepicker (if available)
@@ -38,7 +38,7 @@ $("document").ready(function(){
 				});		
 			}
 			});
-});
+});*/
 </script> 
 <style>
 .travelReqform{
@@ -90,7 +90,7 @@ $("document").ready(function(){
 .deleteApproverTd{
 	padding-left:5px;
 }
-.submitBtn{
+.submitBtnDiv{
 	float:left;
 	text-align:center;
 	padding:10px 0;
@@ -131,20 +131,20 @@ $("document").ready(function(){
 				<div class="container">
 					<div class="menuSection">						
 						<ul class="menuItems">
-							<li><a href="">Employee Profile</a></li>
-							<li><span class="currentMenuItem">New Travel Request</span></li>
-							<li><a href="">Travel Request Approved</a></li>
+							<li><a href="employeeHome.jsp">Employee Profile</a></li>
+							<li><a href="NewTravelRequest.jsp">New Travel Request</a></li>
+							<li><a href="GetApprovedRequest">Travel Request Approved</a></li>
 							<li><a href="GetPendingRequest">Travel Request Pending</a></li>
-							<li><a href="">Travel Request Rejected</a></li>
-							<li><a href="">Approve Travel Request</a></li>
-							<li><a href="">Approved Travel Requests by you</a></li>
+							<li><a href="GetRejectedRequest">Travel Request Rejected</a></li>
+							<li><a href="GetApproveRequest">Approve Travel Request</a></li>
+							<li><a href="GetApprovedReqByEmp">Approved Travel Requests by you</a></li>
 							<li><a href="LogOut">Log out</a></li>
 						</ul>						
 					</div>
 					
 					<div class="contentSection">
 						<div class="travelReqform">
-							<form action="SaveTravelRequestDetails" method="POST" id="reqForm">
+							<form action="SaveTravelRequestDetails" method="POST" id="travelRequestForm">
 							<div class="rowSection">
 								<div class="leftSection">Source</div>
 								<div class="rightSection"><input type="text" name="source" id="source" value="" /></div>
@@ -212,13 +212,15 @@ $("document").ready(function(){
 											<td class="values"><input type="text" value="" id="approverMailId" name="approverMailId" class="approverMailId"/></td>
 											<td class="values"><input type="text" value="" id="approverDept" name="approverDept" class="approverDept"/></td>
 											<td class="values"><input type="text" value="" id="approverDesignation" name="approverDesignation" class="approverDesignation"/></td>
-											<td class="deleteApproverTd"><a onclick="javascript:deleteApproverRow.call(this);" class="deleteApprover">Delete</a></td>
+											<td class="deleteApproverTd"><a onclick="javascript:deleteApproverRow.call(this);" class="deleteApprover">Delete</a>
+												<input type="hidden" name="approveOrder" id="approveOrder" value="" />
+											</td>
 										</tr>
 										</tbody>
 									</table> 
 								</div>
 							</div>
-							<div class="submitBtn"><input type="submit" value="submit" /></div>
+							<div class="submitBtnDiv"><input type="submit" id="submitBtn"value="submit" /></div>
 						</form>
 					</div>
 				</div>				
@@ -229,11 +231,11 @@ $("document").ready(function(){
 </div>
 <script>
 
-$approverRowHtml = $(".approverRowTable").html();
+$approverRowHtml = $(".approverList").html();
 $(".approverList").html("");
 var approverCount = 1;
 $(".addApproverLink").click(function(){	
-	$(".submitBtn").show();
+	$(".submitBtnDiv").show();	
 	if(approverCount <= 6){		
 		$(".approverList").append("<div class='approverListDiv"+approverCount+"'></div>");		
 		$(".approverListDiv"+approverCount).html($approverRowHtml);
@@ -244,21 +246,14 @@ $(".addApproverLink").click(function(){
 });
 function deleteApproverRow(){	
 	deleteApproverRef = this;
-	$(deleteApproverRef).parent().parent().parent().parent().html("").remove();
+	$(deleteApproverRef).parent().parent().parent().parent().parent().remove();
 	approverCount = approverCount - 1;
 	if(approverCount == 0)
-		$(".submitBtn").hide();
+		$(".submitBtnDiv").hide();	
 }
-function getEmployeeName(){
-	getEmpName = this;
-	if($(getEmpName).val().length > 2){
-		getEmployeeNamesByAjax($(getEmpName).val());
-	}
-}
-function populateEmpDetails(){
-	
-	getEmpId = this;
-	
+
+function populateEmpDetails(){	
+	getEmpId = this;	
 	<c:if test="${empDetailsMap != null}">
 	<c:forEach items="${empDetailsMap}" var="empDetails" varStatus="status">
 		var empid = "${empDetails.key}";
@@ -267,13 +262,29 @@ function populateEmpDetails(){
 				$(getEmpId).parent().parent().children().find(".approverMailId").val("${empDetails.value.emailId}");
 				$(getEmpId).parent().parent().children().find(".approverDept").val("${empDetails.value.departmentName}");
 				$(getEmpId).parent().parent().children().find(".approverDesignation").val("${empDetails.value.designationName}");
-				//$("#reqForm").append("<input type='hidden' name='approveEmpId' value='"+ empid +"' />")
+				$("#travelRequestForm").append("<input type='hidden' name='approveOrder' id='approveOrder' value='' />")
 			}
 		}
 		
 	</c:forEach>
 	</c:if>
 	
+}
+$("#submitBtn").click(function(){
+	alert("click btn");
+	selectedApprovercount = 1;
+	$(".approverRowTable").each(function(){
+		empId = $(this).children().find(".values .empIdList").val();
+		$(this).children().find(".deleteApproverTd #approveOrder").val(empId + "-" + selectedApprovercount);				
+		selectedApprovercount++;
+	});
+	return true;
+});
+function getEmployeeName(){
+	getEmpName = this;
+	if($(getEmpName).val().length > 2){
+		getEmployeeNamesByAjax($(getEmpName).val());
+	}
 }
 function getEmployeeNamesByAjax(empName){
 	$.ajax({

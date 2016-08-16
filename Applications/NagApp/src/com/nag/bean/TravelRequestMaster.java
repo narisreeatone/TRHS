@@ -17,8 +17,15 @@ public class TravelRequestMaster {
 	private String purpose;
 	private Date travelDate; 
 	private List<TravelRequestVersion> reqVersionList;
+	private EmployeeDetails requestedEmpDetails;
 	
 	
+	public EmployeeDetails getRequestedEmpDetails() {
+		return requestedEmpDetails;
+	}
+	public void setRequestedEmpDetails(EmployeeDetails requestedEmpDetails) {
+		this.requestedEmpDetails = requestedEmpDetails;
+	}
 	public String getSource() {
 		return source;
 	}

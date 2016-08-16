@@ -58,7 +58,7 @@ public class SaveTravelRequestDetails extends HttpServlet {
 			String expenses = request.getParameter("expenses");
 			String travelDate = request.getParameter("travelDate");
 			String purpose = request.getParameter("purpose");		
-			String approveEmpId[] = request.getParameterValues("approveEmpId");
+			String approveEmpOrder[] = request.getParameterValues("approveOrder");
 			
 			Date travelDateobj = null;		   
 		    DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
@@ -75,7 +75,7 @@ public class SaveTravelRequestDetails extends HttpServlet {
 			requestForm.setExpenses(expenses);
 			requestForm.setTravelDate(travelDateobj);
 			requestForm.setPurpose(purpose);
-			requestForm.setApproveEmpId(approveEmpId);
+			requestForm.setApproveEmpOrder(approveEmpOrder);
 			requestForm.setEmployeeId(empDetails.getEmployeeDetailsId());
 			
 			DataBaseConnection dbHandler = new DataBaseConnection();

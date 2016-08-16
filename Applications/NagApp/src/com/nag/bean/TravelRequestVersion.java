@@ -8,9 +8,28 @@ public class TravelRequestVersion {
 	private String travelRequestMasterId;
 	private String travelApproverId;
 	private String approverOrder;
-	private Date approvedDate;
-	private Date createdDate;
+	private Date actionDate;
+	private String statusId;
+	private EmployeeDetails approverEmpDetails;
 	
+	public EmployeeDetails getApproverEmpDetails() {
+		return approverEmpDetails;
+	}
+	public void setApproverEmpDetails(EmployeeDetails approverEmpDetails) {
+		this.approverEmpDetails = approverEmpDetails;
+	}
+	public Date getActionDate() {
+		return actionDate;
+	}
+	public void setActionDate(Date actionDate) {
+		this.actionDate = actionDate;
+	}
+	public String getStatusId() {
+		return statusId;
+	}
+	public void setStatusId(String statusId) {
+		this.statusId = statusId;
+	}
 	public String getTravelRequestVersionId() {
 		return travelRequestVersionId;
 	}
@@ -34,18 +53,5 @@ public class TravelRequestVersion {
 	}
 	public void setApproverOrder(String approverOrder) {
 		this.approverOrder = approverOrder;
-	}
-	public Date getApprovedDate() {
-		return approvedDate;
-	}
-	public void setApprovedDate(Date approvedDate) {
-		this.approvedDate = approvedDate;
-	}
-	public Date getCreatedDate() {
-		return createdDate;
-	}
-	public void setCreatedDate(Date createdDate) {
-		this.createdDate = createdDate;
-	}
-		
+	}	
 }

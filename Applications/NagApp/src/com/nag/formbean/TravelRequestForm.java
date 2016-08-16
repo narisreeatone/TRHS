@@ -12,7 +12,7 @@ public class TravelRequestForm {
 	String purpose;	
 	String attachmentPath;
 	String employeeId;
-	String approveEmpId[];
+	String approveEmpOrder[];
 	
 	public String getSource() {
 		return source;
@@ -50,11 +50,11 @@ public class TravelRequestForm {
 	public void setPurpose(String purpose) {
 		this.purpose = purpose;
 	}
-	public String[] getApproveEmpId() {
-		return approveEmpId;
+	public String[] getApproveEmpOrder() {
+		return approveEmpOrder;
 	}
-	public void setApproveEmpId(String[] approveEmpId) {
-		this.approveEmpId = approveEmpId;
+	public void setApproveEmpOrder(String[] approveEmpOrder) {
+		this.approveEmpOrder = approveEmpOrder;
 	}
 	public String getAttachmentPath() {
 		return attachmentPath;

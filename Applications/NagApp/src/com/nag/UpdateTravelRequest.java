@@ -1,32 +1,27 @@
 package com.nag;
 
 import java.io.IOException;
-
 import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.*;
-
-import com.nag.bean.*;
-import com.nag.dao.*;
-import com.nag.formbean.*;
-
+import com.nag.bean.EmployeeDetails;
+import com.nag.bean.TravelRequestMaster;
+import com.nag.dao.DataBaseConnection;
 /**
- * Servlet implementation class GetPendingRequest
+ * Servlet implementation class UpdateTravelRequest
  */
-@WebServlet("/GetPendingRequest")
-public class GetPendingRequest extends HttpServlet {
+@WebServlet("/UpdateTravelRequest")
+public class UpdateTravelRequest extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public GetPendingRequest() {
+    public UpdateTravelRequest() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -36,7 +31,7 @@ public class GetPendingRequest extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		doPost(request, response);
+		response.getWriter().append("Served at: ").append(request.getContextPath());
 	}
 
 	/**
@@ -44,17 +39,23 @@ public class GetPendingRequest extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		System.out.println("begin - get pending req servlet");
+		System.out.println("begin - display req details servlet");
 		DataBaseConnection dbHandler = new DataBaseConnection();		
 		HttpSession session = request.getSession();	
 		RequestDispatcher rd;
+		EmployeeDetails loggedEmpDetails = (EmployeeDetails)session.getAttribute("loginUserDetails");
+		String loggedEmpDetailsId = loggedEmpDetails.getEmployeeDetailsId();
 		
-		EmployeeDetails empDetails = (EmployeeDetails)session.getAttribute("loginUserDetails");
-		String empDetailsId = empDetails.getEmployeeDetailsId();
-		Map <String, TravelRequestMaster> pendingRequestMap = dbHandler.getPendingRequestForEmployee(empDetailsId);
-		System.out.println("peding requests in servelt:::"+pendingRequestMap.size());
-		rd = request.getRequestDispatcher("ShowPendingTravelRequest.jsp");		
-		request.setAttribute("pendingRequestMap", pendingRequestMap);
+		String travelRequestVersionId = request.getParameter("travelRequestVersionId");
+		String action = request.getParameter("action");
+		boolean updateStatus = dbHandler.updateTravelRequest(action, travelRequestVersionId, loggedEmpDetailsId);
+		String message = "Error in updating travel request.";
+		if(updateStatus){
+			message = "Travel request has been updated.";
+		}
+		
+		rd = request.getRequestDispatcher("employeeHome.jsp");	
+		request.setAttribute("displayMessage", message);
 		rd.forward(request,response);
 	}
 
