@@ -7,6 +7,7 @@ import javax.servlet.annotation.WebServlet;
 import java.sql.*;
 import com.nag.dao.*;
 import com.nag.bean.*;
+import com.nag.sql.*;
 
 /*import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -46,7 +47,7 @@ public class LoginServlet extends HttpServlet {
 		ServletContext application = getServletContext();
 		HttpSession session = request.getSession(true);	
 		RequestDispatcher rd;
-		
+		ConstantInfoFromDB constantInfoFromDB = new ConstantInfoFromDB();		
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");				
 		EmployeeDetails empDetails = dbHandler.getEmployeeDetailsByLogin(username, password);
@@ -55,7 +56,8 @@ public class LoginServlet extends HttpServlet {
 			rd = request.getRequestDispatcher("employeeHome.jsp");
 			session.setAttribute("loginUserDetails", empDetails);
 			session.setAttribute("isUserLoggedIn", "true");
-			session.setAttribute("isAdmin", false);
+			session.setAttribute("isAdmin", false);			
+			session.setAttribute("travelModesMap", constantInfoFromDB.getAllTravelModesFromDB());
 			rd.forward(request,response);
 		}else{			
 			rd = request.getRequestDispatcher("login.jsp");

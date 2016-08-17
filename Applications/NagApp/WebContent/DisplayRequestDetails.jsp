@@ -5,7 +5,7 @@
 <%@ page import="java.util.*" %>
 <%@ page import="com.nag.bean.*" %>
 <%@ page import="com.nag.dao.*" %>
-<%@ page import="com.nag.RequestStatus" %>
+<%@ page import="com.nag.sql.*" %>
 
 <%
 	//EmployeeDetails empDetails = (EmployeeDetails)request.getAttribute("loginUserDetails");
@@ -106,11 +106,14 @@
 					<ul class="menuItems">
 						<li><a href="employeeHome.jsp">Employee Profile</a></li>
 						<li><a href="NewTravelRequest.jsp">New Travel Request</a></li>
-						<li><a href="GetApprovedRequest">Travel Request Approved</a></li>
-						<li><a href="GetPendingRequest">Travel Request Pending</a></li>
-						<li><a href="GetRejectedRequest">Travel Request Rejected</a></li>
+						<li><a href="GetApprovedRequest">Approved Travel Requests</a></li>
+						<li><a href="GetPendingRequest">Pending Travel Requests</a></li>
+						<li><a href="GetRejectedRequest">Rejected Travel Requests</a></li>
+						<li></li>
+						<li></li>
 						<li><a href="GetApproveRequest">Approve Travel Request</a></li>
 						<li><a href="GetApprovedReqByEmp">Approved Travel Requests by you</a></li>
+						<li><a href="GetApprovedReqByEmp">Rejected Travel Requests by you</a></li>
 						<li><a href="LogOut">Log out</a></li>
 					</ul>						
 				</div>
@@ -142,7 +145,13 @@
 							</div>
 							<div class="dataRowDiv zebraPattern">
 								<div class="leftDiv">Travel Mode:</div>
-								<div class="rightDiv">${requestDetails.travelModeId}</div>
+								<div class="rightDiv">
+									<c:forEach items="${travelModesMap}" var="travelModes" varStatus="status">													
+										<c:if test="${travelModes.key == requestDetails.travelModeId}">
+											${travelModes.value}
+										</c:if>
+									</c:forEach>
+								</div>
 							</div>
 							<div class="dataRowDiv">
 								<div class="leftDiv">Travel Date:</div>

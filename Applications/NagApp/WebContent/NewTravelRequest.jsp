@@ -12,6 +12,8 @@
 	DataBaseConnection db = new DataBaseConnection();
 	Map<String, Object> empDetailsMap = db.getAllEmployeesDetails();
 	request.setAttribute("empDetailsMap", empDetailsMap);
+	//Map<String,String> travelModes = (Map<String,String>)session.getAttribute("travelModesMap");
+	System.out.println("travelModesMap:::"+session.getAttribute("travelModesMap"));
 %>
 <html>
 <head>
@@ -132,13 +134,16 @@
 					<div class="menuSection">						
 						<ul class="menuItems">
 							<li><a href="employeeHome.jsp">Employee Profile</a></li>
-							<li><a href="NewTravelRequest.jsp">New Travel Request</a></li>
-							<li><a href="GetApprovedRequest">Travel Request Approved</a></li>
-							<li><a href="GetPendingRequest">Travel Request Pending</a></li>
-							<li><a href="GetRejectedRequest">Travel Request Rejected</a></li>
-							<li><a href="GetApproveRequest">Approve Travel Request</a></li>
-							<li><a href="GetApprovedReqByEmp">Approved Travel Requests by you</a></li>
-							<li><a href="LogOut">Log out</a></li>
+						<li><a href="NewTravelRequest.jsp">New Travel Request</a></li>
+						<li><a href="GetApprovedRequest">Approved Travel Requests</a></li>
+						<li><a href="GetPendingRequest">Pending Travel Requests</a></li>
+						<li><a href="GetRejectedRequest">Rejected Travel Requests</a></li>
+						<li></li>
+						<li></li>
+						<li><a href="GetApproveRequest">Approve Travel Request</a></li>
+						<li><a href="GetApprovedReqByEmp">Approved Travel Requests by you</a></li>
+						<li><a href="GetApprovedReqByEmp">Rejected Travel Requests by you</a></li>
+						<li><a href="LogOut">Log out</a></li>
 						</ul>						
 					</div>
 					
@@ -155,7 +160,14 @@
 							</div>							
 							<div class="rowSection">
 								<div class="leftSection">Travel Mode</div>
-								<div class="rightSection"><input type="text" name="travelType" id="travelType" value="" /></div>
+								<div class="rightSection">
+									<select id="travelMode" name="travelMode" style="width: 206px;">
+										<option value="select">Select</option>
+									<c:forEach items="${travelModesMap}" var="travelModes" varStatus="status">													
+										<option value="${travelModes.key}">${travelModes.value}</option>
+									</c:forEach>
+									</select>
+								</div>
 							</div>
 							<div class="rowSection">
 								<div class="leftSection">Expenses (approximate)</div>
@@ -271,7 +283,6 @@ function populateEmpDetails(){
 	
 }
 $("#submitBtn").click(function(){
-	alert("click btn");
 	selectedApprovercount = 1;
 	$(".approverRowTable").each(function(){
 		empId = $(this).children().find(".values .empIdList").val();

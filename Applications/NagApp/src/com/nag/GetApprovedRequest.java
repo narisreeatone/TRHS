@@ -1,32 +1,31 @@
 package com.nag;
 
 import java.io.IOException;
+import java.util.Map;
 
 import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.*;
 
-import com.nag.bean.*;
-import com.nag.dao.*;
-import com.nag.formbean.*;
+import com.nag.bean.EmployeeDetails;
+import com.nag.bean.TravelRequestMaster;
+import com.nag.dao.DataBaseConnection;
 
 /**
- * Servlet implementation class GetPendingRequest
+ * Servlet implementation class GetApprovedRequest
  */
-@WebServlet("/GetPendingRequest")
-public class GetPendingRequest extends HttpServlet {
+@WebServlet("/GetApprovedRequest")
+public class GetApprovedRequest extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public GetPendingRequest() {
+    public GetApprovedRequest() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -44,17 +43,18 @@ public class GetPendingRequest extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		System.out.println("begin - get pending req servlet");
+		
+		System.out.println("begin - get aprroved req servlet");
 		DataBaseConnection dbHandler = new DataBaseConnection();		
 		HttpSession session = request.getSession();	
 		RequestDispatcher rd;
 		
 		EmployeeDetails empDetails = (EmployeeDetails)session.getAttribute("loginUserDetails");
 		String empDetailsId = empDetails.getEmployeeDetailsId();
-		Map <String, TravelRequestMaster> pendingRequestMap = dbHandler.getPendingRequestForEmployee(empDetailsId);
-		System.out.println("peding requests in servelt:::"+pendingRequestMap.size());
-		rd = request.getRequestDispatcher("DisplayPendingTravelRequest.jsp");		
-		request.setAttribute("pendingRequestMap", pendingRequestMap);
+		Map <String, TravelRequestMaster> approvedRequestMap = dbHandler.getAprrovedRequestForEmployee(empDetailsId);
+		System.out.println("approved requests in servelt:::"+approvedRequestMap.size());
+		rd = request.getRequestDispatcher("DisplayApprovedRequest.jsp");		
+		request.setAttribute("approvedRequestMap", approvedRequestMap);
 		rd.forward(request,response);
 	}
 

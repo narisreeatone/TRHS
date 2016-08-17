@@ -16,6 +16,7 @@ import java.text.SimpleDateFormat;
 import com.nag.bean.EmployeeDetails;
 import com.nag.dao.*;
 import com.nag.formbean.*;
+import com.nag.mail.*;
 
 /**
  * Servlet implementation class SaveTravelRequestDetails
@@ -48,13 +49,16 @@ public class SaveTravelRequestDetails extends HttpServlet {
 		HttpSession session = request.getSession();
 		String isUserLoggedIn = (String)session.getAttribute("isUserLoggedIn");
 		EmployeeDetails empDetails = (EmployeeDetails)session.getAttribute("loginUserDetails");
-		String loggedInEmpDetailsId = empDetails.getEmployeeDetailsId();
+		//String loggedInEmpDetailsId = empDetails.getEmployeeDetailsId();
 		boolean reqSavingStatus = false;
 		RequestDispatcher rd;
+		DataBaseConnection dbHandler = null;
+		MailHandler mailHandler = null;
+		TravelRequestForm requestForm = null;
 		if("true".equalsIgnoreCase(isUserLoggedIn)){
 			String source = request.getParameter("source");
 			String destination = request.getParameter("destination");
-			String travelType = request.getParameter("travelType");
+			String travelType = request.getParameter("travelMode");
 			String expenses = request.getParameter("expenses");
 			String travelDate = request.getParameter("travelDate");
 			String purpose = request.getParameter("purpose");		
@@ -68,7 +72,7 @@ public class SaveTravelRequestDetails extends HttpServlet {
 		    catch ( Exception ex ){
 		        System.out.println(ex);
 		    }			
-			TravelRequestForm requestForm = new TravelRequestForm();
+			requestForm = new TravelRequestForm();
 			requestForm.setSource(source);
 			requestForm.setDestination(destination);
 			requestForm.setTravelType(travelType);
@@ -78,12 +82,21 @@ public class SaveTravelRequestDetails extends HttpServlet {
 			requestForm.setApproveEmpOrder(approveEmpOrder);
 			requestForm.setEmployeeId(empDetails.getEmployeeDetailsId());
 			
-			DataBaseConnection dbHandler = new DataBaseConnection();
+			dbHandler = new DataBaseConnection();
 			reqSavingStatus = dbHandler.saveTravelRequestForm(requestForm);			
 		}
 		String displayMessage = "";
 		if(reqSavingStatus){
 			displayMessage = "Request has been successfully sent";
+			String aproveEmpOrder[] = requestForm.getApproveEmpOrder();
+			mailHandler = new MailHandler();
+			for(int i=0; i < aproveEmpOrder.length; i++){
+				String[] empIdAndOrder = aproveEmpOrder[i].split("-");
+				EmployeeDetails approverEmpDetails = dbHandler.getEmployeeDetailsById(empIdAndOrder[0]);				
+				boolean mailstatus = mailHandler.sendTravelRequestMail(approverEmpDetails.getEmailId(), null, null, null, null);
+				if(mailstatus)
+					System.out.println("mail sent successfully for "+approverEmpDetails.getEmployeeName());
+			}
 		}
 		rd = request.getRequestDispatcher("employeeHome.jsp");
 		request.setAttribute("displayMessage", displayMessage);			
