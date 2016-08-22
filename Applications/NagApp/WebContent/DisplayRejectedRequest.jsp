@@ -60,7 +60,7 @@
 						<li></li>
 						<li><a href="GetApproveRequest">Approve Travel Request</a></li>
 						<li><a href="GetApprovedReqByEmp">Approved Travel Requests by you</a></li>
-						<li><a href="GetApprovedReqByEmp">Rejected Travel Requests by you</a></li>
+						<li><a href="GetRejectedReqByEmp">Rejected Travel Requests by you</a></li>
 						<li><a href="LogOut">Log out</a></li>
 					</ul>						
 				</div>
@@ -68,6 +68,8 @@
 				<div class="contentSection">
 					<div class="heading">Rejected Requests</div>
 					<div class="">
+					<c:choose>
+					<c:when test="${not empty rejectedRequestMap}">
 						<table class="pedningReqTable">
 							<tbody>
 								<tr>
@@ -95,12 +97,17 @@
 									</td>
 									<td class="dataTd">${rejectedRequest.value.expenses}</td>
 									<td class="dataTd">${rejectedRequest.value.createdDate}</td>
-									<td class="dataTd"><a href="TravelRequestDetails?travelRequestMasterId=${rejectedRequest.value.travelRequestMasterId}">Details</a></td>														
+									<td class="dataTd"><a href="TravelRequestDetails?requestFrom=owner&travelRequestMasterId=${rejectedRequest.value.travelRequestMasterId}">Details</a></td>														
 								</tr>
 								</c:forEach>
 							</tbody>
 						</table>
-					</div>
+						</c:when>
+						<c:otherwise>
+							No rejected travel requests.
+						</c:otherwise>
+					</c:choose>
+					</div>					
 				</div>
 			</div>				
 		</div>

@@ -60,7 +60,7 @@
 						<li></li>
 						<li><a href="GetApproveRequest">Approve Travel Request</a></li>
 						<li><a href="GetApprovedReqByEmp">Approved Travel Requests by you</a></li>
-						<li><a href="GetApprovedReqByEmp">Rejected Travel Requests by you</a></li>
+						<li><a href="GetRejectedReqByEmp">Rejected Travel Requests by you</a></li>
 						<li><a href="LogOut">Log out</a></li>
 					</ul>						
 				</div>
@@ -68,6 +68,8 @@
 				<div class="contentSection">
 					<div class="heading">Approved Requests</div>
 					<div class="">
+					<c:choose>
+					<c:when test="${not empty approvedRequestMap}">
 						<table class="pedningReqTable">
 							<tbody>
 								<tr>
@@ -81,8 +83,9 @@
 								</tr>
 								<c:set var="count" value="0"></c:set>
 								<c:forEach items="${approvedRequestMap}" var="approvedRequest" varStatus="status">
+								<c:set var="count" value="${count + 1}"></c:set>
 								<tr>
-									<td class="dataTd">${count + 1}</td>	
+									<td class="dataTd">${count}</td>	
 									<td class="dataTd">${approvedRequest.value.source}</td>
 									<td class="dataTd">${approvedRequest.value.destination}</td>
 									<td class="dataTd">${approvedRequest.value.travelDate}</td>
@@ -95,11 +98,16 @@
 									</td>
 									<td class="dataTd">${approvedRequest.value.expenses}</td>
 									<td class="dataTd">${approvedRequest.value.createdDate}</td>
-									<td class="dataTd"><a href="TravelRequestDetails?travelRequestMasterId=${approvedRequest.value.travelRequestMasterId}">Details</a></td>														
+									<td class="dataTd"><a href="TravelRequestDetails?requestFrom=owner&travelRequestMasterId=${approvedRequest.value.travelRequestMasterId}">Details</a></td>														
 								</tr>
 								</c:forEach>
 							</tbody>
 						</table>
+						</c:when>
+						<c:otherwise>
+							No Approved travel requests.
+						</c:otherwise>
+					</c:choose>
 					</div>
 				</div>
 			</div>				

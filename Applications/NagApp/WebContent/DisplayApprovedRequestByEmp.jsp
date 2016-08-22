@@ -28,6 +28,11 @@
 	text-align:center;
 	padding-top:30px;
 }
+.pedningReqTable{
+	float:left;
+	width:100%;
+	
+}
 .HeaderTd{
 	font-weight:bold;
 	padding:5px 5px 5px 0;
@@ -49,7 +54,7 @@
 						<li><a href="employeeHome.jsp">Employee Profile</a></li>
 						<li><a href="NewTravelRequest.jsp">New Travel Request</a></li>
 						<li><a href="GetApprovedRequest">Approved Travel Requests</a></li>
-						<li><a href="GetPendingRequest">Pending Travel Requests</a></li>
+						<li><a href="GetapprovedRequest">Pending Travel Requests</a></li>
 						<li><a href="GetRejectedRequest">Rejected Travel Requests</a></li>
 						<li></li>
 						<li></li>
@@ -61,40 +66,46 @@
 				</div>
 				
 				<div class="contentSection">
-				<div class="heading">Approve Requests</div>
+					<div class="heading">Approved Requests by you</div>
 					<div class="">
 					<c:choose>
-					<c:when test="${not empty approveRequestMap}">
+					<c:when test="${not empty approvedRequestByEmpMap}">
 						<table class="pedningReqTable">
 							<tbody>
 								<tr>
 									<td class="HeaderTd" style="width:8%;">S No</td>
-									<td class="HeaderTd">Requested By</td>
 									<td class="HeaderTd">Source</td>
 									<td class="HeaderTd">Destination</td>
-									<td class="HeaderTd">Travel Date</td>									
+									<td class="HeaderTd">Travel Date</td>
+									<td class="HeaderTd">Travel Mode</td>
 									<td class="HeaderTd">Expenses</td>
 									<td class="HeaderTd">Date</td>																		
 								</tr>
 								<c:set var="count" value="0"></c:set>
-								<c:forEach items="${approveRequestMap}" var="approveRequest" varStatus="status">
+								<c:forEach items="${approvedRequestByEmpMap}" var="approvedRequest" varStatus="status">
 								<c:set var="count" value="${count + 1}"></c:set>
 								<tr>
 									<td class="dataTd">${count}</td>	
-									<td class="dataTd">${approveRequest.value.requestedEmpDetails.employeeName}</td>
-									<td class="dataTd">${approveRequest.value.source}</td>
-									<td class="dataTd">${approveRequest.value.destination}</td>
-									<td class="dataTd">${approveRequest.value.travelDate}</td>									
-									<td class="dataTd">${approveRequest.value.expenses}</td>
-									<td class="dataTd">${approveRequest.value.createdDate}</td>
-									<td class="dataTd"><a href="TravelRequestDetails?travelRequestMasterId=${approveRequest.value.travelRequestMasterId}">Details</a></td>					
+									<td class="dataTd">${approvedRequest.value.source}</td>
+									<td class="dataTd">${approvedRequest.value.destination}</td>
+									<td class="dataTd">${approvedRequest.value.travelDate}</td>
+									<td class="dataTd">
+										<c:forEach items="${travelModesMap}" var="travelModes" varStatus="status">													
+										<c:if test="${travelModes.key == approvedRequest.value.travelModeId}">
+											${travelModes.value}
+										</c:if>
+										</c:forEach>
+									</td>
+									<td class="dataTd">${approvedRequest.value.expenses}</td>
+									<td class="dataTd">${approvedRequest.value.createdDate}</td>	
+									<td class="dataTd"><a href="TravelRequestDetails?requestFrom=completed&travelRequestMasterId=${approvedRequest.value.travelRequestMasterId}">Details</a></td>															
 								</tr>
 								</c:forEach>
 							</tbody>
 						</table>
 						</c:when>
 						<c:otherwise>
-							No travel requests to be approve.
+							No approved travel requests.
 						</c:otherwise>
 					</c:choose>
 					</div>

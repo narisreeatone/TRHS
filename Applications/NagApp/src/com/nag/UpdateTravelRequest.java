@@ -11,6 +11,8 @@ import javax.servlet.http.HttpSession;
 import com.nag.bean.EmployeeDetails;
 import com.nag.bean.TravelRequestMaster;
 import com.nag.dao.DataBaseConnection;
+
+import com.nag.mail.*;
 /**
  * Servlet implementation class UpdateTravelRequest
  */
@@ -38,20 +40,26 @@ public class UpdateTravelRequest extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		System.out.println("begin - display req details servlet");
+		// TODO Auto-generated method stub		
 		DataBaseConnection dbHandler = new DataBaseConnection();		
 		HttpSession session = request.getSession();	
 		RequestDispatcher rd;
-		EmployeeDetails loggedEmpDetails = (EmployeeDetails)session.getAttribute("loginUserDetails");
-		String loggedEmpDetailsId = loggedEmpDetails.getEmployeeDetailsId();
+		MailHandler mailHandler = null;
 		
+		EmployeeDetails loggedEmpDetails = (EmployeeDetails)session.getAttribute("loginUserDetails");
+		String loggedEmpDetailsId = loggedEmpDetails.getEmployeeDetailsId();		
 		String travelRequestVersionId = request.getParameter("travelRequestVersionId");
-		String action = request.getParameter("action");
-		boolean updateStatus = dbHandler.updateTravelRequest(action, travelRequestVersionId, loggedEmpDetailsId);
+		String travelRequestMasterId = request.getParameter("reqMasterId");
+		String action = request.getParameter("action");		
+		String updateStatus = dbHandler.updateTravelRequest(action, travelRequestVersionId, travelRequestMasterId, loggedEmpDetailsId);
 		String message = "Error in updating travel request.";
-		if(updateStatus){
+		TravelRequestMaster reqMaster = dbHandler.getTravelRequestDetails(travelRequestMasterId);
+		EmployeeDetails reqOwnerDetails = dbHandler.getEmployeeDetailsById(reqMaster.getEmployeeDetailsId());
+		if("allApproved".equals(updateStatus)){
 			message = "Travel request has been updated.";
+			boolean mailstatus = mailHandler.sendTravelRequestStatusMail(updateStatus, reqMaster, reqOwnerDetails);
+		}else if("rejected".equals(updateStatus)){
+			
 		}
 		
 		rd = request.getRequestDispatcher("employeeHome.jsp");	

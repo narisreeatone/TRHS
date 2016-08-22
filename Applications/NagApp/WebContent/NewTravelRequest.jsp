@@ -142,7 +142,7 @@
 						<li></li>
 						<li><a href="GetApproveRequest">Approve Travel Request</a></li>
 						<li><a href="GetApprovedReqByEmp">Approved Travel Requests by you</a></li>
-						<li><a href="GetApprovedReqByEmp">Rejected Travel Requests by you</a></li>
+						<li><a href="GetRejectedReqByEmp">Rejected Travel Requests by you</a></li>
 						<li><a href="LogOut">Log out</a></li>
 						</ul>						
 					</div>

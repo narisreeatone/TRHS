@@ -113,13 +113,13 @@
 						<li></li>
 						<li><a href="GetApproveRequest">Approve Travel Request</a></li>
 						<li><a href="GetApprovedReqByEmp">Approved Travel Requests by you</a></li>
-						<li><a href="GetApprovedReqByEmp">Rejected Travel Requests by you</a></li>
+						<li><a href="GetRejectedReqByEmp">Rejected Travel Requests by you</a></li>
 						<li><a href="LogOut">Log out</a></li>
 					</ul>						
 				</div>
 				
 				<div class="contentSection">
-					<div class="heading">Request Details</div>
+					<div class="heading">Request Details ${hideBtns}</div>
 					<div class="subHead">Details</div>
 					<div class="requestDetailsDiv">	
 						<div class="requestDetails">					
@@ -171,8 +171,14 @@
 							</div>
 						</div> 
 						<div class="btnDiv">
+						<c:choose>
+							<c:when test="${hideBtns eq 'hideBtns'}">
+							</c:when>
+							<c:otherwise>
 							<span class="approveBtn"><input type="button" value="Approve Request" id="approveBtn"/></span>
 							<span class="rejectBtn"><input type="button" value="Reject Request" id="rejectBtn"/></span>
+							</c:otherwise>
+						</c:choose>						
 						</div>
 						<div class="subHead">Approvers Details</div>
 						<div class="approverDetails">
@@ -193,10 +199,10 @@
 									<td class="dataTD">${requestStatus.STATUSSTRING[reqVersion.statusId]}</td>
 									<td class="dataTD">${reqVersion.actionDate}</td>
 									<td class="dataTD"></td>
-								</tr>
-								
+								</tr>								
 								<c:if test="${(requestDetails.travelRequestMasterId eq reqVersion.travelRequestMasterId) and (reqVersion.travelApproverId eq loginUserDetails.employeeDetailsId)}">
 									<input type="hidden" id="reqVersionId" value="${reqVersion.travelRequestVersionId}"/>
+									<input type="hidden" id="reqMasterId" value="${reqVersion.travelRequestMasterId}"/>									
 								</c:if>
 								</c:forEach>							
 							</table>
@@ -212,12 +218,12 @@
 </div>
 <script>
 $("#approveBtn").click(function(){	
-	action = $("#requestProcess").attr("action") + "?action=approve&travelRequestVersionId="+$("#reqVersionId").val();
+	var action = $("#requestProcess").attr("action") + "?action=approve&travelRequestVersionId="+$("#reqVersionId").val()+"&reqMasterId="+$("#reqMasterId").val();	
 	$("#requestProcess").attr("action", action); 
 	$("#requestProcess").submit();	
 });
 $("#rejectBtn").click(function(){
-	action = $("#requestProcess").attr("action") + "?action=reject&travelRequestVersionId="+$("#reqVersionId").val();
+	var action = $("#requestProcess").attr("action") + "?action=reject&travelRequestVersionId="+$("#reqVersionId").val()+"&reqMasterId="+$("#reqMasterId").val();	
 	$("#requestProcess").attr("action", action);
 	$("#requestProcess").submit();
 	

@@ -16,16 +16,16 @@ import com.nag.bean.TravelRequestMaster;
 import com.nag.dao.DataBaseConnection;
 
 /**
- * Servlet implementation class TravelRequestDetails
+ * Servlet implementation class GetRejectedRequestByEmp
  */
-@WebServlet("/TravelRequestDetails")
-public class TravelRequestDetails extends HttpServlet {
+@WebServlet("/GetRejectedReqByEmp")
+public class GetRejectedRequestByEmp extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public TravelRequestDetails() {
+    public GetRejectedRequestByEmp() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -43,23 +43,17 @@ public class TravelRequestDetails extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		System.out.println("begin - display req details servlet");
+		System.out.println("begin - get aprroved req servlet");
 		DataBaseConnection dbHandler = new DataBaseConnection();		
 		HttpSession session = request.getSession();	
 		RequestDispatcher rd;
-		EmployeeDetails empDetails = (EmployeeDetails)session.getAttribute("loginUserDetails");
-		String loggedEmpDetailsId = empDetails.getEmployeeDetailsId();
-		String requestFrom = request.getParameter("requestFrom");
-		String travelRequestMasterId = request.getParameter("travelRequestMasterId");
-		TravelRequestMaster requestDetails = dbHandler.getTravelRequestDetails(travelRequestMasterId);
 		
-		System.out.println("request details:::req from:::"+requestFrom);
-		rd = request.getRequestDispatcher("DisplayRequestDetails.jsp");		
-		request.setAttribute("requestDetails", requestDetails);
-		if("owner".equals(requestFrom) || "completed".equals(requestFrom)){
-			request.setAttribute("hideBtns", "hideBtns");
-			System.out.println("hide btn set attribute");
-		}
+		EmployeeDetails empDetails = (EmployeeDetails)session.getAttribute("loginUserDetails");
+		String empDetailsId = empDetails.getEmployeeDetailsId();
+		Map <String, TravelRequestMaster> rejectedRequestByEmpMap = dbHandler.getRejectedRequestByEmployee(empDetailsId);
+		System.out.println("approved requests by employee servelt:::"+rejectedRequestByEmpMap.size());
+		rd = request.getRequestDispatcher("DisplayRejectedRequestByEmp.jsp");		
+		request.setAttribute("rejectedRequestByEmpMap", rejectedRequestByEmpMap);
 		rd.forward(request,response);
 	}
 

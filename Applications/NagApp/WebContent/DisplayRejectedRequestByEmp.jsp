@@ -28,31 +28,15 @@
 	text-align:center;
 	padding-top:30px;
 }
-.empProfile{
+.pedningReqTable{
 	float:left;
 	width:100%;
+	
 }
-.dataRowDiv{
-	float:left;
-	min-width:80%;
-	padding:5px 0;
-	min-height:20px;
-}
-.dataRowDiv .leftDiv{
-	float:left;
-	width:29%;
-	text-align:right;
-	padding-right:2%;
+.HeaderTd{
 	font-weight:bold;
-}
-.dataRowDiv .rightDiv{
-	float:left;
-	text-align:left;
-	width:69%;
-}
-.zebraPattern1{
-	background-color:grey;
-	color:white;
+	padding:5px 5px 5px 0;
+	width:15%;
 }
 </style>
 </head>
@@ -70,7 +54,7 @@
 						<li><a href="employeeHome.jsp">Employee Profile</a></li>
 						<li><a href="NewTravelRequest.jsp">New Travel Request</a></li>
 						<li><a href="GetApprovedRequest">Approved Travel Requests</a></li>
-						<li><a href="GetPendingRequest">Pending Travel Requests</a></li>
+						<li><a href="GetrejectedRequest">Pending Travel Requests</a></li>
 						<li><a href="GetRejectedRequest">Rejected Travel Requests</a></li>
 						<li></li>
 						<li></li>
@@ -82,45 +66,48 @@
 				</div>
 				
 				<div class="contentSection">
-					<div class="welcomeMssg">Welcome ${loginUserDetails.employeeName}</div>	
+					<div class="heading">Rejected Requests by you</div>
+					<div class="">
 					<c:choose>
-					<c:when test="${displayMessage != null}">
-						<div class="displayMssg">${displayMessage}</div>
-					</c:when>
-					<c:otherwise>	
-						<div class="subHead">Employee Profile</div>	
-						<div class="empProfile">
-							<div class="dataRowDiv">
-								<div class="leftDiv">Name:</div>
-								<div class="rightDiv">${loginUserDetails.employeeName}</div>
-							</div>
-							<div class="dataRowDiv zebraPattern">
-								<div class="leftDiv">Employee Id:</div>
-								<div class="rightDiv">${loginUserDetails.employeeId}</div>
-							</div>
-							<div class="dataRowDiv">
-								<div class="leftDiv">Designation:</div>
-								<div class="rightDiv">${loginUserDetails.designationName}</div>
-							</div>
-							<div class="dataRowDiv zebraPattern">
-								<div class="leftDiv">Department:</div>
-								<div class="rightDiv">${loginUserDetails.departmentName}</div>
-							</div>
-							<div class="dataRowDiv">
-								<div class="leftDiv">Email:</div>
-								<div class="rightDiv">${loginUserDetails.emailId}</div>
-							</div>
-							<div class="dataRowDiv zebraPattern">
-								<div class="leftDiv">Mobile:</div>
-								<div class="rightDiv">${loginUserDetails.mobileNumber}</div>
-							</div>
-							<div class="dataRowDiv">
-								<div class="leftDiv">Land line Number:</div>
-								<div class="rightDiv">${loginUserDetails.landLineNumber}</div>
-							</div>							
-						</div>
-					</c:otherwise>
+					<c:when test="${not empty rejectedRequestByEmpMap}">
+						<table class="pedningReqTable">
+							<tbody>
+								<tr>
+									<td class="HeaderTd" style="width:8%;">S No</td>
+									<td class="HeaderTd">Source</td>
+									<td class="HeaderTd">Destination</td>
+									<td class="HeaderTd">Travel Date</td>
+									<td class="HeaderTd">Travel Mode</td>
+									<td class="HeaderTd">Expenses</td>
+									<td class="HeaderTd">Date</td>																		
+								</tr>
+								<c:set var="count" value="0"></c:set>
+								<c:forEach items="${rejectedRequestByEmpMap}" var="rejectedRequest" varStatus="status">
+								<tr>
+									<td class="dataTd">${count + 1}</td>	
+									<td class="dataTd">${rejectedRequest.value.source}</td>
+									<td class="dataTd">${rejectedRequest.value.destination}</td>
+									<td class="dataTd">${rejectedRequest.value.travelDate}</td>
+									<td class="dataTd">
+										<c:forEach items="${travelModesMap}" var="travelModes" varStatus="status">													
+										<c:if test="${travelModes.key == rejectedRequest.value.travelModeId}">
+											${travelModes.value}
+										</c:if>
+										</c:forEach>
+									</td>
+									<td class="dataTd">${rejectedRequest.value.expenses}</td>
+									<td class="dataTd">${rejectedRequest.value.createdDate}</td>	
+									<td class="dataTd"><a href="TravelRequestDetails?requestFrom=completed&travelRequestMasterId=${rejectedRequest.value.travelRequestMasterId}">Details</a></td>															
+								</tr>
+								</c:forEach>
+							</tbody>
+						</table>
+						</c:when>
+						<c:otherwise>
+							No rejected travel requests.
+						</c:otherwise>
 					</c:choose>
+					</div>
 				</div>
 			</div>				
 		</div>

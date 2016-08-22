@@ -67,56 +67,62 @@
 			<div class="container">
 				<div class="menuSection">						
 					<ul class="menuItems">
-						<li><a href="employeeHome.jsp">Employee Profile</a></li>
-						<li><a href="NewTravelRequest.jsp">New Travel Request</a></li>
-						<li><a href="GetApprovedRequest">Approved Travel Requests</a></li>
-						<li><a href="GetPendingRequest">Pending Travel Requests</a></li>
-						<li><a href="GetRejectedRequest">Rejected Travel Requests</a></li>
+						<li><a href="adminHome.jsp">Home</a></li>
+						<li><a href="NewTravelRequest.jsp">Employee Registration</a></li>
+						<li><a href="GetApprovedRequest">Upload Employee Details</a></li>						
 						<li></li>
 						<li></li>
-						<li><a href="GetApproveRequest">Approve Travel Request</a></li>
-						<li><a href="GetApprovedReqByEmp">Approved Travel Requests by you</a></li>
-						<li><a href="GetRejectedReqByEmp">Rejected Travel Requests by you</a></li>
+						<li><a href="GetApproveRequest">Approve Travel Requests</a></li>
+						<li><a href="GetApprovedReqByEmp">Pending Travel Requests</a></li>
+						<li><a href="GetApprovedReqByEmp">Rejected Travel Requests</a></li>
 						<li><a href="LogOut">Log out</a></li>
 					</ul>						
 				</div>
 				
 				<div class="contentSection">
-					<div class="welcomeMssg">Welcome ${loginUserDetails.employeeName}</div>	
+					<div class="welcomeMssg">Welcome Admin</div>	
 					<c:choose>
-					<c:when test="${displayMessage != null}">
+					<c:when test="{displayMessage != null}">
 						<div class="displayMssg">${displayMessage}</div>
 					</c:when>
 					<c:otherwise>	
-						<div class="subHead">Employee Profile</div>	
+						<div class="subHead">Employee Registration Form</div>	
 						<div class="empProfile">
-							<div class="dataRowDiv">
-								<div class="leftDiv">Name:</div>
-								<div class="rightDiv">${loginUserDetails.employeeName}</div>
-							</div>
 							<div class="dataRowDiv zebraPattern">
 								<div class="leftDiv">Employee Id:</div>
-								<div class="rightDiv">${loginUserDetails.employeeId}</div>
+								<div class="rightDiv"><input type="text" name="employeeId" id="employeeId" /></div>
 							</div>
 							<div class="dataRowDiv">
+								<div class="leftDiv">Employee Name:</div>
+								<div class="rightDiv"><input type="text" name="employeeName" id="employeeName" /></div>
+							</div>
+							<div class="dataRowDiv">
+								<div class="leftDiv">Date of Birth:</div>
+								<div class="rightDiv"><input type="text" name="dob" id="dob" /></div>
+							</div>					
+							<div class="dataRowDiv">
 								<div class="leftDiv">Designation:</div>
-								<div class="rightDiv">${loginUserDetails.designationName}</div>
+								<div class="rightDiv"><input type="text" name="designation" id="designation" /></div>
 							</div>
 							<div class="dataRowDiv zebraPattern">
 								<div class="leftDiv">Department:</div>
-								<div class="rightDiv">${loginUserDetails.departmentName}</div>
+								<div class="rightDiv"><input type="text" name="department" id="department" /></div>
 							</div>
 							<div class="dataRowDiv">
 								<div class="leftDiv">Email:</div>
-								<div class="rightDiv">${loginUserDetails.emailId}</div>
+								<div class="rightDiv"><input type="text" name="email" id="email" /></div>
 							</div>
 							<div class="dataRowDiv zebraPattern">
 								<div class="leftDiv">Mobile:</div>
-								<div class="rightDiv">${loginUserDetails.mobileNumber}</div>
+								<div class="rightDiv"><input type="text" name="mobile" id="mobile" /></div>
 							</div>
 							<div class="dataRowDiv">
 								<div class="leftDiv">Land line Number:</div>
-								<div class="rightDiv">${loginUserDetails.landLineNumber}</div>
+								<div class="rightDiv"><input type="text" name="landline" id="landline" /></div>
+							</div>
+							<div class="dataRowDiv">
+								<div class="leftDiv">Extension:</div>
+								<div class="rightDiv"><input type="text" name="extension" id="extension" /></div>
 							</div>							
 						</div>
 					</c:otherwise>
