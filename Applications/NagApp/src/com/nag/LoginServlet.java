@@ -47,17 +47,26 @@ public class LoginServlet extends HttpServlet {
 		ServletContext application = getServletContext();
 		HttpSession session = request.getSession(true);	
 		RequestDispatcher rd;
-		ConstantInfoFromDB constantInfoFromDB = new ConstantInfoFromDB();		
+		//ConstantInfoFromDB constantInfoFromDB = new ConstantInfoFromDB();		
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");				
 		EmployeeDetails empDetails = dbHandler.getEmployeeDetailsByLogin(username, password);
 		
-		if(empDetails != null){			
-			rd = request.getRequestDispatcher("employeeHome.jsp");
-			session.setAttribute("loginUserDetails", empDetails);
-			session.setAttribute("isUserLoggedIn", "true");
-			session.setAttribute("isAdmin", false);			
-			session.setAttribute("travelModesMap", constantInfoFromDB.getAllTravelModesFromDB());
+		if(empDetails != null){	
+			if(empDetails.isAdmin()){
+				rd = request.getRequestDispatcher("AdminHome.jsp");
+				session.setAttribute("loginUserDetails", empDetails);
+				session.setAttribute("isUserLoggedIn", false);
+				session.setAttribute("isAdmin", true);				
+			}else{
+				rd = request.getRequestDispatcher("employeeHome.jsp");
+				session.setAttribute("loginUserDetails", empDetails);
+				session.setAttribute("isUserLoggedIn", true);
+				session.setAttribute("isAdmin", false);				
+			}
+			session.setAttribute("travelModesMap", ConstantInfoFromDB.getAllTravelModesFromDB());
+			session.setAttribute("departmentMap", ConstantInfoFromDB.getDepartmentFromDB());
+			session.setAttribute("designationMap", ConstantInfoFromDB.getDesignationFromDB());
 			rd.forward(request,response);
 		}else{			
 			rd = request.getRequestDispatcher("login.jsp");

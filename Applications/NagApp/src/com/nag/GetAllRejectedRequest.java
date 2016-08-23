@@ -14,18 +14,18 @@ import javax.servlet.http.HttpSession;
 import com.nag.bean.EmployeeDetails;
 import com.nag.bean.TravelRequestMaster;
 import com.nag.dao.DataBaseConnection;
-
+import com.nag.sql.RequestStatus;
 /**
- * Servlet implementation class GetRejectedRequest
+ * Servlet implementation class GetAllRejectedRequest
  */
-@WebServlet("/GetRejectedRequest")
-public class GetRejectedRequest extends HttpServlet {
+@WebServlet("/GetAllRejectedRequest")
+public class GetAllRejectedRequest extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public GetRejectedRequest() {
+    public GetAllRejectedRequest() {
         super();
         // TODO Auto-generated constructor stub
     }
@@ -35,7 +35,6 @@ public class GetRejectedRequest extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		response.getWriter().append("Served at: ").append(request.getContextPath());
 		doPost(request, response);
 	}
 
@@ -43,16 +42,16 @@ public class GetRejectedRequest extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub		
+		// TODO Auto-generated method stub
 		DataBaseConnection dbHandler = new DataBaseConnection();		
 		HttpSession session = request.getSession();	
 		RequestDispatcher rd;
-		
+		RequestStatus reqStatus = new RequestStatus();
 		EmployeeDetails empDetails = (EmployeeDetails)session.getAttribute("loginUserDetails");
 		String empDetailsId = empDetails.getEmployeeDetailsId();
-		Map <String, TravelRequestMaster> rejectedRequestMap = dbHandler.getRejectedRequestForEmployee(empDetailsId);		
-		rd = request.getRequestDispatcher("DisplayRejectedRequest.jsp");		
-		request.setAttribute("rejectedRequestMap", rejectedRequestMap);
+		Map <String, TravelRequestMaster> allRejectedRequestMap = dbHandler.getAllTravelRequestByStatus(reqStatus.REJECTED);		
+		rd = request.getRequestDispatcher("DisplayAllRejectedRequest.jsp");		
+		request.setAttribute("allRejectedRequestMap", allRejectedRequestMap);
 		rd.forward(request,response);
 	}
 

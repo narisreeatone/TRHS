@@ -8,12 +8,12 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <%
-	EmployeeDetails empDetails = (EmployeeDetails)request.getAttribute("empDetails");
+	/*EmployeeDetails empDetails = (EmployeeDetails)request.getAttribute("empDetails");
 	DataBaseConnection db = new DataBaseConnection();
 	Map<String, Object> empDetailsMap = db.getAllEmployeesDetails();
 	request.setAttribute("empDetailsMap", empDetailsMap);
 	//Map<String,String> travelModes = (Map<String,String>)session.getAttribute("travelModesMap");
-	System.out.println("travelModesMap:::"+session.getAttribute("travelModesMap"));
+	System.out.println("travelModesMap:::"+session.getAttribute("travelModesMap"));*/
 %>
 <html>
 <head>

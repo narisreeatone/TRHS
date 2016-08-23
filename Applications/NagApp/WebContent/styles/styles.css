@@ -84,3 +84,6 @@ a:hover{
 	padding:5px 0 15px 0;
 	color:#530594;
 }
+.errorMsgDiv, erroMsg{
+	color:red;
+}

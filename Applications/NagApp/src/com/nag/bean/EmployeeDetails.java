@@ -11,7 +11,7 @@ public class EmployeeDetails {
 	private String landLineNumber;
 	private String extNumber;
 	private Date dob;
-	private String designitionId;
+	private String designationId;
 	private String deptId;
 	private Date createdDate;
 	private String status;
@@ -19,6 +19,7 @@ public class EmployeeDetails {
 	private String designationName;
 	private Department department;
 	private Designation designation;
+	private boolean isAdmin;
 	
 	public String getDepartmentName() {
 		return departmentName;
@@ -98,11 +99,11 @@ public class EmployeeDetails {
 	public void setDob(Date dob) {
 		this.dob = dob;
 	}
-	public String getDesignitionId() {
-		return designitionId;
+	public String getDesignationId() {
+		return designationId;
 	}
-	public void setDesignitionId(String designitionId) {
-		this.designitionId = designitionId;
+	public void setDesignationId(String designationId) {
+		this.designationId = designationId;
 	}
 	public String getDeptId() {
 		return deptId;
@@ -116,4 +117,11 @@ public class EmployeeDetails {
 	public void setCreatedDate(Date createdDate) {
 		this.createdDate = createdDate;
 	}
+	public boolean isAdmin() {
+		return isAdmin;
+	}
+	public void setAdmin(boolean isAdmin) {
+		this.isAdmin = isAdmin;
+	}
+	
 }

@@ -43,7 +43,7 @@ public class TravelRequestDetails extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		System.out.println("begin - display req details servlet");
+		
 		DataBaseConnection dbHandler = new DataBaseConnection();		
 		HttpSession session = request.getSession();	
 		RequestDispatcher rd;
@@ -52,13 +52,11 @@ public class TravelRequestDetails extends HttpServlet {
 		String requestFrom = request.getParameter("requestFrom");
 		String travelRequestMasterId = request.getParameter("travelRequestMasterId");
 		TravelRequestMaster requestDetails = dbHandler.getTravelRequestDetails(travelRequestMasterId);
-		
-		System.out.println("request details:::req from:::"+requestFrom);
+				
 		rd = request.getRequestDispatcher("DisplayRequestDetails.jsp");		
 		request.setAttribute("requestDetails", requestDetails);
 		if("owner".equals(requestFrom) || "completed".equals(requestFrom)){
-			request.setAttribute("hideBtns", "hideBtns");
-			System.out.println("hide btn set attribute");
+			request.setAttribute("hideBtns", "hideBtns");			
 		}
 		rd.forward(request,response);
 	}

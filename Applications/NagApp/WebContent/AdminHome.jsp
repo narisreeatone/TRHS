@@ -67,16 +67,17 @@
 			<div class="container">
 				<div class="menuSection">						
 					<ul class="menuItems">
-						<li><a href="employeeHome.jsp">Employee Profile</a></li>
-						<li><a href="NewTravelRequest.jsp">New Travel Request</a></li>
-						<li><a href="GetApprovedRequest">Approved Travel Requests</a></li>
-						<li><a href="GetPendingRequest">Pending Travel Requests</a></li>
-						<li><a href="GetRejectedRequest">Rejected Travel Requests</a></li>
+						<li><a href="AdminHome.jsp">Admin Home</a></li>
+						<li><a href="EmployeeRegistration.jsp">Employee Registration</a></li>
+						<li><a href="UploadEmpData.jsp">Upload Employee's Data</a></li>
 						<li></li>
 						<li></li>
-						<li><a href="GetApproveRequest">Approve Travel Request</a></li>
-						<li><a href="GetApprovedReqByEmp">Approved Travel Requests by you</a></li>
-						<li><a href="GetRejectedReqByEmp">Rejected Travel Requests by you</a></li>
+						
+						<li><a href="GetAllApprovedRequest">Approved Travel Requests</a></li>
+						<li><a href="GetAllPendingRequest">Pending Travel Requests</a></li>
+						<li><a href="GetAllRejectedRequest">Rejected Travel Requests</a></li>
+						<li></li>
+						<li></li>						
 						<li><a href="LogOut">Log out</a></li>
 					</ul>						
 				</div>
@@ -100,23 +101,11 @@
 							</div>
 							<div class="dataRowDiv">
 								<div class="leftDiv">Designation:</div>
-								<div class="rightDiv">
-								<c:forEach items="${designationMap}" var="designation" varStatus="status">													
-									<c:if test="${designation.key == loginUserDetails.designationId}">
-										${designation.value}
-									</c:if>
-								</c:forEach>
-								</div>
+								<div class="rightDiv">${loginUserDetails.designationName}</div>
 							</div>
 							<div class="dataRowDiv zebraPattern">
 								<div class="leftDiv">Department:</div>
-								<div class="rightDiv">
-								<c:forEach items="${departmentMap}" var="department" varStatus="status">													
-									<c:if test="${department.key == loginUserDetails.deptId}">
-										${department.value}
-									</c:if>
-								</c:forEach>								
-								</div>
+								<div class="rightDiv">${loginUserDetails.departmentName}</div>
 							</div>
 							<div class="dataRowDiv">
 								<div class="leftDiv">Email:</div>

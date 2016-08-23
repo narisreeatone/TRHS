@@ -43,16 +43,14 @@ public class GetPendingRequest extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		System.out.println("begin - get pending req servlet");
+		// TODO Auto-generated method stub		
 		DataBaseConnection dbHandler = new DataBaseConnection();		
 		HttpSession session = request.getSession();	
 		RequestDispatcher rd;
 		
 		EmployeeDetails empDetails = (EmployeeDetails)session.getAttribute("loginUserDetails");
 		String empDetailsId = empDetails.getEmployeeDetailsId();
-		Map <String, TravelRequestMaster> pendingRequestMap = dbHandler.getPendingRequestForEmployee(empDetailsId);
-		System.out.println("peding requests in servelt:::"+pendingRequestMap.size());
+		Map <String, TravelRequestMaster> pendingRequestMap = dbHandler.getPendingRequestForEmployee(empDetailsId);		
 		rd = request.getRequestDispatcher("DisplayPendingTravelRequest.jsp");		
 		request.setAttribute("pendingRequestMap", pendingRequestMap);
 		rd.forward(request,response);

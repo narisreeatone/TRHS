@@ -44,7 +44,7 @@ public class UpdateTravelRequest extends HttpServlet {
 		DataBaseConnection dbHandler = new DataBaseConnection();		
 		HttpSession session = request.getSession();	
 		RequestDispatcher rd;
-		MailHandler mailHandler = null;
+		MailHandler mailHandler = new MailHandler();
 		
 		EmployeeDetails loggedEmpDetails = (EmployeeDetails)session.getAttribute("loginUserDetails");
 		String loggedEmpDetailsId = loggedEmpDetails.getEmployeeDetailsId();		
@@ -53,15 +53,17 @@ public class UpdateTravelRequest extends HttpServlet {
 		String action = request.getParameter("action");		
 		String updateStatus = dbHandler.updateTravelRequest(action, travelRequestVersionId, travelRequestMasterId, loggedEmpDetailsId);
 		String message = "Error in updating travel request.";
+		boolean mailstatus = false;
 		TravelRequestMaster reqMaster = dbHandler.getTravelRequestDetails(travelRequestMasterId);
 		EmployeeDetails reqOwnerDetails = dbHandler.getEmployeeDetailsById(reqMaster.getEmployeeDetailsId());
 		if("allApproved".equals(updateStatus)){
 			message = "Travel request has been updated.";
-			boolean mailstatus = mailHandler.sendTravelRequestStatusMail(updateStatus, reqMaster, reqOwnerDetails);
+			mailstatus = mailHandler.sendTravelRequestStatusMail(updateStatus, reqMaster, reqOwnerDetails);
 		}else if("rejected".equals(updateStatus)){
-			
+			message = "Travel request has been rejected.";
+			mailstatus = mailHandler.sendTravelRequestStatusMail(updateStatus, reqMaster, reqOwnerDetails);
 		}
-		
+		System.out.println("mail sent status:::"+mailstatus);
 		rd = request.getRequestDispatcher("employeeHome.jsp");	
 		request.setAttribute("displayMessage", message);
 		rd.forward(request,response);

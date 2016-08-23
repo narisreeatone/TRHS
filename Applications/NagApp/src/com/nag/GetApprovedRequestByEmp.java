@@ -42,16 +42,14 @@ public class GetApprovedRequestByEmp extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		System.out.println("begin - get aprroved req servlet");
+		// TODO Auto-generated method stub		
 		DataBaseConnection dbHandler = new DataBaseConnection();		
 		HttpSession session = request.getSession();	
 		RequestDispatcher rd;
 		
 		EmployeeDetails empDetails = (EmployeeDetails)session.getAttribute("loginUserDetails");
 		String empDetailsId = empDetails.getEmployeeDetailsId();
-		Map <String, TravelRequestMaster> approvedRequestByEmpMap = dbHandler.getAprrovedRequestByEmployee(empDetailsId);
-		System.out.println("approved requests by employee servelt:::"+approvedRequestByEmpMap.size());
+		Map <String, TravelRequestMaster> approvedRequestByEmpMap = dbHandler.getAprrovedRequestByEmployee(empDetailsId);		
 		rd = request.getRequestDispatcher("DisplayApprovedRequestByEmp.jsp");		
 		request.setAttribute("approvedRequestByEmpMap", approvedRequestByEmpMap);
 		rd.forward(request,response);

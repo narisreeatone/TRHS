@@ -12,5 +12,15 @@ public class ConstantInfoFromDB {
 		Map<String,String> travelModesMap = dbHandler.getTravelModes();
 		return travelModesMap;
 	}
+	public static Map<String,String> getDepartmentFromDB(){
+		DataBaseConnection dbHandler = new DataBaseConnection();
+		Map<String,String> departmentMap = dbHandler.getDepartment();
+		return departmentMap;
+	}
+	public static Map<String,String> getDesignationFromDB(){
+		DataBaseConnection dbHandler = new DataBaseConnection();
+		Map<String,String> designationMap = dbHandler.getDesignation();
+		return designationMap;
+	}
 	
 }
