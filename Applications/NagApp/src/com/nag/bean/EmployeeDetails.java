@@ -14,12 +14,14 @@ public class EmployeeDetails {
 	private String designationId;
 	private String deptId;
 	private Date createdDate;
-	private String status;
+	//private String status;
 	private String departmentName;
 	private String designationName;
 	private Department department;
 	private Designation designation;
 	private boolean isAdmin;
+	private boolean isRandomPwd;
+	private boolean isActive;
 	
 	public String getDepartmentName() {
 		return departmentName;
@@ -45,12 +47,12 @@ public class EmployeeDetails {
 	public void setDesignation(Designation designation) {
 		this.designation = designation;
 	}	
-	public String getStatus() {
+	/*public String getStatus() {
 		return status;
 	}
 	public void setStatus(String status) {
 		this.status = status;
-	}
+	}*/
 	public String getEmployeeDetailsId() {
 		return employeeDetailsId;
 	}
@@ -122,6 +124,18 @@ public class EmployeeDetails {
 	}
 	public void setAdmin(boolean isAdmin) {
 		this.isAdmin = isAdmin;
+	}
+	public boolean isRandomPwd() {
+		return isRandomPwd;
+	}
+	public void setRandomPwd(boolean isRandomPwd) {
+		this.isRandomPwd = isRandomPwd;
+	}
+	public boolean isActive() {
+		return isActive;
+	}
+	public void setActive(boolean isActive) {
+		this.isActive = isActive;
 	}
 	
 }

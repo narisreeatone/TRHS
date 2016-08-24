@@ -58,75 +58,86 @@
 </head>
 <body>
 <div id="mainDiv">
-	<div id="innerMainDiv">
+	<div class="header">
+		<div class="headerContentMainDiv">
+			<div class="logo"><image src="images/logo.jpg" /></div>
+		</div>
+	</div>
+	<div id="innerMainDiv">	
+		<div id="contentDiv">
 		
-		<div class="header">Menu</div>
-		
-		<div id="empHome" class="pageContent">			
-				
-			<div class="container">
-				<div class="menuSection">						
-					<ul class="menuItems">
-						<li><a href="AdminHome.jsp">Admin Home</a></li>
-						<li><a href="EmployeeRegistration.jsp">Employee Registration</a></li>
-						<li><a href="UploadEmpData.jsp">Upload Employee's Data</a></li>
-						<li></li>
-						<li></li>
-						
-						<li><a href="GetAllApprovedRequest">Approved Travel Requests</a></li>
-						<li><a href="GetAllPendingRequest">Pending Travel Requests</a></li>
-						<li><a href="GetAllRejectedRequest">Rejected Travel Requests</a></li>
-						<li></li>
-						<li></li>						
-						<li><a href="LogOut">Log out</a></li>
-					</ul>						
-				</div>
-				
-				<div class="contentSection">
-					<div class="welcomeMssg">Welcome ${loginUserDetails.employeeName}</div>	
-					<c:choose>
-					<c:when test="${displayMessage != null}">
-						<div class="displayMssg">${displayMessage}</div>
-					</c:when>
-					<c:otherwise>	
-						<div class="subHead">Employee Profile</div>	
-						<div class="empProfile">
-							<div class="dataRowDiv">
-								<div class="leftDiv">Name:</div>
-								<div class="rightDiv">${loginUserDetails.employeeName}</div>
+			<div id="adminHome" class="pageContent">			
+					
+				<div class="container">
+					<div class="menuSection">						
+						<ul class="menuItems">
+							<li><a href="AdminHome.jsp">Admin Home</a></li>
+							<li><a href="EmployeeRegistration.jsp">Employee Registration</a></li>
+							<li><a href="UploadEmpData.jsp">Upload Employee's Data</a></li>
+							<li></li>
+							<li></li>
+							
+							<li><a href="GetAllApprovedRequest">Approved Travel Requests</a></li>
+							<li><a href="GetAllPendingRequest">Pending Travel Requests</a></li>
+							<li><a href="GetAllRejectedRequest">Rejected Travel Requests</a></li>
+							<li></li>
+							<li></li>						
+							<li><a href="LogOut">Log out</a></li>
+						</ul>						
+					</div>
+					
+					<div class="contentSection">
+						<div class="welcomeMssg">Welcome ${loginUserDetails.employeeName}</div>	
+						<c:choose>
+						<c:when test="${displayMessage != null}">
+							<div class="displayMssg">${displayMessage}</div>
+						</c:when>
+						<c:otherwise>	
+							<div class="subHead">Employee Profile</div>	
+							<div class="empProfile">
+								<div class="dataRowDiv">
+									<div class="leftDiv">Name:</div>
+									<div class="rightDiv">${loginUserDetails.employeeName}</div>
+								</div>
+								<div class="dataRowDiv zebraPattern">
+									<div class="leftDiv">Employee Id:</div>
+									<div class="rightDiv">${loginUserDetails.employeeId}</div>
+								</div>
+								<div class="dataRowDiv">
+									<div class="leftDiv">Designation:</div>
+									<div class="rightDiv">${loginUserDetails.designationName}</div>
+								</div>
+								<div class="dataRowDiv zebraPattern">
+									<div class="leftDiv">Department:</div>
+									<div class="rightDiv">${loginUserDetails.departmentName}</div>
+								</div>
+								<div class="dataRowDiv">
+									<div class="leftDiv">Email:</div>
+									<div class="rightDiv">${loginUserDetails.emailId}</div>
+								</div>
+								<div class="dataRowDiv zebraPattern">
+									<div class="leftDiv">Mobile:</div>
+									<div class="rightDiv">${loginUserDetails.mobileNumber}</div>
+								</div>
+								<div class="dataRowDiv">
+									<div class="leftDiv">Land line Number:</div>
+									<div class="rightDiv">${loginUserDetails.landLineNumber}</div>
+								</div>							
 							</div>
-							<div class="dataRowDiv zebraPattern">
-								<div class="leftDiv">Employee Id:</div>
-								<div class="rightDiv">${loginUserDetails.employeeId}</div>
-							</div>
-							<div class="dataRowDiv">
-								<div class="leftDiv">Designation:</div>
-								<div class="rightDiv">${loginUserDetails.designationName}</div>
-							</div>
-							<div class="dataRowDiv zebraPattern">
-								<div class="leftDiv">Department:</div>
-								<div class="rightDiv">${loginUserDetails.departmentName}</div>
-							</div>
-							<div class="dataRowDiv">
-								<div class="leftDiv">Email:</div>
-								<div class="rightDiv">${loginUserDetails.emailId}</div>
-							</div>
-							<div class="dataRowDiv zebraPattern">
-								<div class="leftDiv">Mobile:</div>
-								<div class="rightDiv">${loginUserDetails.mobileNumber}</div>
-							</div>
-							<div class="dataRowDiv">
-								<div class="leftDiv">Land line Number:</div>
-								<div class="rightDiv">${loginUserDetails.landLineNumber}</div>
-							</div>							
-						</div>
-					</c:otherwise>
-					</c:choose>
-				</div>
-			</div>				
+						</c:otherwise>
+						</c:choose>
+					</div>
+				</div>	
+				<div class="footerPush"></div>			
+			</div>			
 		</div>
 		
-		<div class="footer">Footer</div>
+		<div class="footer">
+			<div class="footerContentMainDiv">
+				<div class=></div>
+			</div>
+		</div>
+		
 	</div>
 </div>
 </body>

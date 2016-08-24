@@ -54,15 +54,27 @@ public class LoginServlet extends HttpServlet {
 		
 		if(empDetails != null){	
 			if(empDetails.isAdmin()){
+				System.out.println("admin home");
 				rd = request.getRequestDispatcher("AdminHome.jsp");
 				session.setAttribute("loginUserDetails", empDetails);
 				session.setAttribute("isUserLoggedIn", false);
 				session.setAttribute("isAdmin", true);				
 			}else{
-				rd = request.getRequestDispatcher("employeeHome.jsp");
-				session.setAttribute("loginUserDetails", empDetails);
-				session.setAttribute("isUserLoggedIn", true);
-				session.setAttribute("isAdmin", false);				
+				System.out.println("empDetails.isRandomPwd():::"+empDetails.isRandomPwd());
+				if(empDetails.isRandomPwd()){
+					rd = request.getRequestDispatcher("ChangePassword.jsp");
+					session.setAttribute("loginUserDetails", empDetails);
+					session.setAttribute("isUserLoggedIn", true);
+					session.setAttribute("isRandomPwd", true);
+					//rd.forward(request,response);
+				}else{
+					System.out.println("employee home");
+					rd = request.getRequestDispatcher("employeeHome.jsp");
+					session.setAttribute("loginUserDetails", empDetails);
+					session.setAttribute("isUserLoggedIn", true);
+					session.setAttribute("isAdmin", false);	
+					//rd.forward(request,response);
+				}
 			}
 			session.setAttribute("travelModesMap", ConstantInfoFromDB.getAllTravelModesFromDB());
 			session.setAttribute("departmentMap", ConstantInfoFromDB.getDepartmentFromDB());

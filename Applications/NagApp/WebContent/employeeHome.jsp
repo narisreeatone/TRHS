@@ -58,86 +58,94 @@
 </head>
 <body>
 <div id="mainDiv">
-	<div id="innerMainDiv">
-		
-		<div class="header">Menu</div>
-		
-		<div id="empHome" class="pageContent">			
-				
-			<div class="container">
-				<div class="menuSection">						
-					<ul class="menuItems">
-						<li><a href="employeeHome.jsp">Employee Profile</a></li>
-						<li><a href="NewTravelRequest.jsp">New Travel Request</a></li>
-						<li><a href="GetApprovedRequest">Approved Travel Requests</a></li>
-						<li><a href="GetPendingRequest">Pending Travel Requests</a></li>
-						<li><a href="GetRejectedRequest">Rejected Travel Requests</a></li>
-						<li></li>
-						<li></li>
-						<li><a href="GetApproveRequest">Approve Travel Request</a></li>
-						<li><a href="GetApprovedReqByEmp">Approved Travel Requests by you</a></li>
-						<li><a href="GetRejectedReqByEmp">Rejected Travel Requests by you</a></li>
-						<li><a href="LogOut">Log out</a></li>
-					</ul>						
-				</div>
-				
-				<div class="contentSection">
-					<div class="welcomeMssg">Welcome ${loginUserDetails.employeeName}</div>	
-					<c:choose>
-					<c:when test="${displayMessage != null}">
-						<div class="displayMssg">${displayMessage}</div>
-					</c:when>
-					<c:otherwise>	
-						<div class="subHead">Employee Profile</div>	
-						<div class="empProfile">
-							<div class="dataRowDiv">
-								<div class="leftDiv">Name:</div>
-								<div class="rightDiv">${loginUserDetails.employeeName}</div>
-							</div>
-							<div class="dataRowDiv zebraPattern">
-								<div class="leftDiv">Employee Id:</div>
-								<div class="rightDiv">${loginUserDetails.employeeId}</div>
-							</div>
-							<div class="dataRowDiv">
-								<div class="leftDiv">Designation:</div>
-								<div class="rightDiv">
-								<c:forEach items="${designationMap}" var="designation" varStatus="status">													
-									<c:if test="${designation.key == loginUserDetails.designationId}">
-										${designation.value}
-									</c:if>
-								</c:forEach>
-								</div>
-							</div>
-							<div class="dataRowDiv zebraPattern">
-								<div class="leftDiv">Department:</div>
-								<div class="rightDiv">
-								<c:forEach items="${departmentMap}" var="department" varStatus="status">													
-									<c:if test="${department.key == loginUserDetails.deptId}">
-										${department.value}
-									</c:if>
-								</c:forEach>								
-								</div>
-							</div>
-							<div class="dataRowDiv">
-								<div class="leftDiv">Email:</div>
-								<div class="rightDiv">${loginUserDetails.emailId}</div>
-							</div>
-							<div class="dataRowDiv zebraPattern">
-								<div class="leftDiv">Mobile:</div>
-								<div class="rightDiv">${loginUserDetails.mobileNumber}</div>
-							</div>
-							<div class="dataRowDiv">
-								<div class="leftDiv">Land line Number:</div>
-								<div class="rightDiv">${loginUserDetails.landLineNumber}</div>
-							</div>							
-						</div>
-					</c:otherwise>
-					</c:choose>
-				</div>
-			</div>				
+	<div class="header">
+		<div class="headerContentMainDiv">
+			<div class="logo"><img src="images/logo.jpg" /></div>
 		</div>
-		
-		<div class="footer">Footer</div>
+	</div>
+	<div id="innerMainDiv">	
+		<div id="contentDiv">			
+			<div id="empHome" class="pageContent">
+								
+				<div class="container">
+					<div class="menuSection">						
+						<ul class="menuItems">
+							<li><a href="employeeHome.jsp">Employee Profile</a></li>
+							<li><a href="NewTravelRequest.jsp">New Travel Request</a></li>
+							<li><a href="GetApprovedRequest">Approved Travel Requests</a></li>
+							<li><a href="GetPendingRequest">Pending Travel Requests</a></li>
+							<li><a href="GetRejectedRequest">Rejected Travel Requests</a></li>
+							<li></li>
+							<li></li>
+							<li><a href="GetApproveRequest">Approve Travel Request</a></li>
+							<li><a href="GetApprovedReqByEmp">Approved Travel Requests by you</a></li>
+							<li><a href="GetRejectedReqByEmp">Rejected Travel Requests by you</a></li>
+							<li><a href="LogOut">Log out</a></li>
+						</ul>						
+					</div>
+					
+					<div class="contentSection">
+						<div class="welcomeMssg">Welcome ${loginUserDetails.employeeName}</div>	
+						<c:choose>
+						<c:when test="${displayMessage != null}">
+							<div class="displayMssg">${displayMessage}</div>
+						</c:when>
+						<c:otherwise>	
+							<div class="subHead">Employee Profile</div>	
+							<div class="empProfile">
+								<div class="dataRowDiv">
+									<div class="leftDiv">Name:</div>
+									<div class="rightDiv">${loginUserDetails.employeeName}</div>
+								</div>
+								<div class="dataRowDiv zebraPattern">
+									<div class="leftDiv">Employee Id:</div>
+									<div class="rightDiv">${loginUserDetails.employeeId}</div>
+								</div>
+								<div class="dataRowDiv">
+									<div class="leftDiv">Designation:</div>
+									<div class="rightDiv">
+									<c:forEach items="${designationMap}" var="designation" varStatus="status">													
+										<c:if test="${designation.key == loginUserDetails.designationId}">
+											${designation.value}
+										</c:if>
+									</c:forEach>
+									</div>
+								</div>
+								<div class="dataRowDiv zebraPattern">
+									<div class="leftDiv">Department:</div>
+									<div class="rightDiv">
+									<c:forEach items="${departmentMap}" var="department" varStatus="status">													
+										<c:if test="${department.key == loginUserDetails.deptId}">
+											${department.value}
+										</c:if>
+									</c:forEach>								
+									</div>
+								</div>
+								<div class="dataRowDiv">
+									<div class="leftDiv">Email:</div>
+									<div class="rightDiv">${loginUserDetails.emailId}</div>
+								</div>
+								<div class="dataRowDiv zebraPattern">
+									<div class="leftDiv">Mobile:</div>
+									<div class="rightDiv">${loginUserDetails.mobileNumber}</div>
+								</div>
+								<div class="dataRowDiv">
+									<div class="leftDiv">Land line Number:</div>
+									<div class="rightDiv">${loginUserDetails.landLineNumber}</div>
+								</div>							
+							</div>
+						</c:otherwise>
+						</c:choose>
+					</div>
+				</div>					
+			</div>			
+		</div>
+		<div class="footerPush"></div>
+	</div>
+	<div class="footer">
+		<div class="footerContentMainDiv">
+			<div class=></div>
+		</div>
 	</div>
 </div>
 </body>

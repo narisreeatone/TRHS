@@ -88,13 +88,13 @@ public class RegisterEmployee extends HttpServlet {
 				employeeDetails = dbHandler.getEmployeeDetailsByEmpId(employeeId);
 				boolean mailStatus = mailHandler.sendEmployeeRegistrationDetails(empLoginDetails, employeeDetails);
 				if(mailStatus){
-					displayMessage = "Employee registration is success. Successfully sent registration details to employee mail.";
+					displayMessage = "Employee registration is success and sent credentials to employee mail.";
 				}
 			}
 			else{
 				displayMessage = "Problem with employee registration";
 			}
-			request.setAttribute("message", displayMessage);
+			request.setAttribute("displayMessage", displayMessage);
 			rd = request.getRequestDispatcher("AdminHome.jsp");
 		}else{
 			request.setAttribute("errorMessage", errorMessage);

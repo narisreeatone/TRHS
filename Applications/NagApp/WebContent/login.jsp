@@ -6,17 +6,21 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Login Page</title>
 <link href="styles/styles.css" type="text/css" rel="stylesheet">
+<script type="text/javascript" src="javascript/jquery-3.1.0.min.js"></script>
+<link href="styles/styles.css" type="text/css" rel="stylesheet">
 <style>
 .container{
 	float:left;
 	width:100%;
+	text-align:center;
 }
 
-.userNameContainer{
+.userNameDiv{
 	float:left;
 	width:100%;
+	margin-bottom:10px;
 }
-.pwdContainer{
+.pwdDiv{
 	float:left;
 	width:100%;
 }
@@ -24,39 +28,78 @@
 	float:left;
 	width:50%;
 	text-align:right;
+	font-weight:bold;
 }
 .ipField{
 	float:left;
 	width:50%;
 	text-align:left;
 }
+.submitBtnDiv{
+	float:left;
+	width:100%;
+	text-align:center;
+	margin-top:20px;
+}
+.box{
+	width:100%;
+	
+	float:left;
+}
+.errorMsg{
+	display:none;
+}
 </style>
 </head>
 <body>
 <div id="mainDiv">
-	<div id="innerMainDiv">
-		
-		<div class="header">Menu</div>
-		
-		<div id="" class="pageContent">
-			<form action="LoginServlet" method="post">
-				<div class="container">
-					<div class="userNameContainer">
-						<div class="label">User Name:</div>
-						<div class="ipField"><input type="text" name="username" id="username" /></div>
-					</div>
-					<div class="pwdContainer">
-						<div class="label">Password:</div>
-						<div class="ipField"><input type="password" name="password" id="password" /></div>
-					</div>
-					<div class=""><input type="submit" value="Enter" id=""/></div>
-					<div class=""></div>
-				</div>
-			</form>
+	<div class="header">
+		<div class="headerContentMainDiv">
+			<div class="logo"><img src="images/logo.jpg" /></img></div>
 		</div>
-		
-		<div class="footer">Footer</div>
 	</div>
+	<div id="innerMainDiv">	
+		<div id="contentDiv">
+		
+			<div id="loginPage" class="pageContent">
+				<form action="LoginServlet" method="post" id="loginForm"></form>
+				<div class="container">
+					<div class="box">
+					<div class="errorMsg">Please enter correct values</div>
+						<div class="userNameDiv">
+							<div class="label">User Name:</div>
+							<div class="ipField"><input type="text" name="username" id="username" /></div>
+						</div>
+						<div class="pwdDiv">
+							<div class="label">Password:</div>
+							<div class="ipField"><input type="password" name="password" id="password" /></div>
+						</div>
+						<div class="submitBtnDiv"><input type="submit" value="sign in" id="submitBtn"/></div>
+						<div class=""></div>
+					</div>
+				</div>				
+			</div>
+		
+			<div class="footerPush"></div>
+		</div>
+	</div>
+	<div class="footer">
+		<div class="footerContentMainDiv">
+			<div class=></div>
+		</div>
+	</div>	
 </div>
 </body>
+<script>
+$("#submitBtn").click(function(){
+	username = $(".username").val();
+	password = $(".password").val();
+	alert("submit btn");
+	if(username != " " && password != " "){
+		$("#loginForm").submit();
+	}else{
+		$(".errorMsg").show();
+	}
+});
+</script>
 </html>

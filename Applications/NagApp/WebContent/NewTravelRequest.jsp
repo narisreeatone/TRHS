@@ -8,12 +8,12 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <%
-	/*EmployeeDetails empDetails = (EmployeeDetails)request.getAttribute("empDetails");
+	EmployeeDetails empDetails = (EmployeeDetails)request.getAttribute("empDetails");
 	DataBaseConnection db = new DataBaseConnection();
 	Map<String, Object> empDetailsMap = db.getAllEmployeesDetails();
 	request.setAttribute("empDetailsMap", empDetailsMap);
 	//Map<String,String> travelModes = (Map<String,String>)session.getAttribute("travelModesMap");
-	System.out.println("travelModesMap:::"+session.getAttribute("travelModesMap"));*/
+	System.out.println("empDetailsMap:::"+empDetailsMap);
 %>
 <html>
 <head>
@@ -124,9 +124,13 @@
 </head>
 <body>
 <div id="mainDiv">
-	<div id="innerMainDiv">
-		
-		<div class="header">Menu</div>
+	<div class="header">
+		<div class="headerContentMainDiv">
+			<div class="logo"><img src="images/logo.jpg" /></div>
+		</div>
+	</div>
+	<div id="innerMainDiv">	
+		<div id="contentDiv">
 		
 		<div id="travelRequestForm" class="pageContent">			
 				
@@ -175,7 +179,7 @@
 							</div>
 							<div class="rowSection">
 								<div class="leftSection">Travel Date</div>
-								<div class="rightSection"><input type="text" name="travelDate" id="travelDate" value="" /></div>
+								<div class="rightSection"><input type="text" name="travelDate" id="travelDate" value="" /> (dd/mm/yyyy)</div>
 							</div>
 							<div class="rowSection">
 								<div class="leftSection">Purpose</div>
@@ -236,10 +240,16 @@
 						</form>
 					</div>
 				</div>				
-		</div>
+			</div>
 		
-		<div class="footer">Footer</div>
+			<div class="footerPush"></div>
+		</div>
 	</div>
+	<div class="footer">
+		<div class="footerContentMainDiv">
+			<div class=></div>
+		</div>
+	</div>	
 </div>
 <script>
 
@@ -266,8 +276,11 @@ function deleteApproverRow(){
 
 function populateEmpDetails(){	
 	getEmpId = this;	
+
+
 	<c:if test="${empDetailsMap != null}">
 	<c:forEach items="${empDetailsMap}" var="empDetails" varStatus="status">
+	
 		var empid = "${empDetails.key}";
 		if ($(getEmpId).val() == empid){
 			if($(getEmpId).parent().parent().hasClass(".approverMailId"));{

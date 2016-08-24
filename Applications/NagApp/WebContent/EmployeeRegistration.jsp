@@ -74,104 +74,113 @@
 </head>
 <body>
 <div id="mainDiv">
-	<div id="innerMainDiv">
-		
-		<div class="header">Menu</div>
-		
-		<div id="empHome" class="pageContent">			
-				
-			<div class="container">
-				<div class="menuSection">						
-					<ul class="menuItems">
-						<li><a href="AdminHome.jsp">Admin Home</a></li>
-						<li><a href="EmployeeRegistration.jsp">Employee Registration</a></li>
-						<li><a href="UploadEmpData.jsp">Upload Employee's Data</a></li>
-						<li></li>
-						<li></li>
-						
-						<li><a href="GetAllApprovedRequest">Approved Travel Requests</a></li>
-						<li><a href="GetAllPendingRequest">Pending Travel Requests</a></li>
-						<li><a href="GetAllRejectedRequest">Rejected Travel Requests</a></li>
-						<li></li>
-						<li></li>						
-						<li><a href="LogOut">Log out</a></li>
-					</ul>						
-				</div>
-				
-				<div class="contentSection">
-					<div class="welcomeMssg">Welcome Admin</div>	
-					<c:choose>
-					<c:when test="{displayMessage != null}">
-						<div class="displayMssg">${displayMessage}</div>
-					</c:when>
-					<c:otherwise>	
-						<div class="subHead">Employee Registration Form</div>	
-						<div class="empProfile">
-						<form id="empRegistration" action="RegisterEmployee" method="POST" >
-							<div class="errorMsgDiv"><span class="errorMsg">${errorMessage}</span></div>
-							<div class="reqFeildsMsgDiv"><span class="reqFeildsMsg">*required fields</span></div>
-							<div class="dataRowDiv zebraPattern">
-								<div class="leftDiv">Employee Id*:</div>
-								<div class="rightDiv"><input type="text" name="employeeId" id="employeeId" /></div>
-							</div>
-							<div class="dataRowDiv">
-								<div class="leftDiv">Employee Name*:</div>
-								<div class="rightDiv"><input type="text" name="employeeName" id="employeeName" /></div>
-							</div>
-							<div class="dataRowDiv">
-								<div class="leftDiv">Date of Birth*:</div>
-								<div class="rightDiv"><input type="text" name="dob" id="dob" /></div>
-							</div>					
-							<div class="dataRowDiv">
-								<div class="leftDiv">Designation*:</div>
-								<div class="rightDiv">
-									<select id="designationId" name="designationId" style="width: 206px;">
-										<option value="select">Select</option>
-									<c:forEach items="${designationMap}" var="designation" varStatus="status">													
-										<option value="${designation.key}">${designation.value}</option>
-									</c:forEach>
-									</select>
-								</div>
-							</div>
-							<div class="dataRowDiv zebraPattern">
-								<div class="leftDiv">Department*:</div>
-								<div class="rightDiv">
-									<select id="departmentId" name="departmentId" style="width: 206px;">
-										<option value="select">Select</option>
-									<c:forEach items="${departmentMap}" var="department" varStatus="status">													
-										<option value="${department.key}">${department.value}</option>
-									</c:forEach>
-									</select>
-								</div>
-							</div>
-							<div class="dataRowDiv">
-								<div class="leftDiv">Email*:</div>
-								<div class="rightDiv"><input type="text" name="email" id="email" /></div>
-							</div>
-							<div class="dataRowDiv zebraPattern">
-								<div class="leftDiv">Mobile*:</div>
-								<div class="rightDiv"><input type="text" name="mobile" id="mobile" /></div>
-							</div>
-							<div class="dataRowDiv">
-								<div class="leftDiv">Land line Number:</div>
-								<div class="rightDiv"><input type="text" name="landline" id="landline" /></div>
-							</div>
-							<div class="dataRowDiv">
-								<div class="leftDiv">Extension:</div>
-								<div class="rightDiv"><input type="text" name="extension" id="extension" /></div>
-							</div>
-							<div class="dataRowDiv">								
-								<div class="submitBtnDiv"><input type="submit" id="sumbitBtn" value="register" style="width:100px;"/></div>
-							</div>	
-							</form>						
-						</div>
-					</c:otherwise>
-					</c:choose>
-				</div>
-			</div>				
+	<div class="header">
+		<div class="headerContentMainDiv">
+			<div class="logo"><img src="images/logo.jpg" /></div>
 		</div>
+	</div>
+	<div id="innerMainDiv">	
+		<div id="contentDiv">
 		
-		<div class="footer">Footer</div>
+			<div id="empregistration" class="pageContent">			
+					
+				<div class="container">
+					<div class="menuSection">						
+						<ul class="menuItems">
+							<li><a href="AdminHome.jsp">Admin Home</a></li>
+							<li><a href="EmployeeRegistration.jsp">Employee Registration</a></li>
+							<li><a href="UploadEmpData.jsp">Upload Employee's Data</a></li>
+							<li></li>
+							<li></li>
+							
+							<li><a href="GetAllApprovedRequest">Approved Travel Requests</a></li>
+							<li><a href="GetAllPendingRequest">Pending Travel Requests</a></li>
+							<li><a href="GetAllRejectedRequest">Rejected Travel Requests</a></li>
+							<li></li>
+							<li></li>						
+							<li><a href="LogOut">Log out</a></li>
+						</ul>						
+					</div>
+					
+					<div class="contentSection">
+						<div class="welcomeMssg">Welcome Admin</div>	
+						<c:choose>
+						<c:when test="{displayMessage != null}">
+							<div class="displayMssg">${displayMessage}</div>
+						</c:when>
+						<c:otherwise>	
+							<div class="subHead">Employee Registration Form</div>	
+							<div class="empProfile">
+							<form id="empRegistration" action="RegisterEmployee" method="POST" >
+								<div class="errorMsgDiv"><span class="errorMsg">${errorMessage}</span></div>
+								<div class="reqFeildsMsgDiv"><span class="reqFeildsMsg">*required fields</span></div>
+								<div class="dataRowDiv zebraPattern">
+									<div class="leftDiv">Employee Id*:</div>
+									<div class="rightDiv"><input type="text" name="employeeId" id="employeeId" /></div>
+								</div>
+								<div class="dataRowDiv">
+									<div class="leftDiv">Employee Name*:</div>
+									<div class="rightDiv"><input type="text" name="employeeName" id="employeeName" /></div>
+								</div>
+								<div class="dataRowDiv">
+									<div class="leftDiv">Date of Birth*:</div>
+									<div class="rightDiv"><input type="text" name="dob" id="dob" /></div>
+								</div>					
+								<div class="dataRowDiv">
+									<div class="leftDiv">Designation*:</div>
+									<div class="rightDiv">
+										<select id="designationId" name="designationId" style="width: 206px;">
+											<option value="select">Select</option>
+										<c:forEach items="${designationMap}" var="designation" varStatus="status">													
+											<option value="${designation.key}">${designation.value}</option>
+										</c:forEach>
+										</select>
+									</div>
+								</div>
+								<div class="dataRowDiv zebraPattern">
+									<div class="leftDiv">Department*:</div>
+									<div class="rightDiv">
+										<select id="departmentId" name="departmentId" style="width: 206px;">
+											<option value="select">Select</option>
+										<c:forEach items="${departmentMap}" var="department" varStatus="status">													
+											<option value="${department.key}">${department.value}</option>
+										</c:forEach>
+										</select>
+									</div>
+								</div>
+								<div class="dataRowDiv">
+									<div class="leftDiv">Email*:</div>
+									<div class="rightDiv"><input type="text" name="email" id="email" /></div>
+								</div>
+								<div class="dataRowDiv zebraPattern">
+									<div class="leftDiv">Mobile*:</div>
+									<div class="rightDiv"><input type="text" name="mobile" id="mobile" /></div>
+								</div>
+								<div class="dataRowDiv">
+									<div class="leftDiv">Land line Number:</div>
+									<div class="rightDiv"><input type="text" name="landline" id="landline" /></div>
+								</div>
+								<div class="dataRowDiv">
+									<div class="leftDiv">Extension:</div>
+									<div class="rightDiv"><input type="text" name="extension" id="extension" /></div>
+								</div>
+								<div class="dataRowDiv">								
+									<div class="submitBtnDiv"><input type="submit" id="sumbitBtn" value="register" style="width:100px;"/></div>
+								</div>	
+								</form>						
+							</div>
+						</c:otherwise>
+						</c:choose>
+					</div>
+				</div>				
+			</div>				
+		</div><div class="footerPush"></div>
+		
+	</div>
+	<div class="footer">
+		<div class="footerContentMainDiv">
+			<div class=></div>
+		</div>
 	</div>
 </div>
 </body>

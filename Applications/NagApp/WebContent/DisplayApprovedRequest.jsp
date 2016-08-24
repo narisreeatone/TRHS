@@ -42,79 +42,88 @@
 </head>
 <body>
 <div id="mainDiv">
-	<div id="innerMainDiv">
-		
-		<div class="header">Menu</div>
-		
-		<div id="empHome" class="pageContent">			
-				
-			<div class="container">
-				<div class="menuSection">						
-					<ul class="menuItems">
-						<li><a href="employeeHome.jsp">Employee Profile</a></li>
-						<li><a href="NewTravelRequest.jsp">New Travel Request</a></li>
-						<li><a href="GetApprovedRequest">Approved Travel Requests</a></li>
-						<li><a href="GetPendingRequest">Pending Travel Requests</a></li>
-						<li><a href="GetRejectedRequest">Rejected Travel Requests</a></li>
-						<li></li>
-						<li></li>
-						<li><a href="GetApproveRequest">Approve Travel Request</a></li>
-						<li><a href="GetApprovedReqByEmp">Approved Travel Requests by you</a></li>
-						<li><a href="GetRejectedReqByEmp">Rejected Travel Requests by you</a></li>
-						<li><a href="LogOut">Log out</a></li>
-					</ul>						
-				</div>
-				
-				<div class="contentSection">
-					<div class="heading">Approved Requests</div>
-					<div class="">
-					<c:choose>
-					<c:when test="${not empty approvedRequestMap}">
-						<table class="pedningReqTable">
-							<tbody>
-								<tr>
-									<td class="HeaderTd" style="width:8%;">S No</td>
-									<td class="HeaderTd">Source</td>
-									<td class="HeaderTd">Destination</td>
-									<td class="HeaderTd">Travel Date</td>
-									<td class="HeaderTd">Travel Mode</td>
-									<td class="HeaderTd">Expenses</td>
-									<td class="HeaderTd">Date</td>																		
-								</tr>
-								<c:set var="count" value="0"></c:set>
-								<c:forEach items="${approvedRequestMap}" var="approvedRequest" varStatus="status">
-								<c:set var="count" value="${count + 1}"></c:set>
-								<tr>
-									<td class="dataTd">${count}</td>	
-									<td class="dataTd">${approvedRequest.value.source}</td>
-									<td class="dataTd">${approvedRequest.value.destination}</td>
-									<td class="dataTd">${approvedRequest.value.travelDate}</td>
-									<td class="dataTd">
-									<c:forEach items="${travelModesMap}" var="travelModes" varStatus="status">													
-										<c:if test="${travelModes.key == approvedRequest.value.travelModeId}">
-											${travelModes.value}
-										</c:if>
-									</c:forEach>								
-									</td>
-									<td class="dataTd">${approvedRequest.value.expenses}</td>
-									<td class="dataTd">${approvedRequest.value.createdDate}</td>
-									<td class="dataTd"><a href="TravelRequestDetails?requestFrom=owner&travelRequestMasterId=${approvedRequest.value.travelRequestMasterId}">Details</a></td>														
-								</tr>
-								</c:forEach>
-							</tbody>
-						</table>
-						</c:when>
-						<c:otherwise>
-							No Approved travel requests.
-						</c:otherwise>
-					</c:choose>
-					</div>
-				</div>
-			</div>				
+	<div class="header">
+		<div class="headerContentMainDiv">
+			<div class="logo"><image src="images/logo.jpg" /></div>
 		</div>
-		
-		<div class="footer">Footer</div>
 	</div>
+	<div id="innerMainDiv">	
+		<div id="contentDiv">
+		
+			<div id="displayApprovedRequest" class="pageContent">			
+					
+				<div class="container">
+					<div class="menuSection">						
+						<ul class="menuItems">
+							<li><a href="employeeHome.jsp">Employee Profile</a></li>
+							<li><a href="NewTravelRequest.jsp">New Travel Request</a></li>
+							<li><a href="GetApprovedRequest">Approved Travel Requests</a></li>
+							<li><a href="GetPendingRequest">Pending Travel Requests</a></li>
+							<li><a href="GetRejectedRequest">Rejected Travel Requests</a></li>
+							<li></li>
+							<li></li>
+							<li><a href="GetApproveRequest">Approve Travel Request</a></li>
+							<li><a href="GetApprovedReqByEmp">Approved Travel Requests by you</a></li>
+							<li><a href="GetRejectedReqByEmp">Rejected Travel Requests by you</a></li>
+							<li><a href="LogOut">Log out</a></li>
+						</ul>						
+					</div>
+					
+					<div class="contentSection">
+						<div class="heading">Approved Requests</div>
+						<div class="">
+						<c:choose>
+						<c:when test="${not empty approvedRequestMap}">
+							<table class="pedningReqTable">
+								<tbody>
+									<tr>
+										<td class="HeaderTd" style="width:8%;">S No</td>
+										<td class="HeaderTd">Source</td>
+										<td class="HeaderTd">Destination</td>
+										<td class="HeaderTd">Travel Date</td>
+										<td class="HeaderTd">Travel Mode</td>
+										<td class="HeaderTd">Expenses</td>
+										<td class="HeaderTd">Date</td>																		
+									</tr>
+									<c:set var="count" value="0"></c:set>
+									<c:forEach items="${approvedRequestMap}" var="approvedRequest" varStatus="status">
+									<c:set var="count" value="${count + 1}"></c:set>
+									<tr>
+										<td class="dataTd">${count}</td>	
+										<td class="dataTd">${approvedRequest.value.source}</td>
+										<td class="dataTd">${approvedRequest.value.destination}</td>
+										<td class="dataTd">${approvedRequest.value.travelDate}</td>
+										<td class="dataTd">
+										<c:forEach items="${travelModesMap}" var="travelModes" varStatus="status">													
+											<c:if test="${travelModes.key == approvedRequest.value.travelModeId}">
+												${travelModes.value}
+											</c:if>
+										</c:forEach>								
+										</td>
+										<td class="dataTd">${approvedRequest.value.expenses}</td>
+										<td class="dataTd">${approvedRequest.value.createdDate}</td>
+										<td class="dataTd"><a href="TravelRequestDetails?requestFrom=owner&travelRequestMasterId=${approvedRequest.value.travelRequestMasterId}">Details</a></td>														
+									</tr>
+									</c:forEach>
+								</tbody>
+							</table>
+							</c:when>
+							<c:otherwise>
+								No Approved travel requests.
+							</c:otherwise>
+						</c:choose>
+						</div>
+					</div>
+				</div>				
+			</div>
+			<div class="footerPush"></div>
+		</div>
+	</div>
+	<div class="footer">
+		<div class="footerContentMainDiv">
+			<div class=></div>
+		</div>
+	</div>	
 </div>
 </body>
 </html>

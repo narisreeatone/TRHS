@@ -28,6 +28,7 @@ import javax.net.ssl.SSLSession;
 import javax.mail.*;
 
 import com.nag.bean.*;
+import com.nag.formbean.*;
 
 public class MailHandler {
 	/*private String to = null;
@@ -42,7 +43,7 @@ public class MailHandler {
 	public static Properties props = null;
 	public static Session session = null;	
 	
-	public boolean sendTravelRequestMail(String toemail, String fromemail, String replytoemail, String bcc, String cc){	
+	public boolean sendNewTravelRequestMail(EmployeeDetails empDetails, TravelRequestForm reqFrom, String toemail){	
 		String host = "smtp.gmail.com";
 		String port = "587";
 		String username = "amaravathicomputersservices@gmail.com";
@@ -59,36 +60,27 @@ public class MailHandler {
 	    props.put("mail.smtp.socketFactory.port", "465");  
 	    props.put("mail.smtp.socketFactory.class","javax.net.ssl.SSLSocketFactory");  
 	    props.put("mail.smtp.socketFactory.fallback", "false");  
-	    Session session1 = Session.getInstance(props, new MailAuthenticator(username, password));  
+	    Session session1 = Session.getInstance(props, new MailAuthenticator(username, password));  		
 		
-		if (replytoemail != null)
-			replyto = replytoemail;
-		if (fromemail != null)
-			from = fromemail;
 		try {
 			 String subject, messageBody = null;
             // create a message
             MimeMessage msg = new MimeMessage(session1);
-            msg.setFrom(new InternetAddress(from));
-            
-            if(replyto!=null && !replyto.equalsIgnoreCase("")){
-                InternetAddress[] address_replyto = InternetAddress.parse(replyto);
-                msg.setReplyTo(address_replyto);
-            }                
+            msg.setFrom(new InternetAddress(from));            
+                         
 
             InternetAddress[] address_to = InternetAddress.parse(toemail);
             msg.setRecipients(Message.RecipientType.TO, address_to);
             // set BCC
-            if(bcc!=null && !bcc.equalsIgnoreCase("")){
-                InternetAddress[] address_bcc = InternetAddress.parse(bcc);
-                msg.setRecipients(Message.RecipientType.BCC, address_bcc);
-            }                
-            if(cc!=null && !cc.equalsIgnoreCase("")){
-                InternetAddress[] address_cc = InternetAddress.parse(cc);
-                msg.setRecipients(Message.RecipientType.CC, address_cc);
-            }                
-            subject = "Travel Request";
-            messageBody = "New travel request";
+                      
+            subject = "New Travel Request";
+            messageBody = "<table width='600' height='18' cellspacing='0' cellpadding='0' border='0' style=''><tbody><tr><td width='600' height='18' valign='bottom' bgcolor='#ffffff' style='line-height:17px;font-family:Arial,Helvetica,Sans-serif;padding-bottom:20px;'>Below travel request has been received from {0}</td></tr><tr><td width='600' height='18' valign='bottom' bgcolor='#ffffff' style='line-height:17px;font-family:Arial,Helvetica,Sans-serif;'><table width='600' height='18' cellspacing='0' cellpadding='0' border='0' style=''><tbody><tr><td width='150' height='18' valign='bottom' bgcolor='#ffffff' style='line-height:17px;font-family:Arial,Helvetica,Sans-serif;text-align:right;padding-right:10px'>Source :</td><td width='' height='18' valign='bottom' bgcolor='#ffffff' style='line-height:17px;font-family:Arial,Helvetica,Sans-serif;'>{1}</td></tr><tr><td width='' height='18' valign='bottom' bgcolor='#ffffff' style='line-height:17px;font-family:Arial,Helvetica,Sans-serif;text-align:right;padding-right:10px'>Destination :</td><td width='' height='18' valign='bottom' bgcolor='#ffffff' style='line-height:17px;font-family:Arial,Helvetica,Sans-serif;'>{2}</td></tr><tr><td width='' height='18' valign='bottom' bgcolor='#ffffff' style='line-height:17px;font-family:Arial,Helvetica,Sans-serif;text-align:right;padding-right:10px'>Purpose :</td><td width='' height='18' valign='bottom' bgcolor='#ffffff' style='line-height:17px;font-family:Arial,Helvetica,Sans-serif;'>{3}</td></tr><tr><td width='' height='18' valign='bottom' bgcolor='#ffffff' style='line-height:17px;font-family:Arial,Helvetica,Sans-serif;text-align:right;padding-right:10px'>Travel Date :</td><td width='' height='18' valign='bottom' bgcolor='#ffffff' style='line-height:17px;font-family:Arial,Helvetica,Sans-serif;'>{4}</td></tr></tbody></table></td></tr></tbody></table>";
+            messageBody = messageBody.replace("{0}", empDetails.getEmployeeName());
+            messageBody = messageBody.replace("{1}", reqFrom.getSource());
+            messageBody = messageBody.replace("{2}", reqFrom.getDestination());
+            messageBody = messageBody.replace("{3}", reqFrom.getPurpose());
+            messageBody = messageBody.replace("{4}", reqFrom.getTravelDate().toString());            
+            
             msg.setSubject(subject, "UTF-8");
             StringBuffer sb = new StringBuffer();
             sb.append("<HTML>\n");
@@ -256,7 +248,7 @@ public class MailHandler {
             StringBuilder sb = null;
             
             	System.out.println("sending approved mail");
-            	subject = "Travel Request Approved";
+            	subject = "Employee registration success";
                 messageBody = "<table width='600' height='18' cellspacing='0' cellpadding='0' border='0' style=''><tbody><tr><td width='600' height='18' valign='bottom' bgcolor='#ffffff' style='line-height:17px;font-family:Arial,Helvetica,Sans-serif;padding-bottom:20px;'>Your details are successfully registered. Below are the login details.</td></tr><tr><td width='600' height='18' valign='bottom' bgcolor='#ffffff' style='line-height:17px;font-family:Arial,Helvetica,Sans-serif;'><table width='600' height='18' cellspacing='0' cellpadding='0' border='0' style=''><tbody><tr><td width='150' height='18' valign='bottom' bgcolor='#ffffff' style='line-height:17px;font-family:Arial,Helvetica,Sans-serif;text-align:right;padding-right:10px'>username :</td><td width='' height='18' valign='bottom' bgcolor='#ffffff' style='line-height:17px;font-family:Arial,Helvetica,Sans-serif;'>{1}</td></tr><tr><td width='' height='18' valign='bottom' bgcolor='#ffffff' style='line-height:17px;font-family:Arial,Helvetica,Sans-serif;text-align:right;padding-right:10px'>password :</td><td width='' height='18' valign='bottom' bgcolor='#ffffff' style='line-height:17px;font-family:Arial,Helvetica,Sans-serif;'>{2}</td></tr></tbody></table></td></tr></tbody></table>";
                 messageBody = messageBody.replace("{1}", empLoginDetails.getUserName());
                 messageBody = messageBody.replace("{2}", empLoginDetails.getLoginPassword());

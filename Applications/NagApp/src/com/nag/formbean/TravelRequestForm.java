@@ -4,15 +4,15 @@ import java.util.Date;
 
 public class TravelRequestForm {
 
-	String source;
-	String destination;
-	String travelType;
-	String expenses;
-	Date travelDate;
-	String purpose;	
-	String attachmentPath;
-	String employeeId;
-	String approveEmpOrder[];
+	private String source;
+	private String destination;
+	private String travelType;
+	private String expenses;
+	private Date travelDate;
+	private String purpose;	
+	private String attachmentPath;
+	private String employeeId;
+	private String approveEmpOrder[];
 	
 	public String getSource() {
 		return source;

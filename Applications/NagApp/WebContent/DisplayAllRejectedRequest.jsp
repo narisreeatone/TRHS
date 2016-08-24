@@ -42,11 +42,15 @@
 </head>
 <body>
 <div id="mainDiv">
-	<div id="innerMainDiv">
+	<div class="header">
+		<div class="headerContentMainDiv">
+			<div class="logo"><img src="images/logo.jpg" /></div>
+		</div>
+	</div>
+	<div id="innerMainDiv">	
+		<div id="contentDiv">
 		
-		<div class="header">Menu</div>
-		
-		<div id="empHome" class="pageContent">			
+		<div id="displayAllRejectedReq" class="pageContent">			
 				
 			<div class="container">
 				<div class="menuSection">						
@@ -114,8 +118,12 @@
 			</div>				
 		</div>
 		
-		<div class="footer">Footer</div>
+		<div class="header">
+		<div class="headerContentMainDiv">
+			<div class="logo"><img src="images/logo.jpg" /></img></div>
+		</div>
 	</div>
-</div>
+	<div id="innerMainDiv">	
+		<div id="contentDiv">
 </body>
 </html>

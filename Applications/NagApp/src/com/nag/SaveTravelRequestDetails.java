@@ -47,15 +47,17 @@ public class SaveTravelRequestDetails extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		HttpSession session = request.getSession();
-		String isUserLoggedIn = (String)session.getAttribute("isUserLoggedIn");
+		boolean isUserLoggedIn = (boolean)session.getAttribute("isUserLoggedIn");
 		EmployeeDetails empDetails = (EmployeeDetails)session.getAttribute("loginUserDetails");
+		System.out.println("in saving req fservlet:::login emp id :::"+empDetails.getEmployeeDetailsId());
+		System.out.println("in saving req fservlet:::login emp id :::"+empDetails.getEmployeeName());
 		//String loggedInEmpDetailsId = empDetails.getEmployeeDetailsId();
 		boolean reqSavingStatus = false;
 		RequestDispatcher rd;
 		DataBaseConnection dbHandler = null;
 		MailHandler mailHandler = null;
 		TravelRequestForm requestForm = null;
-		if("true".equalsIgnoreCase(isUserLoggedIn)){
+		if(isUserLoggedIn){
 			String source = request.getParameter("source");
 			String destination = request.getParameter("destination");
 			String travelType = request.getParameter("travelMode");
@@ -93,7 +95,7 @@ public class SaveTravelRequestDetails extends HttpServlet {
 			for(int i=0; i < aproveEmpOrder.length; i++){
 				String[] empIdAndOrder = aproveEmpOrder[i].split("-");
 				EmployeeDetails approverEmpDetails = dbHandler.getEmployeeDetailsById(empIdAndOrder[0]);				
-				boolean mailstatus = mailHandler.sendTravelRequestMail(approverEmpDetails.getEmailId(), null, null, null, null);
+				boolean mailstatus = mailHandler.sendNewTravelRequestMail(empDetails, requestForm, approverEmpDetails.getEmailId());
 				if(mailstatus)
 					System.out.println("mail sent successfully for "+approverEmpDetails.getEmployeeName());
 			}

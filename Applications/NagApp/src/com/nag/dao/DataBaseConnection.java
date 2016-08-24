@@ -18,18 +18,29 @@ public class DataBaseConnection {
 		try{
 			/*Driver myDriver = new oracle.jdbc.driver.OracleDriver();
 			DriverManager.registerDriver( myDriver );	*/
-			Class.forName("oracle.jdbc.driver.OracleDriver");			
+			if(conn == null || conn.isClosed()){
+				conn = null;
+				Class.forName("oracle.jdbc.driver.OracleDriver");			
 				conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE","nagarjuna","nagarjuna");
+			}
 		}catch(Exception e){
 			System.out.println("Exception in DB connection"+e.getMessage());
 		}
 		return conn;
 	}
 	
-	public EmployeeLoginDetails getLoginDetails(String employeeId){
+	public EmployeeLoginDetails getLoginDetails(String employeeId){		
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		EmployeeLoginDetails empLoginDetails = new EmployeeLoginDetails();
+		//conn = getDBConnection();
+		/*Connection conn1 = null;
+		try{
+			Class.forName("oracle.jdbc.driver.OracleDriver");			
+			conn1 = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE","nagarjuna","nagarjuna");
+		}catch(Exception e){
+			
+		}*/
 		try{
 			stmt=conn.prepareStatement("select * from TLOGIN where USERNAME=?");			
 			stmt.setString(1, employeeId);
@@ -40,8 +51,8 @@ public class DataBaseConnection {
 				empLoginDetails.setLoginPassword(rs.getString("LOGINPASSWORD"));
 				empLoginDetails.setEmployeeDetailsId(rs.getString("EMPLOYEEDETAILSID"));
 				empLoginDetails.setLastLoginDate(rs.getDate("LASTLOGINDATE"));
-				empLoginDetails.setIsRandomPwd("Y");
-				empLoginDetails.setIsActive("Y");
+				empLoginDetails.setIsRandomPwd(rs.getString("ISRANDOMPWD"));
+				empLoginDetails.setIsActive(rs.getString("ISACTIVE"));
 				empLoginDetails.setEmployeeRoleId(rs.getString("EMPLOYEEROLEID"));
 			}
 		}catch(SQLException e){
@@ -50,7 +61,8 @@ public class DataBaseConnection {
 		finally{			
 			try{
 				stmt.close();
-				rs.close();				
+				rs.close();	
+				//conn.close();
 			}catch(Exception e){}
 		}
 		return empLoginDetails;
@@ -60,33 +72,24 @@ public class DataBaseConnection {
 		
 		conn = getDBConnection();
 		PreparedStatement stmt = null;
-		ResultSet rs = null;		
+		ResultSet rs = null;	
 		EmployeeDetails empDetails = new EmployeeDetails();
+		EmployeeLoginDetails empLoginDetails = new EmployeeLoginDetails();
 		boolean isAdmin = false;
+		boolean isRandomPwd = false;
 		
-		PreparedStatement stmt1 = null;
-		ResultSet rs1 = null;
+		//PreparedStatement stmt1 = null;
+		//ResultSet rs1 = null;
 		String employeeDetailsId = null;
-		try{
-			stmt1=conn.prepareStatement("select EMPLOYEEDETAILSID, LOGINPASSWORD, EMPLOYEEROLEID from TLOGIN where USERNAME=?");			
-			stmt1.setString(1, username);
-			rs1 = stmt1.executeQuery();
+		empLoginDetails = getLoginDetails(username);
+		
+		if(empLoginDetails != null){
+			if(password.equals(empLoginDetails.getLoginPassword())){
 			
-			while(rs1.next()){
-				if(password.equals(rs1.getString("LOGINPASSWORD"))){
-				
-					employeeDetailsId = rs1.getString("EMPLOYEEDETAILSID");
-					isAdmin = "1".equals(rs1.getString("EMPLOYEEROLEID"))?true:false;
-				}
+				employeeDetailsId = empLoginDetails.getEmployeeDetailsId();
+				isAdmin = "1".equals(empLoginDetails.getEmployeeRoleId())?true:false;
+				isRandomPwd = "Y".equals(empLoginDetails.getIsRandomPwd())?true:false;
 			}
-		}catch(SQLException e){
-			System.out.println("exception in login detials:::"+e.getMessage());
-		}
-		finally{			
-			try{
-				stmt1.close();
-				rs1.close();				
-			}catch(Exception e){}
 		}
 		
 		if( employeeDetailsId != null){
@@ -110,6 +113,8 @@ public class DataBaseConnection {
 					empDetails.setCreatedDate(rs.getDate("ACTIONDATE"));
 					//isAdmin = "1".equals(rs.getString("EMPLOYEEROLEID"))?true:false;
 					empDetails.setAdmin(isAdmin);
+					empDetails.setRandomPwd(isRandomPwd);
+					empDetails.setActive("Y".equals(rs.getString("ISACTIVE")));
 				}
 			}catch(Exception e){
 				System.out.println("exception in get employee query by login:::"+e.getMessage());
@@ -131,8 +136,9 @@ public class DataBaseConnection {
 		ResultSet rs = null;
 		EmployeeDetails empDetails = null;				
 		Map<String, Object> map = new HashMap<String, Object>();
+		boolean isempActive =false;
 		try{
-			stmt=conn.prepareStatement("select Emp.*, Dept.DEPARTMENTNAME, Desi.DESIGNATIONNAME   from TEMPLOYEEDETAILS Emp, TDEPARTMENTS Dept, TDESIGNATION Desi where Emp.DESIGNATIONID = Desi.DESIGNATIONID AND Emp.DEPARTMENTID = Dept.DEPARTMENTID and Emp.status = '1'");						
+			stmt=conn.prepareStatement("select Emp.*, Dept.DEPARTMENTNAME, Desi.DESIGNATIONNAME   from TEMPLOYEEDETAILS Emp, TDEPARTMENTS Dept, TDESIGNATION Desi where Emp.DESIGNATIONID = Desi.DESIGNATIONID AND Emp.DEPARTMENTID = Dept.DEPARTMENTID and Emp.ISACTIVE = 'Y'");						
 			rs = stmt.executeQuery();
 	
 			while(rs.next()){
@@ -150,7 +156,8 @@ public class DataBaseConnection {
 				empDetails.setDesignationName(rs.getString("DESIGNATIONNAME"));
 				
 				empDetails.setDob(rs.getDate("DATEOFBIRTH"));
-				empDetails.setCreatedDate(rs.getDate("ACTIONDATE"));
+				empDetails.setCreatedDate(rs.getDate("ACTIONDATE"));				
+				empDetails.setActive("Y".equals(rs.getString("ISACTIVE")));
 				map.put(rs.getString("EMPLOYEEID"), empDetails);
 			}
 		}catch(Exception e){
@@ -219,7 +226,8 @@ public class DataBaseConnection {
 					empDetails.setDesignationName(rs.getString("EMPDESIGNATIONNAME"));
 					
 					empDetails.setDob(rs.getDate("DATEOFBIRTH"));
-					empDetails.setCreatedDate(rs.getDate("ACTIONDATE"));					
+					empDetails.setCreatedDate(rs.getDate("ACTIONDATE"));
+					empDetails.setActive("Y".equals(rs.getString("ISACTIVE")));
 				}
 			}catch(Exception e){
 				System.out.println("exception in get employee query:::"+e.getMessage());
@@ -228,7 +236,7 @@ public class DataBaseConnection {
 				try{
 					ps.close();
 					rs.close();
-					conn.close();
+					//conn1.close();
 				}catch(Exception e){}
 			}			
 		}
@@ -808,19 +816,20 @@ public class DataBaseConnection {
 		PreparedStatement ps1 = null;
 		PreparedStatement ps2 = null;
 		PreparedStatement ps3 = null;
+		Connection conn1 = null;
 		ResultSet rs1 = null;
 		ResultSet rs2 = null;
 		boolean status = false;
 		try{
-			conn = getDBConnection();
-			ps1 = conn.prepareStatement("select max(EMPLOYEEDETAILSID) as NUMBEROFRECORDS from TEMPLOYEEDETAILS");
+			conn1 = getDBConnection();
+			ps1 = conn1.prepareStatement("select max(EMPLOYEEDETAILSID) as NUMBEROFRECORDS from TEMPLOYEEDETAILS");
 			rs1 = ps1.executeQuery();
 			Integer empDetailsId = 0;
 			if(rs1.next())
 				if(rs1.getString(1) != null)
 					empDetailsId = rs1.getInt("NUMBEROFRECORDS");					
 			//insert employee details to emp details table
-			ps=conn.prepareStatement("insert into TEMPLOYEEDETAILS(EMPLOYEEDETAILSID,EMPLOYEEID,EMPLOYEENAME,EMAILID,MOBILENUMBER,LANDLINENUMBER,EXTNNUMBER,DATEOFBIRTH,DESIGNATIONID,DEPARTMENTID,ACTIONDATE,ISACTIVE) values (?,?,?,?,?,?,?,?,?,?,sysdate,?)");
+			ps=conn1.prepareStatement("insert into TEMPLOYEEDETAILS(EMPLOYEEDETAILSID,EMPLOYEEID,EMPLOYEENAME,EMAILID,MOBILENUMBER,LANDLINENUMBER,EXTNNUMBER,DATEOFBIRTH,DESIGNATIONID,DEPARTMENTID,ACTIONDATE,ISACTIVE) values (?,?,?,?,?,?,?,?,?,?,sysdate,?)");
 			empDetailsId = empDetailsId + 1;
 			ps.setInt(1, empDetailsId);	
 			ps.setString(2, registerEmployeeForm.getEmployeeId());
@@ -833,18 +842,18 @@ public class DataBaseConnection {
 			ps.setString(8, registerEmployeeForm.getDob());
 			ps.setString(9, registerEmployeeForm.getDesignationId());
 			ps.setString(10, registerEmployeeForm.getDepartmentId());			
-			ps.setString(11, "1");			
+			ps.setString(11, "Y");			
 			ps.executeQuery();	
 			
 		// insert employee login details to login table
-			ps3 = conn.prepareStatement("select max(LOGINID) as NUMBEROFRECORDS from TLOGIN");
+			ps3 = conn1.prepareStatement("select max(LOGINID) as NUMBEROFRECORDS from TLOGIN");
 			rs2 = ps3.executeQuery();
 			Integer loginId = 0;
 			if(rs2.next())
 				if(rs2.getString(1) != null)
 					loginId = rs2.getInt("NUMBEROFRECORDS");
 			PasswordGenerator pwdGenerator = new PasswordGenerator();
-			ps2 = conn.prepareStatement("insert into TLOGIN(LOGINID,USERNAME,LOGINPASSWORD,EMPLOYEEDETAILSID,LASTLOGINDATE,ISRANDOMPWD,ISACTIVE,EMPLOYEEROLEID) values (?,?,?,?,sysdate,?,?,?)");
+			ps2 = conn1.prepareStatement("insert into TLOGIN(LOGINID,USERNAME,LOGINPASSWORD,EMPLOYEEDETAILSID,LASTLOGINDATE,ISRANDOMPWD,ISACTIVE,EMPLOYEEROLEID) values (?,?,?,?,sysdate,?,?,?)");
 			ps2.setInt(1, loginId);
 			ps2.setString(2, registerEmployeeForm.getEmployeeId());
 			ps2.setString(3, pwdGenerator.generateRandomString());
@@ -865,7 +874,7 @@ public class DataBaseConnection {
 				ps3.close();
 				rs1.close();
 				rs2.close();
-				conn.close();
+				conn1.close();
 			}catch(Exception e){}
 		}			
 		return status;
@@ -938,6 +947,37 @@ public class DataBaseConnection {
 			}catch(Exception e){}
 		}	
 		return travelModesMap;
+	}
+	
+	public boolean updatePassword(String empDetailsId, boolean isRandomPwd, String newPwd){
+		boolean status = false;
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		
+		try{
+			conn = getDBConnection();
+			if(isRandomPwd){
+				ps = conn.prepareStatement("update TLOGIN set LOGINPASSWORD = ?, ISRANDOMPWD = 'N' where EMPLOYEEDETAILSID = ?");
+			}else{
+				ps = conn.prepareStatement("update TLOGIN set LOGINPASSWORD = ? where EMPLOYEEDETAILSID = ?");
+			}
+			ps.setString(1, newPwd);
+			ps.setString(2, empDetailsId);
+			rs = ps.executeQuery();
+			if(rs.next()){
+				status = true;
+			}		
+		}catch(Exception e){
+			System.out.println("exception in update password query:::"+e.getMessage());
+		}
+		finally{
+			try{
+				ps.close();
+				rs.close();
+				conn.close();
+			}catch(Exception e){}
+		}	
+		return status;
 	}
 	
 	public Map<String, String> getDepartment(){

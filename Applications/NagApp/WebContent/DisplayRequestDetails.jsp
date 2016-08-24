@@ -95,11 +95,15 @@
 </head>
 <body>
 <div id="mainDiv">
-	<div id="innerMainDiv">
+	<div class="header">
+		<div class="headerContentMainDiv">
+			<div class="logo"><img src="images/logo.jpg" /></div>
+		</div>
+	</div>
+	<div id="innerMainDiv">	
+		<div id="contentDiv">
 		
-		<div class="header">Menu</div>
-		
-		<div id="empHome" class="pageContent">			
+		<div id="displayRequestDetails" class="pageContent">			
 				
 			<div class="container">
 				<div class="menuSection">						
@@ -119,7 +123,7 @@
 				</div>
 				
 				<div class="contentSection">
-					<div class="heading">Request Details ${hideBtns}</div>
+					<div class="heading">Request Details</div>
 					<div class="subHead">Details</div>
 					<div class="requestDetailsDiv">	
 						<div class="requestDetails">					
@@ -213,9 +217,17 @@
 			</div>				
 		</div>
 		
-		<div class="footer">Footer</div>
+		<div class="footerPush"></div>
+	</div>
+	</div>
+	<div class="footer">
+		<div class="footerContentMainDiv">
+			<div class=></div>
+		</div>
 	</div>
 </div>
+</body>
+</html>
 <script>
 $("#approveBtn").click(function(){	
 	var action = $("#requestProcess").attr("action") + "?action=approve&travelRequestVersionId="+$("#reqVersionId").val()+"&reqMasterId="+$("#reqMasterId").val();	
