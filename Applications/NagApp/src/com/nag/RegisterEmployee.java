@@ -1,6 +1,9 @@
 package com.nag;
 
 import java.io.IOException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -57,7 +60,14 @@ public class RegisterEmployee extends HttpServlet {
 		
 		String employeeId = request.getParameter("employeeId");
 		String employeeName = request.getParameter("employeeName");
-		String dob = request.getParameter("dob");
+		String dobString = request.getParameter("dob");
+		Date dob = null;
+		try{
+        	DateFormat df = new SimpleDateFormat("dd/mm/yyyy"); 
+        	dob = df.parse(dobString);
+        }catch(Exception e){
+        	System.out.println("Unable to convert emp DOB to date object in bulk upload");
+        }
 		String designationId = request.getParameter("designationId");
 		String departmentId = request.getParameter("departmentId");
 		String email = request.getParameter("email");
@@ -67,7 +77,7 @@ public class RegisterEmployee extends HttpServlet {
 		
 		if( StringUtils.isNotEmpty(employeeId) && 
 				StringUtils.isNotEmpty(employeeName) && 
-				StringUtils.isNotEmpty(dob) && 
+				StringUtils.isNotEmpty(dobString) && 
 				StringUtils.isNotEmpty(designationId) && 
 				StringUtils.isNotEmpty(departmentId) &&
 				StringUtils.isNotEmpty(email) &&

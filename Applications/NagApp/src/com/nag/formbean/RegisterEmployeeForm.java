@@ -1,9 +1,10 @@
 package com.nag.formbean;
 
+import java.util.Date;
 public class RegisterEmployeeForm {
 	private String employeeId;
 	private String employeeName;
-	private String dob;
+	private Date dob;
 	private String designationId;
 	private String departmentId;
 	private String email;
@@ -22,10 +23,10 @@ public class RegisterEmployeeForm {
 	public void setEmployeeName(String employeeName) {
 		this.employeeName = employeeName;
 	}
-	public String getDob() {
+	public Date getDob() {
 		return dob;
 	}
-	public void setDob(String dob) {
+	public void setDob(Date dob) {
 		this.dob = dob;
 	}
 	public String getDesignationId() {

@@ -62,10 +62,10 @@
 		<div id="contentDiv">
 		
 			<div id="loginPage" class="pageContent">
-				<form action="LoginServlet" method="post" id="loginForm"></form>
+				<form action="LoginServlet" method="post" id="loginForm">
 				<div class="container">
 					<div class="box">
-					<div class="errorMsg">Please enter correct values</div>
+						<div class="errorMsg">Please enter correct values</div>
 						<div class="userNameDiv">
 							<div class="label">User Name:</div>
 							<div class="ipField"><input type="text" name="username" id="username" /></div>
@@ -77,7 +77,8 @@
 						<div class="submitBtnDiv"><input type="submit" value="sign in" id="submitBtn"/></div>
 						<div class=""></div>
 					</div>
-				</div>				
+				</div>	
+				</form>			
 			</div>
 		
 			<div class="footerPush"></div>
@@ -92,9 +93,8 @@
 </body>
 <script>
 $("#submitBtn").click(function(){
-	username = $(".username").val();
-	password = $(".password").val();
-	alert("submit btn");
+	username = $("#username").val();
+	password = $("#password").val();	
 	if(username != " " && password != " "){
 		$("#loginForm").submit();
 	}else{

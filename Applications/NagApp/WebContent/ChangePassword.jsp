@@ -60,10 +60,9 @@
 <div id="mainDiv">
 	<div id="innerMainDiv">
 		
-		<div class="header">Menu</div>
+		<jsp:include page="header.jsp" />
 		
-		<div id="changeRandomPwd" class="pageContent">			
-				
+		<div id="changeRandomPwd" class="pageContent">				
 			<div class="container">				
 				<div class="contentSection">			
 					
@@ -89,10 +88,11 @@
 							</form>											
 						</div>					
 				</div>
-			</div>				
+			</div>
+			<div class="footerPush"></div>				
 		</div>
 		
-		<div class="footer">Footer</div>
+		<jsp:include page="footer.jsp" />
 	</div>
 </div>
 </body>

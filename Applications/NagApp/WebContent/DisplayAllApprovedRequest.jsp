@@ -42,33 +42,14 @@
 </head>
 <body>
 <div id="mainDiv">
-	<div class="header">
-		<div class="headerContentMainDiv">
-			<div class="logo"><image src="images/logo.jpg" /></div>
-		</div>
-	</div>
+	<jsp:include page="header.jsp" />
 	<div id="innerMainDiv">	
 		<div id="contentDiv">
 		
 			<div id="displayAllApprovedRequest" class="pageContent">			
 					
 				<div class="container">
-					<div class="menuSection">						
-						<ul class="menuItems">
-							<li><a href="AdminHome.jsp">Admin Home</a></li>
-							<li><a href="EmployeeRegistration.jsp">Employee Registration</a></li>
-							<li><a href="UploadEmpData.jsp">Upload Employee's Data</a></li>
-							<li></li>
-							<li></li>
-							
-							<li><a href="GetAllApprovedRequest">Approved Travel Requests</a></li>
-							<li><a href="GetAllPendingRequest">Pending Travel Requests</a></li>
-							<li><a href="GetAllRejectedRequest">Rejected Travel Requests</a></li>
-							<li></li>
-							<li></li>						
-							<li><a href="LogOut">Log out</a></li>
-						</ul>						
-					</div>
+					<jsp:include page="adminMenu.jsp" />
 					
 					<div class="contentSection">
 						<div class="heading">All Approved Requests</div>
@@ -79,10 +60,11 @@
 								<tbody>
 									<tr>
 										<td class="HeaderTd" style="width:8%;">S No</td>
+										<td class="HeaderTd">Requested By</td>
 										<td class="HeaderTd">Source</td>
 										<td class="HeaderTd">Destination</td>
 										<td class="HeaderTd">Travel Date</td>
-										<td class="HeaderTd">Travel Mode</td>
+										<!-- <td class="HeaderTd">Travel Mode</td>-->
 										<td class="HeaderTd">Expenses</td>
 										<td class="HeaderTd">Date</td>																		
 									</tr>
@@ -90,17 +72,18 @@
 									<c:forEach items="${allApprovedRequestMap}" var="approvedRequest" varStatus="status">
 									<c:set var="count" value="${count + 1}"></c:set>
 									<tr>
-										<td class="dataTd">${count}</td>	
+										<td class="dataTd">${count}</td>
+										<td class="dataTd">${approvedRequest.value.requestedEmpDetails.employeeName}</td>
 										<td class="dataTd">${approvedRequest.value.source}</td>
 										<td class="dataTd">${approvedRequest.value.destination}</td>
 										<td class="dataTd">${approvedRequest.value.travelDate}</td>
-										<td class="dataTd">
+										<!-- <td class="dataTd">
 										<c:forEach items="${travelModesMap}" var="travelModes" varStatus="status">													
 											<c:if test="${travelModes.key == approvedRequest.value.travelModeId}">
 												${travelModes.value}
 											</c:if>
 										</c:forEach>								
-										</td>
+										</td> -->
 										<td class="dataTd">${approvedRequest.value.expenses}</td>
 										<td class="dataTd">${approvedRequest.value.createdDate}</td>
 										<td class="dataTd"><a href="TravelRequestDetails?requestFrom=owner&travelRequestMasterId=${approvedRequest.value.travelRequestMasterId}">Details</a></td>														
@@ -116,15 +99,12 @@
 						</div>
 					</div>
 				</div>				
-				<div class="footerPush"></div>
+				
 			</div>
+			<div class="footerPush"></div>
 		</div>
 	</div>
-	<div class="footer">
-		<div class="footerContentMainDiv">
-			<div class=></div>
-		</div>
-	</div>	
+	<jsp:include page="footer.jsp" />
 </div>
 </body>
 </html>

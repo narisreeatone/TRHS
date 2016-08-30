@@ -113,15 +113,14 @@
 					</c:choose>
 					</div>
 				</div>
-			</div>				
+			</div>
+							
 		</div>
-		
-		<div class="header">
-		<div class="headerContentMainDiv">
-			<div class="logo"><img src="images/logo.jpg" /></img></div>
-		</div>
+		<div class="footerPush"></div>
 	</div>
-	<div id="innerMainDiv">	
-		<div id="contentDiv">
+		
+	</div>		
+	<jsp:include page="footer.jsp" />
+</div>
 </body>
 </html>

@@ -42,33 +42,14 @@
 </head>
 <body>
 <div id="mainDiv">
-	<div class="header">
-		<div class="headerContentMainDiv">
-			<div class="logo"><img src="images/logo.jpg" /></div>
-		</div>
-	</div>
+	<jsp:include page="header.jsp" />
 	<div id="innerMainDiv">	
 		<div id="contentDiv">
 		
 		<div id="displayAllRejectedReq" class="pageContent">			
 				
 			<div class="container">
-				<div class="menuSection">						
-					<ul class="menuItems">
-						<li><a href="AdminHome.jsp">Admin Home</a></li>
-						<li><a href="EmployeeRegistration.jsp">Employee Registration</a></li>
-						<li><a href="UploadEmpData.jsp">Upload Employee's Data</a></li>
-						<li></li>
-						<li></li>
-						
-						<li><a href="GetAllApprovedRequest">Approved Travel Requests</a></li>
-						<li><a href="GetAllPendingRequest">Pending Travel Requests</a></li>
-						<li><a href="GetAllRejectedRequest">Rejected Travel Requests</a></li>
-						<li></li>
-						<li></li>						
-						<li><a href="LogOut">Log out</a></li>
-					</ul>						
-				</div>
+				<jsp:include page="adminMenu.jsp" />
 				
 				<div class="contentSection">
 					<div class="heading">All Rejected Requests</div>
@@ -79,10 +60,11 @@
 							<tbody>
 								<tr>
 									<td class="HeaderTd" style="width:8%;">S No</td>
+									<td class="HeaderTd">Requested By</td>
 									<td class="HeaderTd">Source</td>
 									<td class="HeaderTd">Destination</td>
 									<td class="HeaderTd">Travel Date</td>
-									<td class="HeaderTd">Travel Mode</td>
+									<!--<td class="HeaderTd">Travel Mode</td> -->
 									<td class="HeaderTd">Expenses</td>
 									<td class="HeaderTd">Date</td>																		
 								</tr>
@@ -91,16 +73,17 @@
 								<c:set var="count" value="${count + 1}"></c:set>
 								<tr>
 									<td class="dataTd">${count}</td>	
+									<td class="dataTd">${rejectedRequest.value.requestedEmpDetails.employeeName}</td>
 									<td class="dataTd">${rejectedRequest.value.source}</td>
 									<td class="dataTd">${rejectedRequest.value.destination}</td>
 									<td class="dataTd">${rejectedRequest.value.travelDate}</td>
 									<td class="dataTd">
-									<c:forEach items="${travelModesMap}" var="travelModes" varStatus="status">													
+									<!--<c:forEach items="${travelModesMap}" var="travelModes" varStatus="status">													
 										<c:if test="${travelModes.key == rejectedRequest.value.travelModeId}">
 											${travelModes.value}
 										</c:if>
 									</c:forEach>								
-									</td>
+									</td> -->
 									<td class="dataTd">${rejectedRequest.value.expenses}</td>
 									<td class="dataTd">${rejectedRequest.value.createdDate}</td>
 									<td class="dataTd"><a href="TravelRequestDetails?requestFrom=owner&travelRequestMasterId=${rejectedRequest.value.travelRequestMasterId}">Details</a></td>														
@@ -118,12 +101,10 @@
 			</div>				
 		</div>
 		
-		<div class="header">
-		<div class="headerContentMainDiv">
-			<div class="logo"><img src="images/logo.jpg" /></img></div>
+		<div class="footerPush"></div>
 		</div>
 	</div>
-	<div id="innerMainDiv">	
-		<div id="contentDiv">
+	<jsp:include page="footer.jsp" />
+</div>
 </body>
 </html>

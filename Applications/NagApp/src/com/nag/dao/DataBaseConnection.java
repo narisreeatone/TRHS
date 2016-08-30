@@ -136,7 +136,7 @@ public class DataBaseConnection {
 		ResultSet rs = null;
 		EmployeeDetails empDetails = null;				
 		Map<String, Object> map = new HashMap<String, Object>();
-		boolean isempActive =false;
+		//boolean isempActive =false;
 		try{
 			stmt=conn.prepareStatement("select Emp.*, Dept.DEPARTMENTNAME, Desi.DESIGNATIONNAME   from TEMPLOYEEDETAILS Emp, TDEPARTMENTS Dept, TDESIGNATION Desi where Emp.DESIGNATIONID = Desi.DESIGNATIONID AND Emp.DEPARTMENTID = Dept.DEPARTMENTID and Emp.ISACTIVE = 'Y'");						
 			rs = stmt.executeQuery();
@@ -839,7 +839,7 @@ public class DataBaseConnection {
 			ps.setString(5, registerEmployeeForm.getMobile());
 			ps.setString(6, registerEmployeeForm.getLandline());
 			ps.setString(7, registerEmployeeForm.getExtension());
-			ps.setString(8, registerEmployeeForm.getDob());
+			ps.setDate(8, new java.sql.Date(registerEmployeeForm.getDob().getTime()));
 			ps.setString(9, registerEmployeeForm.getDesignationId());
 			ps.setString(10, registerEmployeeForm.getDepartmentId());			
 			ps.setString(11, "Y");			
@@ -908,8 +908,12 @@ public class DataBaseConnection {
 				reqMaster.setAttachmentPath(rs.getString("ATTACHMENTPATH"));
 				reqMaster.setTravelRequestStatus(rs.getString("TRAVELREQUESTSTATUS"));
 				reqMaster.setCreatedDate(rs.getDate("ACTIONDATE"));
-				reqMaster.setTravelDate(rs.getDate("TRAVELDATE"));				
+				reqMaster.setTravelDate(rs.getDate("TRAVELDATE"));	
+				
+				EmployeeDetails requestedEmpDetails = getEmployeeDetailsById(rs.getString("EMPLOYEEDETAILSID"));
+				reqMaster.setRequestedEmpDetails(requestedEmpDetails);
 				reqMasterMap.put(reqMasterId.toString(), reqMaster);
+				
 			}			
 		}catch(Exception e){
 			System.out.println("exception in getting all approved requests query:::"+e.getMessage());
@@ -1028,5 +1032,66 @@ public class DataBaseConnection {
 			}catch(Exception e){}
 		}	
 		return designationMap;
+	}
+	
+	public boolean addNewService(String serviceType, String serviceName){
+		PreparedStatement ps = null;
+		ResultSet rs = null;
+		PreparedStatement ps1 = null;
+		//ResultSet rs1 = null;
+		Integer id = 0;
+		boolean status = true;
+		try{
+			conn = getDBConnection();
+			if( "dept".equals(serviceType)){
+				ps = conn.prepareStatement("select max(DEPARTMENTID) from TDEPARTMENTS");
+				rs = ps.executeQuery();				
+				if(rs.next()){
+					id = rs.getInt(1);
+				}
+				
+				ps1 = conn.prepareStatement("insert into TDEPARTMENTS(DEPARTMENTID,DEPARTMENTNAME,ACTIONDATE) values(?,?,sysdate)");
+				ps1.setInt(1, id+1);
+				ps1.setString(2, serviceName);	
+				ps1.executeQuery();
+			}else
+			if("designation".equals(serviceType)){
+				ps = conn.prepareStatement("select max(DESIGNATIONID) from TDESIGNATION");
+				rs = ps.executeQuery();
+				if(rs.next()){
+					id = rs.getInt(1);
+				}
+				
+				ps1 = conn.prepareStatement("insert into TDESIGNATION(DESIGNATIONID,DESIGNATIONNAME,ACTIONDATE) values(?,?,sysdate)");
+				ps1.setInt(1, id+1);
+				ps1.setString(2, serviceName);	
+				ps1.executeQuery();
+			}else
+			if("travelMode".equals(serviceType)){
+				ps = conn.prepareStatement("select max(TRAVELMODEID) from TTRAVELMODES");
+				rs = ps.executeQuery();
+				if(rs.next()){
+					id = rs.getInt(1);
+				}
+				
+				ps1 = conn.prepareStatement("insert into TTRAVELMODES(TRAVELMODEID,TRAVELMODENAME,ACTIONDATE) values(?,?,sysdate)");
+				ps1.setInt(1, id+1);
+				ps1.setString(2, serviceName);	
+				ps1.executeQuery();
+			}						
+		}catch(Exception e){
+			System.out.println("exception in adding new services to DB:::"+e.getMessage());
+			status = false;
+		}
+		finally{
+			try{
+				ps.close();
+				rs.close();
+				ps1.close();
+				//rs1.close();
+				conn.close();
+			}catch(Exception e){}
+		}
+		return status;
 	}
 }

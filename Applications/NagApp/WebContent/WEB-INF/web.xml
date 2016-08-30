@@ -20,4 +20,9 @@
     <param-name>password</param-name>
     <param-value>nagarjuna</param-value>
   </context-param>
+  <context-param>
+    <description>Location to store uploaded file</description>
+    <param-name>file-upload</param-name>
+    <param-value>c:\Program Files\Tomcat 8.0\webapps\nagarjuna\</param-value>
+  </context-param>
 </web-app>

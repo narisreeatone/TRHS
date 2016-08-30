@@ -42,32 +42,14 @@
 </head>
 <body>
 <div id="mainDiv">
-	<div class="header">
-		<div class="headerContentMainDiv">
-			<div class="logo"><img src="images/logo.jpg" /></div>
-		</div>
-	</div>
+	<jsp:include page="header.jsp" />
 	<div id="innerMainDiv">	
 		<div id="contentDiv">
 		
 		<div id="displayApprovedReqByEmp" class="pageContent">			
 				
 			<div class="container">
-				<div class="menuSection">						
-					<ul class="menuItems">
-						<li><a href="employeeHome.jsp">Employee Profile</a></li>
-						<li><a href="NewTravelRequest.jsp">New Travel Request</a></li>
-						<li><a href="GetApprovedRequest">Approved Travel Requests</a></li>
-						<li><a href="GetapprovedRequest">Pending Travel Requests</a></li>
-						<li><a href="GetRejectedRequest">Rejected Travel Requests</a></li>
-						<li></li>
-						<li></li>
-						<li><a href="GetApproveRequest">Approve Travel Request</a></li>
-						<li><a href="GetApprovedReqByEmp">Approved Travel Requests by you</a></li>
-						<li><a href="GetRejectedReqByEmp">Rejected Travel Requests by you</a></li>
-						<li><a href="LogOut">Log out</a></li>
-					</ul>						
-				</div>
+				<jsp:include page="employeeMenu.jsp" />
 				
 				<div class="contentSection">
 					<div class="heading">Approved Requests by you</div>
@@ -114,16 +96,12 @@
 					</c:choose>
 					</div>
 				</div>
-			</div>				
-		<div class="footerPush"></div>
-	</div>
-	</div>
-	<div class="footer">
-		<div class="footerContentMainDiv">
-			<div class=></div>
+			</div>	
 		</div>
+		<div class="footerPush"></div>
+		</div>	
 	</div>
-</div>
+	<jsp:include page="footer.jsp" />
 </div>
 </body>
 </html>
