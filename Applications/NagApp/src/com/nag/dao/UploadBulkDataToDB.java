@@ -17,6 +17,8 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import com.nag.formbean.*;
+import com.nag.mail.MailHandler;
+import com.nag.bean.*;
 
 public class UploadBulkDataToDB {
 	private Connection conn = null;
@@ -36,9 +38,11 @@ public class UploadBulkDataToDB {
 		return conn;
 	}
 	
-	public boolean uploadEmpDetailsToDB(String filePath){
+	public String uploadEmpDetailsToDB(String filePath){
 		FileInputStream inputStream = null;
-		Workbook workbook = null;		
+		Workbook workbook = null;
+		String message = "true";
+		String errorMessage = "There is a problem with Employee data. Please check employee data of Emp Id(s):::";
 		try {
 			inputStream = new FileInputStream(new File(filePath));
 			workbook = new XSSFWorkbook(inputStream);
@@ -89,6 +93,9 @@ public class UploadBulkDataToDB {
             	dob = df.parse(dobString);
             }catch(Exception e){
             	System.out.println("Unable to convert emp DOB to date object in bulk upload");
+            	errorMessage = errorMessage + rowValues.get(1) + ", ";
+            	message = errorMessage;
+            	break;
             }
             String designationId = rowValues.get(7);
             String departmentId = rowValues.get(8);
@@ -102,46 +109,22 @@ public class UploadBulkDataToDB {
             registerEmpForm.setDob(dob);
             registerEmpForm.setDesignationId(designationId);
             registerEmpForm.setDepartmentId(departmentId);
-            boolean dbStatus = dbHandler.registerEmployee(registerEmpForm);
-            if(!dbStatus)
-            	return dbStatus;
-            /*conn = getDBConnection();
-            PreparedStatement ps = null;
-            PreparedStatement ps1 = null;
-    		ResultSet rs = null;
-            try{
-            	ps = conn.prepareStatement("select max(EMPLOYEEDETAILSID) as NUMBEROFRECORDS from TEMPLOYEEDETAILS");
-    			rs = ps.executeQuery();
-    			Integer empDetailsId = 0;
-    			if(rs.next())
-    				if(rs.getString(1) != null)
-    					empDetailsId = rs.getInt("NUMBEROFRECORDS");					
-    			
-    			ps1=conn.prepareStatement("insert into TEMPLOYEEDETAILS(EMPLOYEEDETAILSID,EMPLOYEEID,EMPLOYEENAME,EMAILID,MOBILENUMBER,LANDLINENUMBER,EXTNNUMBER,DATEOFBIRTH,DESIGNATIONID,DEPARTMENTID,ISACTIVE,ACTIONDATE) values (?,?,?,?,?,?,?,?,?,?,?,sysdate)");
-    			empDetailsId = empDetailsId + 1;
-    			ps1.setInt(1, empDetailsId);	
-    			for(int i = 0, j = 2; i < rowValues.size(); i++,j++){
-    				if(i == 6){
-    					DateFormat df = new SimpleDateFormat("dd/mm/yyyy"); 
-    					java.util.Date dob = df.parse(rowValues.get(i));
-						ps1.setDate(j, new java.sql.Date(dob.getTime()));
-    				}
-    				else{    					
-    					ps1.setString(j, rowValues.get(i));
-    				}
-    			}
-    			ps1.setString(11, "1");
-    			ps1.executeQuery();
-    			System.out.println("successfully inserted employee details. Id is:::"+rowValues.get(1)); 
-            }catch(Exception e){
-            	System.out.println("exception inserting employee details:::employee id:::"+rowValues.get(0)+" exception is:::"+e.getMessage());
-            }finally{
-            	try{
-    				ps.close();
-    				ps1.close();    				
-    				conn.close();
-    			}catch(Exception e){}
-    		}*/
+            String dbStatus = dbHandler.registerEmployee(registerEmpForm);
+            if("true".equals(dbStatus)){
+            	MailHandler mailHandler = new MailHandler();
+            	System.out.println("successfully inserted employee details. Emp Id is:::"+rowValues.get(0));
+            	EmployeeLoginDetails empLoginDetails = dbHandler.getLoginDetails(employeeId);
+            	EmployeeDetails employeeDetails = dbHandler.getEmployeeDetailsByEmpId(employeeId);
+            	boolean mailStatus = mailHandler.sendEmployeeRegistrationDetails(empLoginDetails, employeeDetails);
+				if(mailStatus){
+					System.out.println("successfully sent employee credentials to Emp Id is:::"+rowValues.get(0));
+				}
+            }
+            else{
+            	System.out.println("There is a problem with Employee data. Please check data. Emp Id is:::"+rowValues.get(1));
+            	errorMessage = errorMessage + rowValues.get(1) + ", ";
+            	message = errorMessage;
+            }            
         }
          
         try {
@@ -151,6 +134,6 @@ public class UploadBulkDataToDB {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        return true;
+        return message;
 	}
 }

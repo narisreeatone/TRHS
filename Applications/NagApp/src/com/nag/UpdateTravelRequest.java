@@ -13,10 +13,11 @@ import com.nag.bean.TravelRequestMaster;
 import com.nag.dao.DataBaseConnection;
 
 import com.nag.mail.*;
+import com.nag.util.ValidateUserSession;
 /**
  * Servlet implementation class UpdateTravelRequest
  */
-@WebServlet("/UpdateTravelRequest")
+@WebServlet("/web/UpdateTravelRequest")
 public class UpdateTravelRequest extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -41,31 +42,40 @@ public class UpdateTravelRequest extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub		
-		DataBaseConnection dbHandler = new DataBaseConnection();		
-		HttpSession session = request.getSession();	
+				
+		HttpSession session = request.getSession(false);
+		ValidateUserSession validateUserSession = new ValidateUserSession();
 		RequestDispatcher rd;
-		MailHandler mailHandler = new MailHandler();
 		
-		EmployeeDetails loggedEmpDetails = (EmployeeDetails)session.getAttribute("loginUserDetails");
-		String loggedEmpDetailsId = loggedEmpDetails.getEmployeeDetailsId();		
-		String travelRequestVersionId = request.getParameter("travelRequestVersionId");
-		String travelRequestMasterId = request.getParameter("reqMasterId");
-		String action = request.getParameter("action");		
-		String updateStatus = dbHandler.updateTravelRequest(action, travelRequestVersionId, travelRequestMasterId, loggedEmpDetailsId);
-		String message = "Error in updating travel request.";
-		boolean mailstatus = false;
-		TravelRequestMaster reqMaster = dbHandler.getTravelRequestDetails(travelRequestMasterId);
-		EmployeeDetails reqOwnerDetails = dbHandler.getEmployeeDetailsById(reqMaster.getEmployeeDetailsId());
-		if("allApproved".equals(updateStatus)){
-			message = "Travel request has been updated.";
-			mailstatus = mailHandler.sendTravelRequestStatusMail(updateStatus, reqMaster, reqOwnerDetails);
-		}else if("rejected".equals(updateStatus)){
-			message = "Travel request has been rejected.";
-			mailstatus = mailHandler.sendTravelRequestStatusMail(updateStatus, reqMaster, reqOwnerDetails);
+		if(!validateUserSession.checkUserSession(session)){
+			DataBaseConnection dbHandler = new DataBaseConnection();
+			MailHandler mailHandler = new MailHandler();
+			EmployeeDetails loggedEmpDetails = (EmployeeDetails)session.getAttribute("loginUserDetails");
+			String loggedEmpDetailsId = loggedEmpDetails.getEmployeeDetailsId();		
+			String travelRequestVersionId = request.getParameter("travelRequestVersionId");
+			String travelRequestMasterId = request.getParameter("reqMasterId");
+			String action = request.getParameter("action");		
+			String updateStatus = dbHandler.updateTravelRequest(action, travelRequestVersionId, travelRequestMasterId, loggedEmpDetailsId);
+			String message = "Error in updating travel request.";
+			boolean mailstatus = false;
+			TravelRequestMaster reqMaster = dbHandler.getTravelRequestDetails(travelRequestMasterId);
+			EmployeeDetails reqOwnerDetails = dbHandler.getEmployeeDetailsById(reqMaster.getEmployeeDetailsId());
+			if("allApproved".equals(updateStatus)){
+				message = "Travel request has been updated.";
+				mailstatus = mailHandler.sendTravelRequestStatusMail(updateStatus, reqMaster, reqOwnerDetails);
+			}else if("rejected".equals(updateStatus)){
+				message = "Travel request has been rejected.";
+				mailstatus = mailHandler.sendTravelRequestStatusMail(updateStatus, reqMaster, reqOwnerDetails);
+			}
+			System.out.println("mail sent status:::"+mailstatus);
+			rd = request.getRequestDispatcher("/web/employeeHome.jsp");	
+			request.setAttribute("displayMessage", message);
+			//rd.forward(request,response);
+		}else{
+			rd = request.getRequestDispatcher("/NagApp/login.jsp");	
+			request.setAttribute("displayMessage", "Please log in to your account.");
 		}
-		System.out.println("mail sent status:::"+mailstatus);
-		rd = request.getRequestDispatcher("employeeHome.jsp");	
-		request.setAttribute("displayMessage", message);
+		
 		rd.forward(request,response);
 	}
 

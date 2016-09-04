@@ -6,6 +6,8 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Properties;
 import java.util.concurrent.Callable;
@@ -79,7 +81,13 @@ public class MailHandler {
             messageBody = messageBody.replace("{1}", reqFrom.getSource());
             messageBody = messageBody.replace("{2}", reqFrom.getDestination());
             messageBody = messageBody.replace("{3}", reqFrom.getPurpose());
-            messageBody = messageBody.replace("{4}", reqFrom.getTravelDate().toString());            
+            Date travelDate = new Date();
+            try{
+            	DateFormat df = new SimpleDateFormat("dd-MM-yyyy"); 
+            	travelDate = df.parse(reqFrom.getTravelDate().toString());
+            }catch(Exception e){            	
+            }
+            messageBody = messageBody.replace("{4}", travelDate.toString());            
             
             msg.setSubject(subject, "UTF-8");
             StringBuffer sb = new StringBuffer();
@@ -155,8 +163,17 @@ public class MailHandler {
                 messageBody = messageBody.replace("{1}", reqMaster.getSource());
                 messageBody = messageBody.replace("{2}", reqMaster.getDestination());
                 messageBody = messageBody.replace("{3}", reqMaster.getPurpose());
-                messageBody = messageBody.replace("{4}", reqMaster.getTravelDate().toString());
-                messageBody = messageBody.replace("{5}", reqMaster.getCreatedDate().toString());
+                //messageBody = messageBody.replace("{4}", reqMaster.getTravelDate().toString());
+                //messageBody = messageBody.replace("{5}", reqMaster.getCreatedDate().toString());
+                Date travelDate = new Date();
+                Date actionDate = new Date();
+                try{
+                	DateFormat df = new SimpleDateFormat("dd-mm-yyyy"); 
+                	travelDate = df.parse(reqMaster.getTravelDate().toString());
+                	actionDate = df.parse(reqMaster.getCreatedDate().toString());
+                }catch(Exception e){}
+                messageBody = messageBody.replace("{4}", travelDate.toString());
+                messageBody = messageBody.replace("{5}", actionDate.toString());
                 msg.setSubject(subject, "UTF-8");
                 sb = new StringBuilder();
                 sb.append("<HTML>\n");
@@ -248,7 +265,7 @@ public class MailHandler {
             StringBuilder sb = null;
             
             	System.out.println("sending approved mail");
-            	subject = "Employee registration success";
+            	subject = "Employee registration details";
                 messageBody = "<table width='600' height='18' cellspacing='0' cellpadding='0' border='0' style=''><tbody><tr><td width='600' height='18' valign='bottom' bgcolor='#ffffff' style='line-height:17px;font-family:Arial,Helvetica,Sans-serif;padding-bottom:20px;'>Your details are successfully registered. Below are the login details.</td></tr><tr><td width='600' height='18' valign='bottom' bgcolor='#ffffff' style='line-height:17px;font-family:Arial,Helvetica,Sans-serif;'><table width='600' height='18' cellspacing='0' cellpadding='0' border='0' style=''><tbody><tr><td width='150' height='18' valign='bottom' bgcolor='#ffffff' style='line-height:17px;font-family:Arial,Helvetica,Sans-serif;text-align:right;padding-right:10px'>username :</td><td width='' height='18' valign='bottom' bgcolor='#ffffff' style='line-height:17px;font-family:Arial,Helvetica,Sans-serif;'>{1}</td></tr><tr><td width='' height='18' valign='bottom' bgcolor='#ffffff' style='line-height:17px;font-family:Arial,Helvetica,Sans-serif;text-align:right;padding-right:10px'>password :</td><td width='' height='18' valign='bottom' bgcolor='#ffffff' style='line-height:17px;font-family:Arial,Helvetica,Sans-serif;'>{2}</td></tr></tbody></table></td></tr></tbody></table>";
                 messageBody = messageBody.replace("{1}", empLoginDetails.getUserName());
                 messageBody = messageBody.replace("{2}", empLoginDetails.getLoginPassword());

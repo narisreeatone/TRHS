@@ -25,4 +25,12 @@
     <param-name>file-upload</param-name>
     <param-value>c:\Program Files\Tomcat 8.0\webapps\nagarjuna\</param-value>
   </context-param>
+  	<filter>
+   		<filter-name>CheckSession</filter-name>
+  		<filter-class>com.nag.filter.CheckSession</filter-class>   		
+	</filter>
+	<filter-mapping>
+   		<filter-name>CheckSession</filter-name>
+   		<url-pattern>/web/*</url-pattern>
+	</filter-mapping>
 </web-app>

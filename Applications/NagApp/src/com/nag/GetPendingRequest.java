@@ -15,11 +15,12 @@ import java.util.*;
 import com.nag.bean.*;
 import com.nag.dao.*;
 import com.nag.formbean.*;
+import com.nag.util.ValidateUserSession;
 
 /**
  * Servlet implementation class GetPendingRequest
  */
-@WebServlet("/GetPendingRequest")
+@WebServlet("/web/GetPendingRequest")
 public class GetPendingRequest extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -43,16 +44,23 @@ public class GetPendingRequest extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub		
-		DataBaseConnection dbHandler = new DataBaseConnection();		
-		HttpSession session = request.getSession();	
+		// TODO Auto-generated method stub			
+		HttpSession session = request.getSession(false);	
 		RequestDispatcher rd;
+		ValidateUserSession validateUserSession = new ValidateUserSession();
+		if(!validateUserSession.checkUserSession(session)){
+			DataBaseConnection dbHandler = new DataBaseConnection();
+			EmployeeDetails empDetails = (EmployeeDetails)session.getAttribute("loginUserDetails");
+			String empDetailsId = empDetails.getEmployeeDetailsId();
+			Map <String, TravelRequestMaster> pendingRequestMap = dbHandler.getPendingRequestForEmployee(empDetailsId);		
+			rd = request.getRequestDispatcher("/web/DisplayPendingTravelRequest.jsp");		
+			request.setAttribute("pendingRequestMap", pendingRequestMap);
+			//rd.forward(request,response);
+		}else{
+			rd = request.getRequestDispatcher("/NagApp/login.jsp");	
+			request.setAttribute("displayMessage", "Please log in to your account.");
+		}
 		
-		EmployeeDetails empDetails = (EmployeeDetails)session.getAttribute("loginUserDetails");
-		String empDetailsId = empDetails.getEmployeeDetailsId();
-		Map <String, TravelRequestMaster> pendingRequestMap = dbHandler.getPendingRequestForEmployee(empDetailsId);		
-		rd = request.getRequestDispatcher("DisplayPendingTravelRequest.jsp");		
-		request.setAttribute("pendingRequestMap", pendingRequestMap);
 		rd.forward(request,response);
 	}
 

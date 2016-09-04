@@ -14,11 +14,12 @@ import javax.servlet.http.HttpSession;
 import com.nag.bean.EmployeeDetails;
 import com.nag.bean.TravelRequestMaster;
 import com.nag.dao.DataBaseConnection;
+import com.nag.util.ValidateUserSession;
 
 /**
  * Servlet implementation class GetApproveRequest
  */
-@WebServlet("/GetApproveRequest")
+@WebServlet("/web/GetApproveRequest")
 public class GetApproveRequest extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -43,14 +44,23 @@ public class GetApproveRequest extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
-		DataBaseConnection dbHandler = new DataBaseConnection();		
-		HttpSession session = request.getSession();	
+				
+		HttpSession session = request.getSession(false);	
 		RequestDispatcher rd;
-		EmployeeDetails empDetails = (EmployeeDetails)session.getAttribute("loginUserDetails");
-		String empDetailsId = empDetails.getEmployeeDetailsId();
-		Map <String, TravelRequestMaster> approveRequestMap = dbHandler.getApproveRequestForEmployee(empDetailsId);
-		rd = request.getRequestDispatcher("DisplayApproveRequest.jsp");		
-		request.setAttribute("approveRequestMap", approveRequestMap);
+		ValidateUserSession validateUserSession = new ValidateUserSession();
+		if(!validateUserSession.checkUserSession(session)){
+			DataBaseConnection dbHandler = new DataBaseConnection();
+			EmployeeDetails empDetails = (EmployeeDetails)session.getAttribute("loginUserDetails");
+			String empDetailsId = empDetails.getEmployeeDetailsId();
+			Map <String, TravelRequestMaster> approveRequestMap = dbHandler.getApproveRequestForEmployee(empDetailsId);
+			rd = request.getRequestDispatcher("/web/DisplayApproveRequest.jsp");		
+			request.setAttribute("approveRequestMap", approveRequestMap);
+			//rd.forward(request,response);
+		}else{
+			rd = request.getRequestDispatcher("/NagApp/login.jsp");	
+			request.setAttribute("displayMessage", "Please log in to your account.");
+		}
+		
 		rd.forward(request,response);
 		
 	}

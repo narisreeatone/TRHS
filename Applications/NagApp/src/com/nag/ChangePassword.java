@@ -18,7 +18,7 @@ import com.nag.sql.ConstantInfoFromDB;
 /**
  * Servlet implementation class ChangePassword
  */
-@WebServlet("/ChangePassword")
+@WebServlet("/web/ChangePassword")
 public class ChangePassword extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -44,7 +44,7 @@ public class ChangePassword extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		DataBaseConnection dbHandler = new DataBaseConnection();		
-		HttpSession session = request.getSession(true);	
+		HttpSession session = request.getSession(false);	
 		RequestDispatcher rd;
 		
 		//String currentPwd = request.getParameter("currentPwd");
@@ -58,11 +58,11 @@ public class ChangePassword extends HttpServlet {
 		if(newPwd1.equals(newPwd2)){
 			updatePwdStatus = dbHandler.updatePassword(empDetails.getEmployeeDetailsId(), isRandomPwd, newPwd1);
 			if(updatePwdStatus){
-				rd = request.getRequestDispatcher("employeeHome.jsp");
+				rd = request.getRequestDispatcher("/web/employeeHome.jsp");
 				displayMessage = "Password has been changed.";
 			}
 		}else{
-			rd = request.getRequestDispatcher("ChangePassword.jsp");
+			rd = request.getRequestDispatcher("/web/ChangePassword.jsp");
 			displayMessage = "Entered new password and re-enter new password doesn't match.";
 		}
 		session.setAttribute("displayMessage", displayMessage);

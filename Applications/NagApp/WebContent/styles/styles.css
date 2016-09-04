@@ -23,7 +23,7 @@ a:hover{
 }
 #innerMainDiv{		
 	height: 100%;
-	margin: 0 auto -120px;
+	margin: 0 auto -50px;
 }
 #contentDiv{
 	
@@ -34,7 +34,7 @@ a:hover{
 .header{
 	float:left;
 	width:100%;
-	height:120px;
+	height:84px;
 	color:blue;	
 	margin-bottom: 20px;
 	background: #016fe3 none repeat scroll 0 0;
@@ -49,7 +49,7 @@ a:hover{
 .footer{
 	float:left;
 	width:100%;
-	height:120px;
+	height:50px;
 	color:blue;	
 	background: #016fe3 none repeat scroll 0 0;
 	clear: both;
@@ -78,6 +78,7 @@ a:hover{
     border-right: 1px solid black;
     float: left;
     width: 19%;
+    padding-top:15px;
 }
 .menuItems{
 	list-style:none;	
@@ -116,4 +117,21 @@ a:hover{
 }
 .errorMsgDiv, .erroMsg{
 	color:red;
+}
+.error {
+    border: 1px dotted red;
+}
+.errorMessage{
+	color:red;
+	visibility:hidden;
+}
+#submitBtn {
+    background: #33b5e5 none repeat scroll 0 0;
+    border: 0 none;
+    color: #ffffff;
+    cursor: pointer;
+    padding: 7px 0;
+    transition: all 0.3s ease 0s;
+    width: 85px;
+    font-weight:bold;
 }

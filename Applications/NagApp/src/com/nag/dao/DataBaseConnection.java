@@ -33,7 +33,7 @@ public class DataBaseConnection {
 		PreparedStatement stmt = null;
 		ResultSet rs = null;
 		EmployeeLoginDetails empLoginDetails = new EmployeeLoginDetails();
-		//conn = getDBConnection();
+		conn = getDBConnection();
 		/*Connection conn1 = null;
 		try{
 			Class.forName("oracle.jdbc.driver.OracleDriver");			
@@ -73,7 +73,7 @@ public class DataBaseConnection {
 		conn = getDBConnection();
 		PreparedStatement stmt = null;
 		ResultSet rs = null;	
-		EmployeeDetails empDetails = new EmployeeDetails();
+		EmployeeDetails empDetails = null;
 		EmployeeLoginDetails empLoginDetails = new EmployeeLoginDetails();
 		boolean isAdmin = false;
 		boolean isRandomPwd = false;
@@ -98,7 +98,8 @@ public class DataBaseConnection {
 				stmt.setString(1, employeeDetailsId);			
 				rs = stmt.executeQuery();
 		
-				while(rs.next()){					
+				while(rs.next()){	
+					empDetails = new EmployeeDetails();
 					empDetails.setEmployeeId(rs.getString("EMPLOYEEID"));					
 					empDetails.setEmployeeDetailsId(rs.getString("EMPLOYEEDETAILSID"));					
 					empDetails.setEmployeeName(rs.getString("EMPLOYEENAME"));					
@@ -811,7 +812,7 @@ public class DataBaseConnection {
 		return updateStatus;
 	}
 	
-	public boolean registerEmployee(RegisterEmployeeForm registerEmployeeForm){
+	public String registerEmployee(RegisterEmployeeForm registerEmployeeForm){
 		PreparedStatement ps = null;		
 		PreparedStatement ps1 = null;
 		PreparedStatement ps2 = null;
@@ -819,50 +820,62 @@ public class DataBaseConnection {
 		Connection conn1 = null;
 		ResultSet rs1 = null;
 		ResultSet rs2 = null;
-		boolean status = false;
+		
+		PreparedStatement ps4 = null;
+		ResultSet rs3 = null;
+		String status = "false";
 		try{
 			conn1 = getDBConnection();
-			ps1 = conn1.prepareStatement("select max(EMPLOYEEDETAILSID) as NUMBEROFRECORDS from TEMPLOYEEDETAILS");
-			rs1 = ps1.executeQuery();
-			Integer empDetailsId = 0;
-			if(rs1.next())
-				if(rs1.getString(1) != null)
-					empDetailsId = rs1.getInt("NUMBEROFRECORDS");					
-			//insert employee details to emp details table
-			ps=conn1.prepareStatement("insert into TEMPLOYEEDETAILS(EMPLOYEEDETAILSID,EMPLOYEEID,EMPLOYEENAME,EMAILID,MOBILENUMBER,LANDLINENUMBER,EXTNNUMBER,DATEOFBIRTH,DESIGNATIONID,DEPARTMENTID,ACTIONDATE,ISACTIVE) values (?,?,?,?,?,?,?,?,?,?,sysdate,?)");
-			empDetailsId = empDetailsId + 1;
-			ps.setInt(1, empDetailsId);	
-			ps.setString(2, registerEmployeeForm.getEmployeeId());
-			ps.setString(3, registerEmployeeForm.getEmployeeName());
 			
-			ps.setString(4, registerEmployeeForm.getEmail());
-			ps.setString(5, registerEmployeeForm.getMobile());
-			ps.setString(6, registerEmployeeForm.getLandline());
-			ps.setString(7, registerEmployeeForm.getExtension());
-			ps.setDate(8, new java.sql.Date(registerEmployeeForm.getDob().getTime()));
-			ps.setString(9, registerEmployeeForm.getDesignationId());
-			ps.setString(10, registerEmployeeForm.getDepartmentId());			
-			ps.setString(11, "Y");			
-			ps.executeQuery();	
+			ps4 = conn1.prepareStatement("select EMPLOYEEID from TEMPLOYEEDETAILS where EMPLOYEEID = ?");
+			ps4.setString(1, registerEmployeeForm.getEmployeeId()); 
+			rs3 = ps4.executeQuery();
+			if(rs3.next()){
+				status = "duplicateEmpId";
+			}else{
 			
-		// insert employee login details to login table
-			ps3 = conn1.prepareStatement("select max(LOGINID) as NUMBEROFRECORDS from TLOGIN");
-			rs2 = ps3.executeQuery();
-			Integer loginId = 0;
-			if(rs2.next())
-				if(rs2.getString(1) != null)
-					loginId = rs2.getInt("NUMBEROFRECORDS");
-			PasswordGenerator pwdGenerator = new PasswordGenerator();
-			ps2 = conn1.prepareStatement("insert into TLOGIN(LOGINID,USERNAME,LOGINPASSWORD,EMPLOYEEDETAILSID,LASTLOGINDATE,ISRANDOMPWD,ISACTIVE,EMPLOYEEROLEID) values (?,?,?,?,sysdate,?,?,?)");
-			ps2.setInt(1, loginId);
-			ps2.setString(2, registerEmployeeForm.getEmployeeId());
-			ps2.setString(3, pwdGenerator.generateRandomString());
-			ps2.setInt(4, empDetailsId);
-			ps2.setString(5, "Y");			
-			ps2.setString(6, "Y");
-			ps2.setString(7, null);
-			ps2.executeQuery();
-			status = true;
+				ps1 = conn1.prepareStatement("select max(EMPLOYEEDETAILSID) as NUMBEROFRECORDS from TEMPLOYEEDETAILS");
+				rs1 = ps1.executeQuery();
+				Integer empDetailsId = 0;
+				if(rs1.next())
+					if(rs1.getString(1) != null)
+						empDetailsId = rs1.getInt("NUMBEROFRECORDS");					
+				//insert employee details to emp details table
+				ps=conn1.prepareStatement("insert into TEMPLOYEEDETAILS(EMPLOYEEDETAILSID,EMPLOYEEID,EMPLOYEENAME,EMAILID,MOBILENUMBER,LANDLINENUMBER,EXTNNUMBER,DATEOFBIRTH,DESIGNATIONID,DEPARTMENTID,ACTIONDATE,ISACTIVE) values (?,?,?,?,?,?,?,?,?,?,sysdate,?)");
+				empDetailsId = empDetailsId + 1;
+				ps.setInt(1, empDetailsId);	
+				ps.setString(2, registerEmployeeForm.getEmployeeId());
+				ps.setString(3, registerEmployeeForm.getEmployeeName());
+				
+				ps.setString(4, registerEmployeeForm.getEmail());
+				ps.setString(5, registerEmployeeForm.getMobile());
+				ps.setString(6, registerEmployeeForm.getLandline());
+				ps.setString(7, registerEmployeeForm.getExtension());
+				ps.setDate(8, new java.sql.Date(registerEmployeeForm.getDob().getTime()));
+				ps.setString(9, registerEmployeeForm.getDesignationId());
+				ps.setString(10, registerEmployeeForm.getDepartmentId());			
+				ps.setString(11, "Y");			
+				ps.executeQuery();	
+				
+			// insert employee login details to login table
+				ps3 = conn1.prepareStatement("select max(LOGINID) as NUMBEROFRECORDS from TLOGIN");
+				rs2 = ps3.executeQuery();
+				Integer loginId = 0;
+				if(rs2.next())
+					if(rs2.getString(1) != null)
+						loginId = rs2.getInt("NUMBEROFRECORDS");
+				PasswordGenerator pwdGenerator = new PasswordGenerator();
+				ps2 = conn1.prepareStatement("insert into TLOGIN(LOGINID,USERNAME,LOGINPASSWORD,EMPLOYEEDETAILSID,LASTLOGINDATE,ISRANDOMPWD,ISACTIVE,EMPLOYEEROLEID) values (?,?,?,?,sysdate,?,?,?)");
+				ps2.setInt(1, loginId);
+				ps2.setString(2, registerEmployeeForm.getEmployeeId());
+				ps2.setString(3, pwdGenerator.generateRandomString());
+				ps2.setInt(4, empDetailsId);
+				ps2.setString(5, "Y");			
+				ps2.setString(6, "Y");
+				ps2.setString(7, null);
+				ps2.executeQuery();
+				status = "true";
+			}
 		}catch(Exception e){
 			System.out.println("exception in saving employee registration:::"+e.getMessage());
 		}
@@ -872,8 +885,10 @@ public class DataBaseConnection {
 				ps1.close();
 				ps2.close();
 				ps3.close();
+				ps4.close();
 				rs1.close();
 				rs2.close();
+				rs3.close();
 				conn1.close();
 			}catch(Exception e){}
 		}			
@@ -1022,7 +1037,7 @@ public class DataBaseConnection {
 				designationMap.put(rs.getString("DESIGNATIONID"), rs.getString("DESIGNATIONNAME"));
 			} 
 		}catch(Exception e){
-			System.out.println("exception in getting travel modes table query:::"+e.getMessage());
+			System.out.println("exception in getting designation table query:::"+e.getMessage());
 		}
 		finally{
 			try{

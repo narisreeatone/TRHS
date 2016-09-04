@@ -15,11 +15,12 @@ import com.nag.bean.EmployeeDetails;
 import com.nag.bean.TravelRequestMaster;
 import com.nag.dao.DataBaseConnection;
 import com.nag.sql.RequestStatus;
+import com.nag.util.ValidateUserSession;
 
 /**
  * Servlet implementation class GetAllPendingRequest
  */
-@WebServlet("/GetAllPendingRequest")
+@WebServlet("/web/GetAllPendingRequest")
 public class GetAllPendingRequest extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -43,17 +44,26 @@ public class GetAllPendingRequest extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-		DataBaseConnection dbHandler = new DataBaseConnection();		
-		HttpSession session = request.getSession();	
-		RequestDispatcher rd;
-		RequestStatus reqStatus = new RequestStatus();
-		EmployeeDetails empDetails = (EmployeeDetails)session.getAttribute("loginUserDetails");
-		String empDetailsId = empDetails.getEmployeeDetailsId();
-		Map <String, TravelRequestMaster> allPendingRequestMap = dbHandler.getAllTravelRequestByStatus(reqStatus.PENDING);		
-		rd = request.getRequestDispatcher("DisplayAllPendingRequest.jsp");		
-		request.setAttribute("allPendingRequestMap", allPendingRequestMap);
-		rd.forward(request,response);
+		// TODO Auto-generated method stub				
+		HttpSession session = request.getSession(false);	
+		RequestDispatcher rd = null;
+		ValidateUserSession validateUserSession = new ValidateUserSession();
+		if(!validateUserSession.checkUserSession(session)){
+			DataBaseConnection dbHandler = new DataBaseConnection();
+			RequestStatus reqStatus = new RequestStatus();
+			EmployeeDetails empDetails = (EmployeeDetails)session.getAttribute("loginUserDetails");
+			String empDetailsId = empDetails.getEmployeeDetailsId();
+			Map <String, TravelRequestMaster> allPendingRequestMap = dbHandler.getAllTravelRequestByStatus(reqStatus.PENDING);		
+			rd = request.getRequestDispatcher("/web/DisplayAllPendingRequest.jsp");		
+			request.setAttribute("allPendingRequestMap", allPendingRequestMap);
+			rd.forward(request,response);
+		}else{
+			//rd = request.getRequestDispatcher("/NagApp/login.jsp");	
+			request.setAttribute("errorMsg", "Please log in to your account.");
+			response.sendRedirect("/NagApp/login.jsp");
+		}
+		
+		//rd.forward(request,response);
 	}
 
 }

@@ -13,7 +13,7 @@ import javax.servlet.http.HttpSession;
 /**
  * Servlet implementation class LogOut
  */
-@WebServlet("/LogOut")
+@WebServlet("/web/LogOut")
 public class LogOut extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
@@ -38,10 +38,16 @@ public class LogOut extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
-		HttpSession session = request.getSession();
-		session.invalidate();
-		RequestDispatcher rd= request.getRequestDispatcher("login.jsp");		
-		rd.forward(request,response);
+		HttpSession session = request.getSession(false);
+		if(session == null){
+			
+		}else{
+			session.removeAttribute("loginUserDetails");
+			session.removeAttribute("isUserLoggedIn");
+			session.removeAttribute("isAdmin");	
+			session.invalidate();
+		}
+		response.sendRedirect("/NagApp/login.jsp");		
 	}
 
 }
