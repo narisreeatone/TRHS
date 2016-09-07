@@ -125,8 +125,8 @@ public class UploadEmployeeDetails extends HttpServlet {
 		       System.out.println(ex);
 		   }
 		}else{
-			rd = request.getRequestDispatcher("/NagApp/login.jsp");	
-			request.setAttribute("displayMessage", "Please log in to your account.");
+			request.setAttribute("errorMsg", "Session is invalid. Please log in to your account.");
+			response.sendRedirect("/NagApp/login.jsp");
 		}
 		
 		rd.forward(request,response);

@@ -46,8 +46,8 @@ public class LogOut extends HttpServlet {
 			session.removeAttribute("isUserLoggedIn");
 			session.removeAttribute("isAdmin");	
 			session.invalidate();
-		}
-		response.sendRedirect("/NagApp/login.jsp");		
+		}		
+		response.sendRedirect("/NagApp/login.jsp");
 	}
 
 }

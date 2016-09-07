@@ -122,13 +122,11 @@ public class RegisterEmployee extends HttpServlet {
 				request.setAttribute("errorMsg", errorMessage);
 				rd = request.getRequestDispatcher("/web/EmployeeRegistration.jsp");			
 			}			
-			//rd.forward(request,response);
+			rd.forward(request,response);
 		}else{
-			rd = request.getRequestDispatcher("/NagApp/login.jsp");	
-			request.setAttribute("errorMsg", "Please log in to your account.");
+			request.setAttribute("errorMsg", "Session is invalid. Please log in to your account.");
+			response.sendRedirect("/NagApp/login.jsp");
 		}
-		
-		rd.forward(request,response);
 	}
 
 }

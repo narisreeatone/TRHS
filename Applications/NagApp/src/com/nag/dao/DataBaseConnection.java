@@ -203,7 +203,11 @@ public class DataBaseConnection {
 	}
 	
 	public EmployeeDetails getEmployeeDetailsById(String empDetailsId){		
-		conn = getDBConnection();
+		Connection conn=null;
+		try{
+			Class.forName("oracle.jdbc.driver.OracleDriver");			
+			conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE","nagarjuna","nagarjuna");			
+		}catch(Exception e){}
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		EmployeeDetails empDetails = null;	
@@ -237,15 +241,19 @@ public class DataBaseConnection {
 				try{
 					ps.close();
 					rs.close();
-					//conn1.close();
+					conn.close();
 				}catch(Exception e){}
 			}			
 		}
 		return empDetails;
 	}
 	
-	public EmployeeDetails getEmployeeDetailsByEmpId(String empId){		
-		conn = getDBConnection();
+	public EmployeeDetails getEmployeeDetailsByEmpId(String empId){	
+		Connection conn=null;
+		try{
+			Class.forName("oracle.jdbc.driver.OracleDriver");			
+			conn = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE","nagarjuna","nagarjuna");			
+		}catch(Exception e){}
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		EmployeeDetails empDetails = null;	
@@ -291,18 +299,22 @@ public class DataBaseConnection {
 		PreparedStatement ps = null;
 		PreparedStatement ps1 = null;
 		PreparedStatement ps2 = null;
+		PreparedStatement ps3 = null;
+		PreparedStatement ps4 = null;
 		ResultSet rs = null;
+		ResultSet rs1 = null;
+		ResultSet rs2 = null;
 		boolean status = false;
 		try{
 			conn = getDBConnection();
 			ps = conn.prepareStatement("select max(TRAVELREQUESTMASTERID) as NUMBEROFRECORDS from TTRAVELREQUESTMASTER");
 			rs = ps.executeQuery();
 			Integer requestMasterId = 0;
-			if(rs.next())
+			if(rs.next())	
 				if(rs.getString(1) != null)
-					requestMasterId = rs.getInt("NUMBEROFRECORDS");					
+				requestMasterId = rs.getInt("NUMBEROFRECORDS");					
 			//insert travel req form data to request master table
-			ps=conn.prepareStatement("insert into TTRAVELREQUESTMASTER(TRAVELREQUESTMASTERID,SOURCE,DESTINATION,TRAVELMODEID,EXPENSES,PURPOSE,EMPLOYEEDETAILSID,ATTACHMENTPATH,TRAVELREQUESTSTATUS,TRAVELDATE,ACTIONDATE,CREATEDDATE) values (?,?,?,?,?,?,?,?,?,?,sysdate,sysdate)");
+			ps=conn.prepareStatement("insert into TTRAVELREQUESTMASTER(TRAVELREQUESTMASTERID,SOURCE,DESTINATION,TRAVELMODEID,EXPENSES,PURPOSE,EMPLOYEEDETAILSID,ATTACHMENTPATH,TRAVELREQUESTSTATUS,TRAVELDATE,ISMULTIPLEREQUEST,ACTIONDATE,CREATEDDATE) values (?,?,?,?,?,?,?,?,?,?,?,sysdate,sysdate)");
 			requestMasterId = requestMasterId + 1;
 			ps.setInt(1, requestMasterId);	
 			ps.setString(2, requestForm.getSource());
@@ -314,18 +326,19 @@ public class DataBaseConnection {
 			ps.setString(8, requestForm.getAttachmentPath());
 			ps.setString(9, requestStatus.PENDING);
 			ps.setDate(10, new java.sql.Date(requestForm.getTravelDate().getTime()));
-			ps.executeQuery();					
+			ps.setString(11, requestForm.isMultipleRequest()?"Y":"N"); 
+								
 			
 			//insert data into travel version table
 			ps1 = conn.prepareStatement("select max(TRAVELREQUESTVERSIONID) as NUMBEROFRECORDS from TTRAVELREQUESTVERSION");
-			ResultSet rs1 = ps1.executeQuery();
+			rs1 = ps1.executeQuery();
 			Integer requestVersionId = 0;
-			if(rs1.next()){
+			if(rs1.next()){	
 				if(rs1.getString(1) != null)
-					requestVersionId = rs.getInt("NUMBEROFRECORDS");
+				requestVersionId = rs.getInt("NUMBEROFRECORDS");
 			}
 			String aproveEmpOrder[] = requestForm.getApproveEmpOrder();
-			ps2 = conn.prepareStatement("insert into TTRAVELREQUESTVERSION(TRAVELREQUESTVERSIONID,TRAVELREQUESTMASTERID,TRAVELAPPROVERID,APPROVERORDER,REQSTATUSID,ACTIONDATE) values (?,?,?,?,?,sysdate)");
+			ps2 = conn.prepareStatement("insert into TTRAVELREQUESTVERSION(TRAVELREQUESTVERSIONID,TRAVELREQUESTMASTERID,TRAVELAPPROVERID,APPROVERORDER,REQSTATUSID,CREATEDDATE) values (?,?,?,?,?,sysdate)");
 			//while()
 			for(int i=0; i < aproveEmpOrder.length; i++){
 				String[] empIdAndOrder = aproveEmpOrder[i].split("-");
@@ -336,7 +349,32 @@ public class DataBaseConnection {
 				ps2.setInt(4, Integer.parseInt(empIdAndOrder[1]));
 				ps2.setString(5, requestStatus.PENDING);
 				ps2.executeQuery();
-			}			
+			}
+			Map<Integer, MultipleRequestForm> multiReqFormMap = new HashMap<Integer, MultipleRequestForm>();
+			if(requestForm.isMultipleRequest()){
+				multiReqFormMap = requestForm.getMultipleRequestFormMap();
+				ps3 = conn.prepareStatement("select max(MULTIPLEREQUESTID) as NUMBEROFRECORDS from TMULTIPLETRAVELREQUEST");
+				rs2 = ps3.executeQuery();
+				Integer multipleTravelReq = 0;
+				if(rs2.next())	
+					if(rs2.getString(1) != null)
+						multipleTravelReq = rs2.getInt("NUMBEROFRECORDS");	
+				
+				ps4=conn.prepareStatement("insert into TMULTIPLETRAVELREQUEST(MULTIPLEREQUESTID,TRAVELREQUESTMASTERID,SOURCE,DESTINATION,TRAVELDATE,TRAVELMODEID,TRAVELORDER) values (?,?,?,?,?,?,?)");
+				for (Map.Entry<Integer, MultipleRequestForm> entry : multiReqFormMap.entrySet()){
+					MultipleRequestForm multipleReqForm= entry.getValue();
+					multipleTravelReq = multipleTravelReq + 1;
+					ps4.setInt(1, multipleTravelReq);
+					ps4.setInt(2, requestMasterId);
+					ps4.setString(3, multipleReqForm.getSource());
+					ps4.setString(4, multipleReqForm.getDestination());
+					ps4.setDate(5, new java.sql.Date(multipleReqForm.getTravelDate().getTime()));
+					ps4.setString(6, multipleReqForm.getTravelType());
+					ps4.setInt(7, multipleReqForm.getTravelOrder());
+					ps4.executeQuery();
+				}
+			}
+			ps.executeQuery();
 			status = true;
 		}catch(Exception e){
 			System.out.println("exception in saving travel request data:::"+e.getMessage());
@@ -346,9 +384,41 @@ public class DataBaseConnection {
 				ps.close();
 				ps1.close();
 				ps2.close();
+				ps3.close();
+				rs.close();
+				rs1.close();
+				rs2.close();
 				conn.close();
 			}catch(Exception e){}
 		}			
+		return status;
+	}
+	
+	public boolean saveComment(String senderId, String recieverId, String reqMasterId, String reqVersionId, String comments){
+		PreparedStatement ps = null;
+		PreparedStatement ps1 = null;
+		ResultSet rs = null;
+		boolean status = false;
+		try{
+			conn = getDBConnection();
+			ps = conn.prepareStatement("select max(TRAVELREQUESTCOMMENTSID) as NUMBEROFRECORDS from TTRAVELREQUESTCOMMENTS");
+			rs = ps.executeQuery();
+			Integer reqCommentId = 0;
+			if(rs.next())	
+				if(rs.getString(1) != null)
+					reqCommentId = rs.getInt("NUMBEROFRECORDS");
+			ps1=conn.prepareStatement("insert into TTRAVELREQUESTCOMMENTS(TRAVELREQUESTCOMMENTSID,TRAVELREQUESTMASTERID,TRAVELREQUESTVERSIONID,SENDERID,RECEIVERID,COMMENTS,ACTIONDATE) values (?,?,?,?,?,?sysdate)");
+			ps1.setInt(1, reqCommentId+1);
+			ps1.setString(2, reqMasterId);
+			ps1.setString(3, reqVersionId);
+			ps1.setString(4, senderId);
+			ps1.setString(5, recieverId);
+			ps1.setString(6, comments);
+			ps1.executeQuery();
+			status=true;
+		}catch(Exception e){
+			System.out.println("Exception in saving request commments for sender id:::"+senderId);
+		}
 		return status;
 	}
 	
@@ -540,9 +610,13 @@ public class DataBaseConnection {
 		ResultSet rs2 = null;
 		Connection conn1 = null;
 		TravelRequestMaster reqMaster = null;
+		try{
+			Class.forName("oracle.jdbc.driver.OracleDriver");			
+			conn1 = DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE","nagarjuna","nagarjuna");
+		}catch(Exception e){}
 		
 		try{
-			conn1 = getDBConnection();
+			//conn1 = getDBConnection();
 			ps = conn1.prepareStatement("SELECT TRAVELREQUESTMASTERID  FROM TTRAVELREQUESTVERSION WHERE TRAVELAPPROVERID = ? AND REQSTATUSID = ? order by ACTIONDATE desc");			
  			
 			ps.setString(1, empDetailsId);
@@ -626,7 +700,7 @@ public class DataBaseConnection {
 					reqMaster.setTravelRequestStatus(rs1.getString("TRAVELREQUESTSTATUS"));
 					reqMaster.setActionDate(rs1.getDate("ACTIONDATE"));
 					reqMaster.setTravelDate(rs1.getDate("TRAVELDATE"));
-					reqMaster.setCreatedDate(rs.getDate("CREATEDDATE"));
+					reqMaster.setCreatedDate(rs1.getDate("CREATEDDATE"));
 				}
 				reqMasterMap.put(reqMasterId, reqMaster);
 			}
@@ -675,7 +749,7 @@ public class DataBaseConnection {
 					reqMaster.setTravelRequestStatus(rs1.getString("TRAVELREQUESTSTATUS"));
 					reqMaster.setActionDate(rs1.getDate("ACTIONDATE"));
 					reqMaster.setTravelDate(rs1.getDate("TRAVELDATE"));
-					reqMaster.setCreatedDate(rs.getDate("CREATEDDATE"));
+					reqMaster.setCreatedDate(rs1.getDate("CREATEDDATE"));
 				}
 				reqMasterMap.put(reqMasterId.toString(), reqMaster);
 			}
@@ -718,6 +792,8 @@ public class DataBaseConnection {
 				reqMaster.setActionDate(rs.getDate("ACTIONDATE"));
 				reqMaster.setTravelDate(rs.getDate("TRAVELDATE"));		
 				reqMaster.setCreatedDate(rs.getDate("CREATEDDATE"));
+				boolean isMultiReq = "Y".equalsIgnoreCase(rs.getString("ISMULTIPLEREQUEST"))?true:false;
+				reqMaster.setMultipleRequest(isMultiReq);
 				
 				TravelRequestVersion reqVersion = null;
 				PreparedStatement ps1 = conn.prepareStatement("select * from TTRAVELREQUESTVERSION where TRAVELREQUESTMASTERID = ? ORDER BY APPROVERORDER");
@@ -734,16 +810,35 @@ public class DataBaseConnection {
 					reqVersion.setActionDate(rs1.getDate("ACTIONDATE"));
 					reqVersion.setStatusId(rs1.getString("REQSTATUSID"));
 					
-					EmployeeDetails approverEmpDetails = getEmployeeDetailsById(approverEmpId);
+					EmployeeDetails approverEmpDetails = getEmployeeDetailsByEmpId(approverEmpId);
 					reqVersion.setApproverEmpDetails(approverEmpDetails);					
 					reqVersionList.add(reqVersion);
 				}
 				reqMaster.setReqVersionList(reqVersionList);
+				if(reqMaster.isMultipleRequest()){
+					MultipleRequest multipleRequest = null;
+					PreparedStatement ps2 = conn.prepareStatement("select * from TMULTIPLETRAVELREQUEST where TRAVELREQUESTMASTERID = ? ORDER BY TRAVELORDER");
+					ps2.setString(1, reqMasterId);			
+					ResultSet rs2 = ps2.executeQuery();	
+					Map<Integer, MultipleRequest> multipleRequestMap = new HashMap<Integer,MultipleRequest>();
+					while(rs2.next()){
+						multipleRequest = new MultipleRequest();
+						multipleRequest.setMultipleRequestId(rs2.getInt("MULTIPLEREQUESTID"));
+						multipleRequest.setTravelRequestMasterId(rs2.getInt("TRAVELREQUESTMASTERID"));
+						multipleRequest.setSource(rs2.getString("SOURCE"));
+						multipleRequest.setDestination(rs2.getString("DESTINATION"));
+						multipleRequest.setTravelDate(rs2.getDate("TRAVELDATE"));
+						multipleRequest.setTravelType(rs2.getString("TRAVELMODEID"));
+						multipleRequest.setTravelOrder(rs2.getInt("TRAVELORDER"));
+						multipleRequestMap.put(rs2.getInt("TRAVELORDER"), multipleRequest);
+					}
+					reqMaster.setMultipleRequestMap(multipleRequestMap); 
+				}
 				EmployeeDetails empDetails = getEmployeeDetailsById(reqMaster.getEmployeeDetailsId());				
 				reqMaster.setRequestedEmpDetails(empDetails);				
 			}
 		}catch(Exception e){
-			System.out.println("exception in get req master table query:::"+e.getMessage());
+			System.out.println("exception in getting travel request details query:::"+e.getMessage());
 		}
 		finally{
 			try{

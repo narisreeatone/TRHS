@@ -44,10 +44,10 @@ public class GetPendingRequest extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub			
-		HttpSession session = request.getSession(false);	
-		RequestDispatcher rd;
-		ValidateUserSession validateUserSession = new ValidateUserSession();
+		// TODO Auto-generated method stub		
+		HttpSession session = request.getSession(false);		
+		RequestDispatcher rd;		
+		ValidateUserSession validateUserSession = new ValidateUserSession();		
 		if(!validateUserSession.checkUserSession(session)){
 			DataBaseConnection dbHandler = new DataBaseConnection();
 			EmployeeDetails empDetails = (EmployeeDetails)session.getAttribute("loginUserDetails");
@@ -55,13 +55,11 @@ public class GetPendingRequest extends HttpServlet {
 			Map <String, TravelRequestMaster> pendingRequestMap = dbHandler.getPendingRequestForEmployee(empDetailsId);		
 			rd = request.getRequestDispatcher("/web/DisplayPendingTravelRequest.jsp");		
 			request.setAttribute("pendingRequestMap", pendingRequestMap);
-			//rd.forward(request,response);
-		}else{
-			rd = request.getRequestDispatcher("/NagApp/login.jsp");	
-			request.setAttribute("displayMessage", "Please log in to your account.");
+			rd.forward(request,response);
+		}else{		
+			request.setAttribute("errorMsg", "Session is invalid. Please log in to your account.");
+			response.sendRedirect("/NagApp/login.jsp");
 		}
-		
-		rd.forward(request,response);
 	}
 
 }

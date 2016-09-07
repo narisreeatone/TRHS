@@ -7,6 +7,7 @@ public class TravelRequestMaster {
 	private String travelRequestMasterId;
 	private String requestNumber;
 	private String employeeDetailsId;
+	private String employeeId;
 	private String attachmentPath;
 	private String travelRequestStatus;
 	private Date createdDate;
@@ -17,10 +18,18 @@ public class TravelRequestMaster {
 	private String purpose;
 	private Date travelDate; 
 	private Date actionDate;
+	private boolean isMultipleRequest;
 	private List<TravelRequestVersion> reqVersionList;
+	private Map<Integer,MultipleRequest> multipleRequestMap;
 	private EmployeeDetails requestedEmpDetails;
 	
 	
+	public String getEmployeeId() {
+		return employeeId;
+	}
+	public void setEmployeeId(String employeeId) {
+		this.employeeId = employeeId;
+	}
 	public Date getActionDate() {
 		return actionDate;
 	}
@@ -110,5 +119,21 @@ public class TravelRequestMaster {
 	}
 	public void setReqVersionList(List<TravelRequestVersion> reqVersionList) {
 		this.reqVersionList = reqVersionList;
-	}	
+	}
+	public boolean isMultipleRequest() {
+		return isMultipleRequest;
+	}
+	public boolean getIsMultipleRequest() {
+		return isMultipleRequest;
+	}
+	public void setMultipleRequest(boolean isMultipleRequest) {
+		this.isMultipleRequest = isMultipleRequest;
+	}
+	public Map<Integer,MultipleRequest> getMultipleRequestMap() {
+		return multipleRequestMap;
+	}
+	public void setMultipleRequestMap(Map<Integer,MultipleRequest> multipleRequestMap) {
+		this.multipleRequestMap = multipleRequestMap;
+	}
+	
 }

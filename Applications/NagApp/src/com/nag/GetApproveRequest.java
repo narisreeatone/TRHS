@@ -55,14 +55,11 @@ public class GetApproveRequest extends HttpServlet {
 			Map <String, TravelRequestMaster> approveRequestMap = dbHandler.getApproveRequestForEmployee(empDetailsId);
 			rd = request.getRequestDispatcher("/web/DisplayApproveRequest.jsp");		
 			request.setAttribute("approveRequestMap", approveRequestMap);
-			//rd.forward(request,response);
+			rd.forward(request,response);
 		}else{
-			rd = request.getRequestDispatcher("/NagApp/login.jsp");	
-			request.setAttribute("displayMessage", "Please log in to your account.");
+			request.setAttribute("errorMsg", "Session is invalid. Please log in to your account.");
+			response.sendRedirect("/NagApp/login.jsp");
 		}
-		
-		rd.forward(request,response);
-		
 	}
 
 }

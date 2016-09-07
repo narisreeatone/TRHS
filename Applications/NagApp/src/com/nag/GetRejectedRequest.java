@@ -56,13 +56,11 @@ public class GetRejectedRequest extends HttpServlet {
 			Map <String, TravelRequestMaster> rejectedRequestMap = dbHandler.getRejectedRequestForEmployee(empDetailsId);		
 			rd = request.getRequestDispatcher("/web/DisplayRejectedRequest.jsp");		
 			request.setAttribute("rejectedRequestMap", rejectedRequestMap);
-			//rd.forward(request,response);
+			rd.forward(request,response);
 		}else{
-			rd = request.getRequestDispatcher("/NagApp/login.jsp");	
-			request.setAttribute("displayMessage", "Please log in to your account.");
+			request.setAttribute("errorMsg", "Session is invalid. Please log in to your account.");
+			response.sendRedirect("/NagApp/login.jsp");
 		}
-		
-		rd.forward(request,response);
 	}
 
 }

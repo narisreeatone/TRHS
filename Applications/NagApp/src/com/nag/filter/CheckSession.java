@@ -51,11 +51,11 @@ public class CheckSession implements Filter {
 		if( noSession ){
 			session = req.getSession(true);
 			session.setAttribute("errorMsg", "Please log in to your account.");
-			res.sendRedirect("login.jsp");		
+			res.sendRedirect("/NagApp/login.jsp");		
 		}else if(res.getStatus() == 500){
 			session = req.getSession(true);
 			session.setAttribute("errorMsg", "Session is expired. Please log in to your account.");
-			res.sendRedirect("login.jsp");
+			res.sendRedirect("/NagApp/login.jsp");
 		}else
 			chain.doFilter(request, response);
 	}

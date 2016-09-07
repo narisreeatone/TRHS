@@ -71,10 +71,10 @@
 	float:right;	
 }
 .ui-datepicker-trigger{
-	position: absolute;
-    right: 0;
-    top:-1px;
-    height:34px;
+	height: 26px;
+    position: absolute;
+    right: 28px;
+    top: -3px;
 }
 .rightDiv input {
     box-sizing: border-box;

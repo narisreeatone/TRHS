@@ -1,7 +1,7 @@
 <div class="menuSection">						
 	<ul class="menuItems">
 		<li><a href="/NagApp/web/employeeHome.jsp">Employee Profiles</a></li>
-		<li><a href="/NagApp/web/NewTravelRequest.jsp">New Travel Request</a></li>
+		<li><a href="/NagApp/web/TravelRequestForm.jsp">New Travel Request</a></li>
 		<li><a href="/NagApp/web/GetApprovedRequest">Approved Travel Requests</a></li>
 		<li><a href="/NagApp/web/GetPendingRequest">Pending Travel Requests</a></li>
 		<li><a href="/NagApp/web/GetRejectedRequest">Rejected Travel Requests</a></li>

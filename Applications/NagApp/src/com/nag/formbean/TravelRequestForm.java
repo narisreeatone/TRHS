@@ -1,6 +1,7 @@
 package com.nag.formbean;
 
 import java.util.Date;
+import java.util.Map;
 
 public class TravelRequestForm {
 
@@ -12,7 +13,9 @@ public class TravelRequestForm {
 	private String purpose;	
 	private String attachmentPath;
 	private String employeeId;
+	private boolean isMultipleRequest;
 	private String approveEmpOrder[];
+	private Map<Integer, MultipleRequestForm> multipleRequestFormMap;
 	
 	public String getSource() {
 		return source;
@@ -68,6 +71,17 @@ public class TravelRequestForm {
 	public void setEmployeeId(String employeeId) {
 		this.employeeId = employeeId;
 	}
-	
+	public boolean isMultipleRequest() {
+		return isMultipleRequest;
+	}
+	public void setMultipleRequest(boolean isMultipleRequest) {
+		this.isMultipleRequest = isMultipleRequest;
+	}
+	public Map<Integer, MultipleRequestForm> getMultipleRequestFormMap() {
+		return multipleRequestFormMap;
+	}
+	public void setMultipleRequestFormMap(Map<Integer, MultipleRequestForm> multipleRequestFormMap) {
+		this.multipleRequestFormMap = multipleRequestFormMap;
+	}	
 	
 }

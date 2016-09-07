@@ -57,11 +57,9 @@ public class GetAllApprovedRequest extends HttpServlet {
 			request.setAttribute("allApprovedRequestMap", allApprovedRequestMap);
 			rd.forward(request,response);
 		}else{			
-			request.setAttribute("errorMsg", "Please log in to your account.");
+			request.setAttribute("errorMsg", "Session is invalid. Please log in to your account.");
 			response.sendRedirect("/NagApp/login.jsp");
 		}
-		
-		//rd.forward(request,response);
 	}
 
 }

@@ -57,12 +57,9 @@ public class GetAllRejectedRequest extends HttpServlet {
 			request.setAttribute("allRejectedRequestMap", allRejectedRequestMap);
 			rd.forward(request,response);
 		}else{
-			//rd = request.getRequestDispatcher("/login.jsp");	
-			session.setAttribute("errorMsg", "Please log in to your account.");
+			request.setAttribute("errorMsg", "Session is invalid. Please log in to your account.");
 			response.sendRedirect("/NagApp/login.jsp");
 		}
-		
-		//rd.forward(request,response);
 	}
 
 }

@@ -52,14 +52,13 @@ public class AddNewServices extends HttpServlet {
 			System.out.println("service type:::"+serviceType+" \nserviceName:::"+serviceName);
 			boolean status = dbHandler.addNewService(serviceType, serviceName);
 			String displayMessage = "Some error has been found while adding service.";
-			if(status){
-				displayMessage = "Successfully added to Database.";
-			}
+			if(status)
+				displayMessage = "Successfully added to Database.";			
 			rd = request.getRequestDispatcher("/web/AdminHome.jsp");	
 			request.setAttribute("displayMessage", displayMessage);
 			rd.forward(request,response);
 		}else{
-			session.setAttribute("errorMsg", "Please log in to your account.");
+			request.setAttribute("errorMsg", "Session is invalid. Please log in to your account.");
 			response.sendRedirect("/NagApp/login.jsp");
 		}
 		

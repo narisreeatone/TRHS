@@ -95,8 +95,8 @@ a:hover{
 }
 .contentSection{
 	float: left;
-    padding-left: 1%;
-    width: 79%;
+    padding-left: 2%;
+    width: 78%;
 }
 .heading{
 	float:left;
@@ -111,9 +111,18 @@ a:hover{
 	float:left;
 	width:100%;
 	font-weight:bold;
-	font-size:16px;
+	font-size:14px;
 	padding:5px 0 15px 0;
 	color:#530594;
+}
+.contentSubHead{
+	float:left;
+	width:100%;
+	font-weight:bold;
+	font-size:14px;
+	padding:5px 0 7px 0;
+	color:#f59000;
+	
 }
 .errorMsgDiv, .erroMsg{
 	color:red;

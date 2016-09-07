@@ -48,7 +48,7 @@ public class LoginServlet extends HttpServlet {
 		// TODO Auto-generated method stub		
 		DataBaseConnection dbHandler = new DataBaseConnection();		
 		HttpSession session = request.getSession(true);	
-		session.setMaxInactiveInterval(900);
+		session.setMaxInactiveInterval(10);
 		RequestDispatcher rd;
 		//ConstantInfoFromDB constantInfoFromDB = new ConstantInfoFromDB();		
 		String username = request.getParameter("username");
@@ -57,8 +57,7 @@ public class LoginServlet extends HttpServlet {
 		if(StringUtils.isNotEmpty(username) && StringUtils.isNotEmpty(password)){
 			empDetails = dbHandler.getEmployeeDetailsByLogin(username, password);
 			if(empDetails != null){	
-				if(empDetails.isAdmin()){
-					System.out.println("admin home");
+				if(empDetails.isAdmin()){					
 					rd = request.getRequestDispatcher("/web/AdminHome.jsp");
 					session.setAttribute("loginUserDetails", empDetails);
 					session.setAttribute("isUserLoggedIn", false);
@@ -71,30 +70,25 @@ public class LoginServlet extends HttpServlet {
 						session.setAttribute("loginUserDetails", empDetails);
 						session.setAttribute("isUserLoggedIn", true);
 						session.setAttribute("isRandomPwd", true);
-						session.removeAttribute("errorMsg");
-						//rd.forward(request,response);
-					}else{
-						System.out.println("employee home");
+						session.removeAttribute("errorMsg");						
+					}else{						
 						rd = request.getRequestDispatcher("/web/employeeHome.jsp");
 						session.setAttribute("loginUserDetails", empDetails);
 						session.setAttribute("isUserLoggedIn", true);
 						session.setAttribute("isAdmin", false);	
-						session.removeAttribute("errorMsg");
-						//rd.forward(request,response);
+						session.removeAttribute("errorMsg");						
 					}
 				}
 				session.setAttribute("travelModesMap", ConstantInfoFromDB.getAllTravelModesFromDB());
 				session.setAttribute("departmentMap", ConstantInfoFromDB.getDepartmentFromDB());
-				session.setAttribute("designationMap", ConstantInfoFromDB.getDesignationFromDB());
-				//rd.forward(request,response);
+				session.setAttribute("designationMap", ConstantInfoFromDB.getDesignationFromDB());				
 			}else{			
 				rd = request.getRequestDispatcher("login.jsp");
 				request.setAttribute("errorMsg", "Please enter correct username and password.");
 			}
 		}else{			
 			request.setAttribute("errorMsg", "Please enter correct username and password."); 
-			rd = request.getRequestDispatcher("login.jsp");
-			//rd.forward(request,response);
+			rd = request.getRequestDispatcher("login.jsp");			
 		}		
 		rd.forward(request,response);	
 	}

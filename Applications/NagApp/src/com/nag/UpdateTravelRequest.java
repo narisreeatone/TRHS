@@ -70,13 +70,11 @@ public class UpdateTravelRequest extends HttpServlet {
 			System.out.println("mail sent status:::"+mailstatus);
 			rd = request.getRequestDispatcher("/web/employeeHome.jsp");	
 			request.setAttribute("displayMessage", message);
-			//rd.forward(request,response);
+			rd.forward(request,response);
 		}else{
-			rd = request.getRequestDispatcher("/NagApp/login.jsp");	
-			request.setAttribute("displayMessage", "Please log in to your account.");
+			request.setAttribute("errorMsg", "Session is invalid. Please log in to your account.");
+			response.sendRedirect("/NagApp/login.jsp");
 		}
-		
-		rd.forward(request,response);
 	}
 
 }

@@ -61,13 +61,11 @@ public class TravelRequestDetails extends HttpServlet {
 			if("owner".equals(requestFrom) || "completed".equals(requestFrom)){
 				request.setAttribute("hideBtns", "hideBtns");			
 			}
-			//rd.forward(request,response);
+			rd.forward(request,response);
 		}else{
-			rd = request.getRequestDispatcher("/NagApp/login.jsp");	
-			request.setAttribute("displayMessage", "Please log in to your account.");
+			request.setAttribute("errorMsg", "Session is invalid. Please log in to your account.");
+			response.sendRedirect("/NagApp/login.jsp");
 		}
-		
-		rd.forward(request,response);
 	}
 
 }

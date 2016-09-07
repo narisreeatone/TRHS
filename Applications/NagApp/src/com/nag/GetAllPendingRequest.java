@@ -58,12 +58,9 @@ public class GetAllPendingRequest extends HttpServlet {
 			request.setAttribute("allPendingRequestMap", allPendingRequestMap);
 			rd.forward(request,response);
 		}else{
-			//rd = request.getRequestDispatcher("/NagApp/login.jsp");	
-			request.setAttribute("errorMsg", "Please log in to your account.");
+			request.setAttribute("errorMsg", "Session is invalid. Please log in to your account.");
 			response.sendRedirect("/NagApp/login.jsp");
-		}
-		
-		//rd.forward(request,response);
+		}		
 	}
 
 }

@@ -11,12 +11,13 @@
 <%
 	//EmployeeDetails empDetails = (EmployeeDetails)request.getAttribute("loginUserDetails");
 	RequestStatus requestStatus = new RequestStatus();	
-	request.setAttribute("requestStatus", requestStatus);
+	request.setAttribute("requestStatus", requestStatus);	
+	request.setAttribute("requestFrom", request.getParameter("requestFrom"));
 %>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Employee Details</title>
+<title>Travel Request Details</title>
 <link href="styles/styles.css" type="text/css" rel="stylesheet">
 <script type="text/javascript" src="javascript/jquery-3.1.0.min.js"></script>
 <style>
@@ -43,18 +44,17 @@
 	width:100%;
 }
 .requestDetails{
-	float:left;
-	text-align:center;
+	float:left;	
 }
 .dataRowDiv{
 	float:left;
-	min-width:80%;
+	width:100%;
 	padding:5px 0;
 	min-height:20px;
 }
 .dataRowDiv .leftDiv{
 	float:left;
-	width:29%;
+	width:48%;
 	text-align:right;
 	padding-right:2%;
 	font-weight:bold;
@@ -62,11 +62,10 @@
 .dataRowDiv .rightDiv{
 	float:left;
 	text-align:left;
-	width:69%;
+	width:49%;
 }
 .zebraPattern{
-	background-color:grey;
-	color:white;
+	background-color:#f9f9f9;	
 }
 .dataRowDiv{}
 .btnDiv{
@@ -82,7 +81,8 @@
 .approverDetailsTable .labelTD{
 	font-weight:bold;
 	width:13%;
-	padding:5px 5px 10px 0;
+	padding:5px 5px 5px 0;
+	color:#530594;
 }
 .approverDetailsTable .dataTD{
 	padding:5px 5px 10px 0;
@@ -93,6 +93,10 @@
 	padding-left:155px;
 }
 .rejectBtnDiv{
+	float:left;
+	padding-right:10px;
+}
+.clarificationBtnDiv{
 	float:left;
 }
 #approveBtn{
@@ -116,6 +120,52 @@
     width: 150px;
     font-weight:bold;
 }
+#clarifyBtn{
+	background: #33b5e5 none repeat scroll 0 0;
+    border: 0 none;
+    color: #ffffff;
+    cursor: pointer;
+    padding: 7px 0;
+    transition: all 0.3s ease 0s;
+    width: 80px;
+    font-weight:bold;
+}
+#submitCommentBtn{
+	background: #33b5e5 none repeat scroll 0 0;
+    border: 0 none;
+    color: #ffffff;
+    cursor: pointer;
+    padding: 3px 0;
+    transition: all 0.3s ease 0s;
+    width: 50px;
+    font-weight:bold;
+}
+.sectionDiv{
+	float:left;
+	width:155px;
+	padding-right:10px;
+}
+#multipleReqTable{
+	float:left;
+	width:100%;
+}
+#multipleReqTable th{
+	text-align:left;
+}
+#multipleReqTable td{
+	padding:5px 5px 5px 3px;
+}
+.headTd{
+	width:15%;
+	font-weight:bold;
+	color:#530594;
+}
+.clarificationTextDiv{
+	float:left;
+	width:100%;
+	padding-top:20px;
+	display:none;
+}
 </style>
 </head>
 <body>
@@ -136,10 +186,11 @@
 				</c:otherwise>
 				</c:choose>
 				<div class="contentSection">
-					<div class="heading">Request Details</div>
-					<div class="subHead">Details</div>
+					<div class="heading">Travel Request Details</div>					
 					<div class="requestDetailsDiv">	
-						<div class="requestDetails">					
+						<div class="requestDetails">
+						<c:choose>
+						<c:when test="${requestFrom ne 'owner'}">			
 							<div class="dataRowDiv">
 								<div class="leftDiv">Requested By:</div>
 								<div class="rightDiv">${requestDetails.requestedEmpDetails.employeeName}</div>
@@ -153,30 +204,6 @@
 								<div class="rightDiv">${requestDetails.requestedEmpDetails.departmentName}</div>
 							</div>
 							<div class="dataRowDiv zebraPattern">
-								<div class="leftDiv">Source:</div>
-								<div class="rightDiv">${requestDetails.source}</div>
-							</div>
-							<div class="dataRowDiv">
-								<div class="leftDiv">Destination:</div>
-								<div class="rightDiv">${requestDetails.destination}</div>
-							</div>
-							<div class="dataRowDiv zebraPattern">
-								<div class="leftDiv">Travel Mode:</div>
-								<div class="rightDiv">
-									<c:forEach items="${travelModesMap}" var="travelModes" varStatus="status">													
-										<c:if test="${travelModes.key == requestDetails.travelModeId}">
-											${travelModes.value}
-										</c:if>
-									</c:forEach>
-								</div>
-							</div>
-							<div class="dataRowDiv">
-								<div class="leftDiv">Travel Date:</div>
-								<div class="rightDiv">
-								<fmt:formatDate value="${requestDetails.travelDate}" type="date" pattern="dd-MM-yyyy" />
-								</div>
-							</div>
-							<div class="dataRowDiv zebraPattern">
 								<div class="leftDiv">Expenses (approximate):</div>
 								<div class="rightDiv">${requestDetails.expenses}</div>
 							</div>
@@ -184,12 +211,91 @@
 								<div class="leftDiv">Purpose:</div>
 								<div class="rightDiv">${requestDetails.purpose}</div>
 							</div>
-							<div class="dataRowDiv zebraPattern">
-								<div class="leftDiv">Requested Date</div>
-								<div class="rightDiv">
-								<fmt:formatDate value="${requestDetails.createdDate}" type="date" pattern="dd-MM-yyyy" />
-								</div>
+						</c:when>
+						<c:otherwise>
+							<div class="dataRowDiv">
+								<div class="leftDiv">Purpose:</div>
+								<div class="rightDiv">${requestDetails.purpose}</div>
 							</div>
+							<div class="dataRowDiv">
+								<div class="leftDiv">Expenses (approximate):</div>
+								<div class="rightDiv">${requestDetails.expenses}</div>
+							</div>
+						</c:otherwise>
+						</c:choose>
+						<c:choose>
+						<c:when test="${requestDetails.isMultipleRequest eq 'true'}">
+						<div class="contentSubHead">Tour details</div>	
+						<table class="" id="multipleReqTable" border="0">
+						<thead>
+						<tr>
+							<th class="headTd">Source</th>
+							<th class="" style="width:3%;"></th>
+							<th class="headTd">Destination</th>
+							<th class="" style="width:3%;"></th>
+							<th class="headTd" style="width:7%;">Travel Date</th>
+							<th class="" style="width:3%;"></th>
+							<th class="headTd" style="width:17%;">Travel Mode</th>
+						</tr>
+						</thead>
+						<tbody>
+						<c:forEach items="${requestDetails.multipleRequestMap}" var="multipleRequestItem" varStatus="status">
+						<tr>
+							<td class="dataTd">${multipleRequestItem.value.source}</td>
+							<td class="dataTd">to</td>
+							<td class="dataTd">${multipleRequestItem.value.destination}</td>
+							<td class="dataTd">on</td>
+							<td class="dataTd"><fmt:formatDate value="${multipleRequestItem.value.travelDate}" type="date" pattern="dd-MM-yyyy" /></td>
+							<td class="dataTd">by</td>
+							<td class="dataTd">
+								<c:forEach items="${travelModesMap}" var="travelModes" varStatus="status">													
+									<c:if test="${travelModes.key == multipleRequestItem.value.travelType}">
+										${travelModes.value}
+									</c:if>
+								</c:forEach>
+							</td>
+							
+						</tr>
+						</c:forEach>
+						</tbody>
+						</table>
+						</c:when>
+						<c:otherwise>							
+							<div class="contentSubHead">Tour details</div>	
+							<table class="" id="multipleReqTable" border="0">
+							<thead>
+							<tr>
+								<th class="headTd">Source</th>
+								<th class="" style="width:3%;"></th>
+								<th class="headTd">Destination</th>
+								<th class="" style="width:3%;"></th>
+								<th class="headTd" style="width:7%;">Travel Date</th>
+								<th class="" style="width:3%;"></th>
+								<th class="headTd" style="width:17%;">Travel Mode</th>
+							</tr>
+							</thead>
+							<tbody>
+								<tr>
+									<td class="dataTd">${requestDetails.source}</td>
+									<td class="dataTd">to</td>
+									<td class="dataTd">${requestDetails.destination}</td>
+									<td class="dataTd">on</td>
+									<td class="dataTd"><fmt:formatDate value="${requestDetails.travelDate}" type="date" pattern="dd-MM-yyyy" /></td>
+									<td class="dataTd">by</td>
+									<td class="dataTd">
+										<c:forEach items="${travelModesMap}" var="travelModes" varStatus="status">													
+											<c:if test="${travelModes.key == requestDetails.travelModeId}">
+												${travelModes.value}
+											</c:if>
+										</c:forEach>
+									</td>
+								</tr>
+							</tbody>
+							</table>
+							
+						</c:otherwise>
+						</c:choose>
+							
 						</div> 
 						<div class="btnDiv">
 						<c:choose>
@@ -197,17 +303,34 @@
 							</c:when>
 							<c:otherwise>
 							<div class="approveBtnDiv">
-							<button id="approveBtn">Approve Request</button>
-							<!-- <input type="button" value="Approve Request" id="approveBtn"/> -->
+								<button id="approveBtn">approve request</button>							
 							</div>
 							<div class="rejectBtnDiv">
-							<button id="rejectBtn">Reject Request</button>
-							<!--<input type="button" value="Reject Request" id="rejectBtn"/>-->
+								<button id="rejectBtn">reject request</button>							
+							</div>
+							<div class="clarificationBtnDiv">
+								<button id="clarifyBtn">clarify</button>
+							</div>
+							
+							<div class="clarificationTextDiv">	
+								<form id="saveComment" action="SaveTRComments" method="POST">
+								<input type="hidden" name="recieverId" id="recieverId" value="${requestDetails.requestedEmpDetails.employeeDetailsId}" />
+								<input type="hidden" name="recieverName" id="recieverName" value="${requestDetails.requestedEmpDetails.employeeName}" />
+								<input type="hidden" name="senderId" id="senderId" value="${loginUserDetails.employeeDetailsId}" />
+								<input type="hidden" name="reqVersionId1" id="reqVersionId1" value="" />								
+								<input type="hidden" name="reqMasterId1" id="reqMasterId1" value="" />
+														
+								<div class="" style="float:left;width:31%;padding-top:18px;">Please enter your comments</div>
+								<div class="" style="float:left;width:65%;">
+									<textarea name="comment" id="comment" style="margin-right:10px;width:300px;height:50px;float:left;"></textarea>
+									<button id="submitCommentBtn" style="float:left;margin-top:15px;">submit</button>
+								</div>
+								</form>	
 							</div>
 							</c:otherwise>
 						</c:choose>						
 						</div>
-						<div class="subHead">Approvers Details</div>
+						<div class="contentSubHead">Approvers Details</div>
 						<div class="approverDetails">
 							<table cellpadding="0" cellspacing="0" class="approverDetailsTable">		
 								<tr>
@@ -240,7 +363,8 @@
 								</c:if>
 								</c:forEach>							
 							</table>
-							<form id="requestProcess" action="UpdateTravelRequest" method="POST"></form>		
+							<form id="requestProcess" action="UpdateTravelRequest" method="POST"></form>
+													
 						</div>
 					</div>
 				</div>
@@ -265,6 +389,17 @@ $("#rejectBtn").click(function(){
 	$("#requestProcess").attr("action", action);
 	$("#requestProcess").submit();
 	
+});
+$("#clarifyBtn").click(function(){
+	$(".clarificationTextDiv").show();	
+});
+$("#submitCommentBtn").click(function(){
+	$("#reqVersionId1").val($("#reqVersionId").val());
+	$("#reqMasterId1").val($("#reqMasterId").val());
+	if(IsEmpty($("#comment")))
+		return false;
+	else
+		return true;
 });
 </script>
 </body>
