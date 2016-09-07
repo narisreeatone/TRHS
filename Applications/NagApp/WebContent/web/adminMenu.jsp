@@ -2,6 +2,7 @@
 	<ul class="menuItems">
 		<li><a href="/NagApp/web/AdminHome.jsp">Admin Home</a></li>
 		<li><a href="/NagApp/web/EmployeeRegistration.jsp">Employee Registration</a></li>
+		<!-- <li><a href="/NagApp/web/EmployeeSearch.jsp">Employee Search</a></li> -->
 		<li><a href="/NagApp/web/uploadEmployeeData.jsp">Upload Employee's Data</a></li>
 		<li><a href="/NagApp/web/AddNewServices.jsp?seviceType=dept">Add Department</a></li>
 		<li><a href="/NagApp/web/AddNewServices.jsp?seviceType=designation">Add Designation</a></li>

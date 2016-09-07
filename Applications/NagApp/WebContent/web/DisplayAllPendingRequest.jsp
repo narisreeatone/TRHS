@@ -6,15 +6,22 @@
 <%@ page import="java.util.*" %>
 <%@ page import="com.nag.bean.*" %>
 <%@ page import="com.nag.dao.*" %>
+<%@ page import="com.nag.sql.*" %>
 
 <%
-	//EmployeeDetails empDetails = (EmployeeDetails)request.getAttribute("loginUserDetails");	
+DataBaseConnection dbHandler = new DataBaseConnection();
+RequestStatus reqStatus = new RequestStatus();
+EmployeeDetails empDetails = (EmployeeDetails)session.getAttribute("loginUserDetails");
+String empDetailsId = empDetails.getEmployeeDetailsId();
+Map <String, TravelRequestMaster> allPendingRequestMap = dbHandler.getAllTravelRequestByStatus(reqStatus.PENDING);		
+		
+request.setAttribute("allPendingRequestMap", allPendingRequestMap);	
 %>
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Employee Details</title>
-<link href="styles/styles.css" type="text/css" rel="stylesheet">
+<link href="../styles/styles.css" type="text/css" rel="stylesheet">
 <style>
 .welcomeMssg{
 	color: blue;
@@ -43,9 +50,10 @@
 </head>
 <body>
 <div id="mainDiv">
-	<jsp:include page="header.jsp" />
-<script src="./datatables/js/jquery.dataTables.min.js"></script>
-<link href="./datatables/css/default_table.css" rel="stylesheet" />
+	<div class="header">
+		<jsp:include page="header.jsp" />
+	</div>	
+	
 	<div id="innerMainDiv">	
 		<div id="contentDiv">
 		
@@ -57,50 +65,56 @@
 				<div class="contentSection">
 					<div class="heading">All Pending Requests</div>
 					<div class="">
-					<c:choose>
-					<c:when test="${not empty allPendingRequestMap}">
-						<table class="pedningReqTable">
-							<tbody>
+					<%
+						if(allPendingRequestMap!= null){							
+						
+					%>
+						<table class="pedningReqTable display" id="resultTable" cellspacing="0" width="100%">
+							<thead>
 								<tr>
-									<td class="HeaderTd" style="width:8%;">S No</td>
+									<td class="HeaderTd" style="width:8%;">No</td>
 									<td class="HeaderTd">Requested By</td>
 									<td class="HeaderTd">Source</td>
 									<td class="HeaderTd">Destination</td>
-									<td class="HeaderTd">Travel Date</td>
-									<!--<td class="HeaderTd">Travel Mode</td> -->
-									<td class="HeaderTd" style="width:10%;">Expenses</td>
-									<td class="HeaderTd" style="width:20%;">Requested Date</td>																		
+									<td class="HeaderTd dateTd">Travel Date</td>									
+									<td class="HeaderTd">Expenses</td>
+									<td class="HeaderTd dateTd">Requested Date</td>
+									<td class="HeaderTd"></td>																		
 								</tr>
-								<c:set var="count" value="0"></c:set>
-								<c:forEach items="${allPendingRequestMap}" var="pendingRequest" varStatus="status">
-								<c:set var="count" value="${count + 1}"></c:set>
+							</thead>							
+							<tbody>
+								<%
+								int count=0;
+								for (Map.Entry<String, TravelRequestMaster> entry : allPendingRequestMap.entrySet())
+								{
+									TravelRequestMaster reqMaster= entry.getValue();
+									
+									count=count+1;							
+								%>
+							
 								<tr>
-									<td class="dataTd">${count}</td>	
-									<td class="dataTd">${pendingRequest.value.requestedEmpDetails.employeeName}</td>
-									<td class="dataTd">${pendingRequest.value.source}</td>
-									<td class="dataTd">${pendingRequest.value.destination}</td>
-									<td class="dataTd"><fmt:formatDate value="${pendingRequest.value.travelDate}" type="date" pattern="dd-MM-yyyy" /></td>
-									<!-- <td class="dataTd">
-									<c:forEach items="${travelModesMap}" var="travelModes" varStatus="status">													
-										<c:if test="${travelModes.key == pendingRequest.value.travelModeId}">
-											${travelModes.value}
-										</c:if>
-									</c:forEach>								
-									</td> -->
-									<td class="dataTd">${pendingRequest.value.expenses}</td>
-									<td class="dataTd">
-									<fmt:formatDate value="${pendingRequest.value.createdDate}" type="date" pattern="dd-MM-yyyy" />
+									<td><%= count %></td>	
+									<td><%=reqMaster.getRequestedEmpDetails().getEmployeeName() %></td>
+									<td><%= reqMaster.getSource()%></td>
+									<td><%= reqMaster.getDestination()%></td>
+									<td><fmt:formatDate value="<%= reqMaster.getTravelDate()%>" type="date" pattern="dd-MM-yyyy" /></td>
+									
+									<td><%= reqMaster.getExpenses()%></td>
+									<td>
+									<fmt:formatDate value="<%= reqMaster.getCreatedDate()%>" type="date" pattern="dd-MM-yyyy" />
 									</td>
-									<td class="dataTd"><a href="TravelRequestDetails?requestFrom=owner&travelRequestMasterId=${pendingRequest.value.travelRequestMasterId}">Details</a></td>														
+									<td><a href="TravelRequestDetails?requestFrom=owner&travelRequestMasterId=<%= reqMaster.getTravelRequestMasterId()%>">Details</a></td>														
 								</tr>
-								</c:forEach>
+								<%
+								}
+								
+								%>
 							</tbody>
 						</table>
-						</c:when>
-						<c:otherwise>
+						
+						<%}else{ %>
 							No Approved travel requests.
-						</c:otherwise>
-					</c:choose>
+						<% } %>
 					</div>
 				</div>
 			</div>				
@@ -111,5 +125,6 @@
 	</div>
 	<jsp:include page="footer.jsp" />
 </div>
+<jsp:include page="DataTableImpl.jsp" />
 </body>
 </html>

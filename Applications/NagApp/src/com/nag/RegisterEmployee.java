@@ -68,10 +68,10 @@ public class RegisterEmployee extends HttpServlet {
 			String dobString = request.getParameter("dob");
 			Date dob = null;
 			try{
-	        	DateFormat df = new SimpleDateFormat("dd/mm/yyyy"); 
+	        	DateFormat df = new SimpleDateFormat("dd/MM/yyyy"); 
 	        	dob = df.parse(dobString);
 	        }catch(Exception e){
-	        	System.out.println("Unable to convert emp DOB to date object in bulk upload");
+	        	System.out.println("Unable to convert emp DOB to date object in bulk upload: "+e.getMessage());
 	        }
 			String designationId = request.getParameter("designationId");
 			String departmentId = request.getParameter("departmentId");
@@ -98,32 +98,34 @@ public class RegisterEmployee extends HttpServlet {
 				registerEmployeeForm.setExtension(extension);
 				String status = dbHandler.registerEmployee(registerEmployeeForm);
 				if("duplicateEmpId".equals(status)){
-					displayMessage = "Employee id is already existed. Please use another employee id.";
-					request.setAttribute("errorMessage", errorMessage);
+					errorMessage = "Employee id is already existed. Please use another employee id.";
+					request.setAttribute("errorMsg", errorMessage);
 					rd = request.getRequestDispatcher("/web/EmployeeRegistration.jsp");	
-				}
-				if ("true".equals(status)){
-					displayMessage = "Employee registration is success. Mail sending start.";
-					empLoginDetails = dbHandler.getLoginDetails(employeeId);
-					employeeDetails = dbHandler.getEmployeeDetailsByEmpId(employeeId);
-					boolean mailStatus = mailHandler.sendEmployeeRegistrationDetails(empLoginDetails, employeeDetails);
-					if(mailStatus){
-						displayMessage = "Employee registration is success and sent credentials to employee mail.";
+				}else {
+					if ("true".equals(status)){					
+				
+						empLoginDetails = dbHandler.getLoginDetails(employeeId);
+						employeeDetails = dbHandler.getEmployeeDetailsByEmpId(employeeId);
+						boolean mailStatus = mailHandler.sendEmployeeRegistrationDetails(empLoginDetails, employeeDetails);
+						if(mailStatus){
+							displayMessage = "Employee registration is success and sent credentials to employee mail.";
+						}else
+							displayMessage = "Employee registration is success but unable to send credentials to employee mail.";
 					}
+					else{
+						errorMessage = "Problem with employee registration. Please check log for error.";
+					}
+					request.setAttribute("displayMessage", displayMessage);
+					rd = request.getRequestDispatcher("/web/AdminHome.jsp");
 				}
-				else{
-					displayMessage = "Problem with employee registration. Please check log for error.";
-				}
-				request.setAttribute("displayMessage", displayMessage);
-				rd = request.getRequestDispatcher("/web/AdminHome.jsp");
 			}else{
-				request.setAttribute("errorMessage", errorMessage);
+				request.setAttribute("errorMsg", errorMessage);
 				rd = request.getRequestDispatcher("/web/EmployeeRegistration.jsp");			
 			}			
 			//rd.forward(request,response);
 		}else{
 			rd = request.getRequestDispatcher("/NagApp/login.jsp");	
-			request.setAttribute("displayMessage", "Please log in to your account.");
+			request.setAttribute("errorMsg", "Please log in to your account.");
 		}
 		
 		rd.forward(request,response);

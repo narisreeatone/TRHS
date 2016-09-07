@@ -94,17 +94,22 @@ public class SaveTravelRequestDetails extends HttpServlet {
 			}
 			String displayMessage = "";
 			if(reqSavingStatus){
-				displayMessage = "Request has been successfully sent";
+				displayMessage = "Travel request has been successfully sent to approver(s).";
 				String aproveEmpOrder[] = requestForm.getApproveEmpOrder();
 				mailHandler = new MailHandler();
 				for(int i=0; i < aproveEmpOrder.length; i++){
 					String[] empIdAndOrder = aproveEmpOrder[i].split("-");
-					EmployeeDetails approverEmpDetails = dbHandler.getEmployeeDetailsById(empIdAndOrder[0]);				
-					boolean mailstatus = mailHandler.sendNewTravelRequestMail(empDetails, requestForm, approverEmpDetails.getEmailId());
+					EmployeeDetails approverEmpDetails = dbHandler.getEmployeeDetailsById(empIdAndOrder[0]);
+					boolean mailstatus = false;
+					try{
+						mailstatus = mailHandler.sendNewTravelRequestMail(empDetails, requestForm, approverEmpDetails.getEmailId());
+					}catch(Exception e){
+						displayMessage = "Request has been successfully saved but unable to sent mail to approver(s).";
+					}
 					if(mailstatus)
-						System.out.println("travel request mail sent successfully for "+approverEmpDetails.getEmployeeName());
+						System.out.println("New travel request mail sent successfully for "+approverEmpDetails.getEmployeeName());
 					else
-						System.out.println("travel request mail sent failed for "+approverEmpDetails.getEmployeeName());
+						System.out.println("New travel request mail failed for "+approverEmpDetails.getEmployeeName());
 				}
 			}
 			rd = request.getRequestDispatcher("/web/employeeHome.jsp");

@@ -152,6 +152,9 @@ div.file_upload input {
 	float:left;
 	padding-left: 25px;
 }
+.errorMessage{
+	padding-bottom:5px;
+}
 </style>
 </head>
 <body>
@@ -169,7 +172,10 @@ div.file_upload input {
 					<div class="contentSection">										
 						<div class="subHead">Upload Employee Data</div>	
 						<div class="empDetailsUploading">							
-							<div class="errorMessage"><c:if test="${errorMessage ne null || errorMessage ne ''}">${errorMessage}</c:if></div>							
+							<div class="errorMessage"><c:if test="${errorMessage ne null || errorMessage ne ''}">
+								${errorMessage}</c:if>
+								<script>$(".errorMessage").css("visibility","visible");</script>
+							</div>							
 							<form action="UploadEmployeeDetails" method="post" enctype="multipart/form-data">
 								<div class="label">Select employee xl file to upload:</div>						
 								<!-- <div class="fileUploadBtn">	<input type="file" name="file" size="50"  value="choose xl file" style="margin:0;padding:0;"/></div>					
@@ -197,6 +203,21 @@ div.file_upload input {
 document.getElementById("file_upload").onchange = function () {
     document.getElementById("uploadFile").value = this.value;
 };
+$("#submitBtn").click(function(){
+	var fileName = $("#uploadFile").val();
+	var error = false;
+	if(IsEmpty($("#uploadFile"))){
+		error = true;
+	}
+	if(!error){
+		var name = fileName.split(".");		
+		if(name[1] == "xl" || name[1] == "xlsx"){
+			return true;	
+		}		
+	}
+	$(".errorMessage").html("Please select xl file.");
+	return false;
+});
 </script>
 </body>
 </html>

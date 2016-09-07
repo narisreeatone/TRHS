@@ -225,7 +225,12 @@
 									<td class="dataTD">${reqVersion.approverEmpDetails.departmentName}</td>
 									<td class="dataTD">${requestStatus.STATUSSTRING[reqVersion.statusId]}</td>
 									<td class="dataTD">
+									<c:choose>
+									<c:when test="${reqVersion.statusId eq 3}">-</c:when>
+									<c:otherwise>
 									<fmt:formatDate value="${reqVersion.actionDate}" type="date" pattern="dd-MM-yyyy" />
+									</c:otherwise>
+									</c:choose>
 									</td>
 									<td class="dataTD"></td>
 								</tr>								

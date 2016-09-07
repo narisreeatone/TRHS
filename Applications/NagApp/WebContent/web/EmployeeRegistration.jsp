@@ -99,14 +99,14 @@
 					
 					<div class="contentSection">							
 						<c:choose>
-						<c:when test="{displayMessage != null}">
+						<c:when test="${displayMessage ne null && displayMessage ne ''}">
 							<div class="displayMssg">${displayMessage}</div>
 						</c:when>
 						<c:otherwise>	
 							<div class="subHead">Employee Registration Form</div>	
 							<div class="empProfile">
 							<form id="empRegistration" action="RegisterEmployee" method="POST" >
-								<div class="errorMsgDiv"><span class="errorMsg">${errorMessage}</span></div>
+								<div class="errorMsgDiv"><span class="errorMsg">${errorMsg}</span></div>
 								<div class="reqFeildsMsgDiv"><span class="reqFeildsMsg">*required fields</span></div>
 								<div class="dataRowDiv zebraPattern">
 									<div class="leftDiv">Employee Id*:</div>
@@ -184,10 +184,12 @@ $("document").ready(function(){
 				 	showOn:          "both",
 				  	showButtonPanel : true,
 				 	buttonImageOnly: true,
-				 	minDate: new Date(),
-				 	maxDate:90,
+				 	minDate: new Date("01/01/1920"),
+				 	maxDate:new Date("01/01/2010"),
 				 	prevText:'Prev',
-				 	nextMonth:'Next'
+				 	nextMonth:'Next',
+				 	 changeYear: true,
+				 	yearRange: '1920:2010'
 				}
 		);
 	} );	
@@ -203,7 +205,7 @@ $("#submitBtn").click(function(){
 	if(IsEmpty($("#dob")))
 		error = true;
 	else
-		$("#travelDate").prop("disabled",false);	
+		$("#dob").prop("disabled",false);	
 	if(validListBox($("#designationId")))
 		error = true;
 	if(validListBox($("#departmentId")))
@@ -223,9 +225,9 @@ $("#submitBtn").click(function(){
 	if(error)
 		$(".errorMsg").html(errorMsg);
 	else
-		$(".errorMsg").html("");
-	//return !error;
-	return false;
+		$(".errorMsg").html("");	
+	return !error;
+	//return false;
 });
 </script>
 </body>

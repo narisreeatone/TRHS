@@ -62,7 +62,8 @@ public class LoginServlet extends HttpServlet {
 					rd = request.getRequestDispatcher("/web/AdminHome.jsp");
 					session.setAttribute("loginUserDetails", empDetails);
 					session.setAttribute("isUserLoggedIn", false);
-					session.setAttribute("isAdmin", true);				
+					session.setAttribute("isAdmin", true);
+					session.removeAttribute("errorMsg");
 				}else{
 					System.out.println("empDetails.isRandomPwd():::"+empDetails.isRandomPwd());
 					if(empDetails.isRandomPwd()){
@@ -70,6 +71,7 @@ public class LoginServlet extends HttpServlet {
 						session.setAttribute("loginUserDetails", empDetails);
 						session.setAttribute("isUserLoggedIn", true);
 						session.setAttribute("isRandomPwd", true);
+						session.removeAttribute("errorMsg");
 						//rd.forward(request,response);
 					}else{
 						System.out.println("employee home");
@@ -77,6 +79,7 @@ public class LoginServlet extends HttpServlet {
 						session.setAttribute("loginUserDetails", empDetails);
 						session.setAttribute("isUserLoggedIn", true);
 						session.setAttribute("isAdmin", false);	
+						session.removeAttribute("errorMsg");
 						//rd.forward(request,response);
 					}
 				}

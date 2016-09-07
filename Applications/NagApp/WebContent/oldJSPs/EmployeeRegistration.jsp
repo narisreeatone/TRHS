@@ -32,7 +32,7 @@ $("document").ready(function(){
 				 	showOn:          "both",
 				  	showButtonPanel : true,
 				 	buttonImageOnly: true,
-				 	minDate: new Date(),
+				 	minDate: new Date(""),
 				 	maxDate:90,
 				 	prevText:'Prev',
 				 	nextMonth:'Next'

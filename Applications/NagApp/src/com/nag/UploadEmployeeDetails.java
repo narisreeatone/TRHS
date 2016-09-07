@@ -63,9 +63,7 @@ public class UploadEmployeeDetails extends HttpServlet {
 		HttpSession session = request.getSession(false);
 		ValidateUserSession validateUserSession = new ValidateUserSession();
 		if(!validateUserSession.checkUserSession(session)){
-			isMultipart = ServletFileUpload.isMultipartContent(request);
-		      response.setContentType("text/html");
-		      java.io.PrintWriter out = response.getWriter( );
+			isMultipart = ServletFileUpload.isMultipartContent(request);	          
 		      if( !isMultipart ){
 		    	  rd = request.getRequestDispatcher("/web/uploadEmployeeData.jsp");
 		    	  request.setAttribute("errorMessage", "Please select xl file.");

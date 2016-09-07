@@ -134,7 +134,7 @@
 							</form>
 							<c:if test="${idMap ne null}">
 							<div class="displayServicesInDB" style="">
-								<div class="" style="float:left;width:100%;paddin:0 0 20px 0;">Below are already added to database.</div>
+								<div class="" style="float:left;width:100%;padding:0 0 20px 0;">Below ${serviceName}s already added to database.</div>
 								<div class="dataDiv" style="">
 									<div class="leftDiv headerDiv" style="">ID</div>
 									<div class="rightDiv headerDiv" style="">${serviceName}</div>

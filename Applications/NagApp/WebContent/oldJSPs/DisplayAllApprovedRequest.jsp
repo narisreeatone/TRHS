@@ -57,18 +57,20 @@
 						<div class="">
 						<c:choose>
 						<c:when test="${not empty allApprovedRequestMap}">
-							<table class="pedningReqTable">
-								<tbody>
+							<table class="pedningReqTable display" id="resultTable" cellspacing="0" width="100%" >
+								<thead>
 									<tr>
-										<td class="HeaderTd" style="width:8%;">S No</td>
-										<td class="HeaderTd">Requested By</td>
-										<td class="HeaderTd">Source</td>
-										<td class="HeaderTd">Destination</td>
-										<td class="HeaderTd">Travel Date</td>
-										<!-- <td class="HeaderTd">Travel Mode</td>-->
-										<td class="HeaderTd">Expenses</td>
-										<td class="HeaderTd">Approved Date</td>																		
+										<th class="HeaderTd" style="width:8%;">S No</th>
+										<th class="HeaderTd">Requested By</th>
+										<th class="HeaderTd">Source</th>
+										<th class="HeaderTd">Destination</th>
+										<th class="HeaderTd">Travel Date</th>										
+										<th class="HeaderTd">Expenses</th>
+										<th class="HeaderTd">Approved Date</th>		
+										<th></th>																
 									</tr>
+								</thead>
+								<tbody>
 									<c:set var="count" value="0"></c:set>
 									<c:forEach items="${allApprovedRequestMap}" var="approvedRequest" varStatus="status">
 									<c:set var="count" value="${count + 1}"></c:set>
@@ -79,14 +81,7 @@
 										<td class="dataTd">${approvedRequest.value.destination}</td>
 										<td class="dataTd">
 										<fmt:formatDate value="${approvedRequest.value.travelDate}" type="date" pattern="dd-MM-yyyy" />
-										</td>
-										<!-- <td class="dataTd">
-										<c:forEach items="${travelModesMap}" var="travelModes" varStatus="status">													
-											<c:if test="${travelModes.key == approvedRequest.value.travelModeId}">
-												${travelModes.value}
-											</c:if>
-										</c:forEach>								
-										</td> -->
+										</td>										
 										<td class="dataTd">${approvedRequest.value.expenses}</td>
 										<td class="dataTd">
 										<fmt:formatDate value="${approvedRequest.value.createdDate}" type="date" pattern="dd-MM-yyyy" />
@@ -96,7 +91,7 @@
 									</c:forEach>
 								</tbody>
 							</table>
-							</c:when>
+							</c:when>							
 							<c:otherwise>
 								No Approved travel requests.
 							</c:otherwise>
@@ -111,5 +106,6 @@
 	</div>
 	<jsp:include page="footer.jsp" />
 </div>
+
 </body>
 </html>

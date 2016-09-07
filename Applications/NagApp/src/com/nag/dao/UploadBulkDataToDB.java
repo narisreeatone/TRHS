@@ -63,8 +63,7 @@ public class UploadBulkDataToDB {
         		continue;
             Iterator<Cell> cellIterator = nextRow.cellIterator();
             List<String> rowValues = new ArrayList<String>();          
-            while (cellIterator.hasNext()) {
-            	System.out.println("Row number:::"+nextRow.getRowNum());            	
+            while (cellIterator.hasNext()) {            	         	
                 Cell cell = cellIterator.next();                
                 switch (cell.getCellType()) {
                     case Cell.CELL_TYPE_STRING:                       
@@ -122,7 +121,7 @@ public class UploadBulkDataToDB {
             }
             else{
             	System.out.println("There is a problem with Employee data. Please check data. Emp Id is:::"+rowValues.get(1));
-            	errorMessage = errorMessage + rowValues.get(1) + ", ";
+            	errorMessage = errorMessage + rowValues.get(0) + ", ";
             	message = errorMessage;
             }            
         }

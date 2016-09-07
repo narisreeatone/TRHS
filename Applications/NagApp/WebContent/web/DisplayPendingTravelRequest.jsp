@@ -57,17 +57,20 @@
 						<div class="">
 						<c:choose>
 						<c:when test="${not empty pendingRequestMap}">
-							<table class="pedningReqTable">
-								<tbody>
+							<table class="pedningReqTable display" id="resultTable" cellspacing="0" width="100%" >
+							<thead>
 									<tr>
-										<td class="HeaderTd" style="width:8%;">S No</td>
+										<td class="HeaderTd" style="width:8%;">No</td>
 										<td class="HeaderTd">Source</td>
 										<td class="HeaderTd">Destination</td>
 										<td class="HeaderTd" style="width:12%;">Travel Date</td>
 										<td class="HeaderTd" style="width:18%;">Travel Mode</td>
 										<td class="HeaderTd" style="width:10%;">Expenses</td>
-										<td class="HeaderTd" style="width:20%;">Requested Date</td>																		
+										<td class="HeaderTd" style="width:20%;">Requested Date</td>	
+										<td></td>																		
 									</tr>
+								</thead>
+								<tbody>
 									<c:set var="count" value="0"></c:set>
 									<c:forEach items="${pendingRequestMap}" var="pendingRequest" varStatus="status">
 									<c:set var="count" value="${count + 1}"></c:set>
@@ -108,5 +111,6 @@
 	</div>
 	<jsp:include page="footer.jsp" />
 </div>
+<jsp:include page="DataTableImpl.jsp" />
 </body>
 </html>

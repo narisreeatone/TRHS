@@ -57,17 +57,20 @@
 					<div class="">
 					<c:choose>
 					<c:when test="${not empty rejectedRequestByEmpMap}">
-						<table class="pedningReqTable">
-							<tbody>
+						<table class="pedningReqTable display" id="resultTable" cellspacing="0" width="100%" >
+							<thead>
 								<tr>
-									<td class="HeaderTd" style="width:8%;">S No</td>
+									<td class="HeaderTd" style="width:8%;">No</td>
 									<td class="HeaderTd">Source</td>
 									<td class="HeaderTd">Destination</td>
 									<td class="HeaderTd">Travel Date</td>
 									<td class="HeaderTd">Travel Mode</td>
 									<td class="HeaderTd">Expenses</td>
-									<td class="HeaderTd">Rejected Date</td>																		
+									<td class="HeaderTd">Rejected Date</td>	
+									<td></td>																		
 								</tr>
+							</thead>
+							<tbody>
 								<c:set var="count" value="0"></c:set>
 								<c:forEach items="${rejectedRequestByEmpMap}" var="rejectedRequest" varStatus="status">
 								<tr>
@@ -109,5 +112,6 @@
 	</div>		
 	<jsp:include page="footer.jsp" />
 </div>
+<jsp:include page="DataTableImpl.jsp" />
 </body>
 </html>

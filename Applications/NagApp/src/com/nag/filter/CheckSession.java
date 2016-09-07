@@ -44,22 +44,18 @@ public class CheckSession implements Filter {
 		HttpSession session = req.getSession(false);
 		RequestDispatcher rd = null;
 		boolean noSession = false;
-		if(session==null){
-			//request.setAttribute("errorMsg", "Please log in to your account.");			
-			//res.sendRedirect("/NagApp/login.jsp");
-			noSession = true;
-		}else if(session.getAttribute("isUserLoggedIn") == null){
-			//request.setAttribute("errorMsg", "Please log in to your account.");			
-			//res.sendRedirect("/NagApp/login.jsp");
-			noSession = true;
-		}if(noSession){
-			/*rd = request.getRequestDispatcher("/NagApp/login.jsp");
-			request.setAttribute("errorMsg", "Please log in to your account.");
-			rd.forward(request,response);*/
+		if( session!= null ){
+			if(session.getAttribute("isUserLoggedIn") == null)				
+				noSession = true;			
+		}		
+		if( noSession ){
 			session = req.getSession(true);
 			session.setAttribute("errorMsg", "Please log in to your account.");
-			res.sendRedirect("/NagApp/login.jsp");
-			
+			res.sendRedirect("login.jsp");		
+		}else if(res.getStatus() == 500){
+			session = req.getSession(true);
+			session.setAttribute("errorMsg", "Session is expired. Please log in to your account.");
+			res.sendRedirect("login.jsp");
 		}else
 			chain.doFilter(request, response);
 	}

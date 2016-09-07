@@ -302,7 +302,7 @@ public class DataBaseConnection {
 				if(rs.getString(1) != null)
 					requestMasterId = rs.getInt("NUMBEROFRECORDS");					
 			//insert travel req form data to request master table
-			ps=conn.prepareStatement("insert into TTRAVELREQUESTMASTER(TRAVELREQUESTMASTERID,SOURCE,DESTINATION,TRAVELMODEID,EXPENSES,PURPOSE,EMPLOYEEDETAILSID,ATTACHMENTPATH,TRAVELREQUESTSTATUS,TRAVELDATE,ACTIONDATE) values (?,?,?,?,?,?,?,?,?,?,sysdate)");
+			ps=conn.prepareStatement("insert into TTRAVELREQUESTMASTER(TRAVELREQUESTMASTERID,SOURCE,DESTINATION,TRAVELMODEID,EXPENSES,PURPOSE,EMPLOYEEDETAILSID,ATTACHMENTPATH,TRAVELREQUESTSTATUS,TRAVELDATE,ACTIONDATE,CREATEDDATE) values (?,?,?,?,?,?,?,?,?,?,sysdate,sysdate)");
 			requestMasterId = requestMasterId + 1;
 			ps.setInt(1, requestMasterId);	
 			ps.setString(2, requestForm.getSource());
@@ -375,8 +375,9 @@ public class DataBaseConnection {
 				reqMaster.setEmployeeDetailsId(empDetailsId);				
 				reqMaster.setAttachmentPath(rs.getString("ATTACHMENTPATH"));
 				reqMaster.setTravelRequestStatus(rs.getString("TRAVELREQUESTSTATUS"));
-				reqMaster.setCreatedDate(rs.getDate("ACTIONDATE"));
+				reqMaster.setActionDate(rs.getDate("ACTIONDATE"));
 				reqMaster.setTravelDate(rs.getDate("TRAVELDATE"));
+				reqMaster.setCreatedDate(rs.getDate("CREATEDDATE"));
 				
 				/*System.out.println("reqMasterId:::"+reqMasterId);
 				
@@ -435,8 +436,9 @@ public class DataBaseConnection {
 				reqMaster.setEmployeeDetailsId(empDetailsId);				
 				reqMaster.setAttachmentPath(rs.getString("ATTACHMENTPATH"));
 				reqMaster.setTravelRequestStatus(rs.getString("TRAVELREQUESTSTATUS"));
-				reqMaster.setCreatedDate(rs.getDate("ACTIONDATE"));
-				reqMaster.setTravelDate(rs.getDate("TRAVELDATE"));				
+				reqMaster.setActionDate(rs.getDate("ACTIONDATE"));
+				reqMaster.setTravelDate(rs.getDate("TRAVELDATE"));	
+				reqMaster.setCreatedDate(rs.getDate("CREATEDDATE"));
 								
 				/*TravelRequestVersion reqVersion = null;
 				PreparedStatement ps1 = conn.prepareStatement("select * from TTRAVELREQUESTVERSION where TRAVELREQUESTMASTERID = ?");
@@ -493,8 +495,9 @@ public class DataBaseConnection {
 				reqMaster.setEmployeeDetailsId(empDetailsId);				
 				reqMaster.setAttachmentPath(rs.getString("ATTACHMENTPATH"));
 				reqMaster.setTravelRequestStatus(rs.getString("TRAVELREQUESTSTATUS"));
-				reqMaster.setCreatedDate(rs.getDate("ACTIONDATE"));
-				reqMaster.setTravelDate(rs.getDate("TRAVELDATE"));				
+				reqMaster.setActionDate(rs.getDate("ACTIONDATE"));
+				reqMaster.setTravelDate(rs.getDate("TRAVELDATE"));	
+				reqMaster.setCreatedDate(rs.getDate("CREATEDDATE"));
 				
 				/*TravelRequestVersion reqVersion = null;
 				PreparedStatement ps1 = conn.prepareStatement("select * from TTRAVELREQUESTVERSION where TRAVELREQUESTMASTERID = ?");
@@ -621,8 +624,9 @@ public class DataBaseConnection {
 					reqMaster.setEmployeeDetailsId(empDetailsId);				
 					reqMaster.setAttachmentPath(rs1.getString("ATTACHMENTPATH"));
 					reqMaster.setTravelRequestStatus(rs1.getString("TRAVELREQUESTSTATUS"));
-					reqMaster.setCreatedDate(rs1.getDate("ACTIONDATE"));
+					reqMaster.setActionDate(rs1.getDate("ACTIONDATE"));
 					reqMaster.setTravelDate(rs1.getDate("TRAVELDATE"));
+					reqMaster.setCreatedDate(rs.getDate("CREATEDDATE"));
 				}
 				reqMasterMap.put(reqMasterId, reqMaster);
 			}
@@ -669,8 +673,9 @@ public class DataBaseConnection {
 					reqMaster.setEmployeeDetailsId(empDetailsId);				
 					reqMaster.setAttachmentPath(rs1.getString("ATTACHMENTPATH"));
 					reqMaster.setTravelRequestStatus(rs1.getString("TRAVELREQUESTSTATUS"));
-					reqMaster.setCreatedDate(rs1.getDate("ACTIONDATE"));
+					reqMaster.setActionDate(rs1.getDate("ACTIONDATE"));
 					reqMaster.setTravelDate(rs1.getDate("TRAVELDATE"));
+					reqMaster.setCreatedDate(rs.getDate("CREATEDDATE"));
 				}
 				reqMasterMap.put(reqMasterId.toString(), reqMaster);
 			}
@@ -710,8 +715,9 @@ public class DataBaseConnection {
 				reqMaster.setEmployeeDetailsId(rs.getString("EMPLOYEEDETAILSID"));				
 				reqMaster.setAttachmentPath(rs.getString("ATTACHMENTPATH"));
 				reqMaster.setTravelRequestStatus(rs.getString("TRAVELREQUESTSTATUS"));
-				reqMaster.setCreatedDate(rs.getDate("ACTIONDATE"));
-				reqMaster.setTravelDate(rs.getDate("TRAVELDATE"));				
+				reqMaster.setActionDate(rs.getDate("ACTIONDATE"));
+				reqMaster.setTravelDate(rs.getDate("TRAVELDATE"));		
+				reqMaster.setCreatedDate(rs.getDate("CREATEDDATE"));
 				
 				TravelRequestVersion reqVersion = null;
 				PreparedStatement ps1 = conn.prepareStatement("select * from TTRAVELREQUESTVERSION where TRAVELREQUESTMASTERID = ? ORDER BY APPROVERORDER");
@@ -902,7 +908,7 @@ public class DataBaseConnection {
 		TravelRequestMaster reqMaster = null;		
 		try{
 			conn = getDBConnection();
-			ps = conn.prepareStatement("select * from TTRAVELREQUESTMASTER where TRAVELREQUESTSTATUS = ? ORDER BY ACTIONDATE");
+			ps = conn.prepareStatement("select * from TTRAVELREQUESTMASTER where TRAVELREQUESTSTATUS = ? ORDER BY TRAVELDATE DESC");
 			if(requestStatus.APPROVED.equals(reqStatus))
 				ps.setString(1, requestStatus.APPROVED);
 			else if(requestStatus.PENDING.equals(reqStatus))
@@ -922,8 +928,9 @@ public class DataBaseConnection {
 				reqMaster.setEmployeeDetailsId(rs.getString("EMPLOYEEDETAILSID"));			
 				reqMaster.setAttachmentPath(rs.getString("ATTACHMENTPATH"));
 				reqMaster.setTravelRequestStatus(rs.getString("TRAVELREQUESTSTATUS"));
-				reqMaster.setCreatedDate(rs.getDate("ACTIONDATE"));
+				reqMaster.setActionDate(rs.getDate("ACTIONDATE"));
 				reqMaster.setTravelDate(rs.getDate("TRAVELDATE"));	
+				reqMaster.setCreatedDate(rs.getDate("CREATEDDATE"));
 				
 				EmployeeDetails requestedEmpDetails = getEmployeeDetailsById(rs.getString("EMPLOYEEDETAILSID"));
 				reqMaster.setRequestedEmpDetails(requestedEmpDetails);

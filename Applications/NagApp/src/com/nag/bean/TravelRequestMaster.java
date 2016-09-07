@@ -16,10 +16,17 @@ public class TravelRequestMaster {
 	private String expenses;
 	private String purpose;
 	private Date travelDate; 
+	private Date actionDate;
 	private List<TravelRequestVersion> reqVersionList;
 	private EmployeeDetails requestedEmpDetails;
 	
 	
+	public Date getActionDate() {
+		return actionDate;
+	}
+	public void setActionDate(Date actionDate) {
+		this.actionDate = actionDate;
+	}
 	public EmployeeDetails getRequestedEmpDetails() {
 		return requestedEmpDetails;
 	}
