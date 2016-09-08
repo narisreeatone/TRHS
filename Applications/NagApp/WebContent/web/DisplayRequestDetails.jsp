@@ -90,7 +90,7 @@
 .approveBtnDiv{
 	float:left;
 	padding-right:10px;
-	padding-left:155px;
+	padding-left:235px;
 }
 .rejectBtnDiv{
 	float:left;
@@ -106,7 +106,7 @@
     cursor: pointer;
     padding: 7px 0;
     transition: all 0.3s ease 0s;
-    width: 150px;
+    width: 140px;
     font-weight:bold;
     
 }
@@ -117,7 +117,7 @@
     cursor: pointer;
     padding: 7px 0;
     transition: all 0.3s ease 0s;
-    width: 150px;
+    width: 125px;
     font-weight:bold;
 }
 #clarifyBtn{
@@ -130,14 +130,22 @@
     width: 80px;
     font-weight:bold;
 }
+.replyBtn{
+	background: #33b5e5 none repeat scroll 0 0;
+    border: 0 none;
+    color: #ffffff;
+    cursor: pointer;
+    padding: 1px 3px;
+    transition: all 0.3s ease 0s;    
+}
 #submitCommentBtn{
 	background: #33b5e5 none repeat scroll 0 0;
     border: 0 none;
     color: #ffffff;
     cursor: pointer;
-    padding: 3px 0;
+    padding: 1px 0 2px 0;
     transition: all 0.3s ease 0s;
-    width: 50px;
+    width: 60px;
     font-weight:bold;
 }
 .sectionDiv{
@@ -291,8 +299,7 @@
 									</td>
 								</tr>
 							</tbody>
-							</table>
-							
+							</table>							
 						</c:otherwise>
 						</c:choose>
 							
@@ -308,25 +315,7 @@
 							<div class="rejectBtnDiv">
 								<button id="rejectBtn">reject request</button>							
 							</div>
-							<div class="clarificationBtnDiv">
-								<button id="clarifyBtn">clarify</button>
-							</div>
 							
-							<div class="clarificationTextDiv">	
-								<form id="saveComment" action="SaveTRComments" method="POST">
-								<input type="hidden" name="recieverId" id="recieverId" value="${requestDetails.requestedEmpDetails.employeeDetailsId}" />
-								<input type="hidden" name="recieverName" id="recieverName" value="${requestDetails.requestedEmpDetails.employeeName}" />
-								<input type="hidden" name="senderId" id="senderId" value="${loginUserDetails.employeeDetailsId}" />
-								<input type="hidden" name="reqVersionId1" id="reqVersionId1" value="" />								
-								<input type="hidden" name="reqMasterId1" id="reqMasterId1" value="" />
-														
-								<div class="" style="float:left;width:31%;padding-top:18px;">Please enter your comments</div>
-								<div class="" style="float:left;width:65%;">
-									<textarea name="comment" id="comment" style="margin-right:10px;width:300px;height:50px;float:left;"></textarea>
-									<button id="submitCommentBtn" style="float:left;margin-top:15px;">submit</button>
-								</div>
-								</form>	
-							</div>
 							</c:otherwise>
 						</c:choose>						
 						</div>
@@ -338,8 +327,7 @@
 									<td class="labelTD">Designation</td>
 									<td class="labelTD">Department</td>
 									<td class="labelTD" style="width:10%;">Status</td>
-									<td class="labelTD" style="width:10%;">Action Date</td>
-									<td class="labelTD" style="width:20%;">Comments</td>									
+									<td class="labelTD" style="width:10%;">Action Date</td>																		
 								</tr>								
 								<c:forEach items="${requestDetails.reqVersionList}" var="reqVersion" varStatus="status">
 								<tr>
@@ -354,17 +342,97 @@
 									<fmt:formatDate value="${reqVersion.actionDate}" type="date" pattern="dd-MM-yyyy" />
 									</c:otherwise>
 									</c:choose>
-									</td>
-									<td class="dataTD"></td>
+									</td>									
 								</tr>								
 								<c:if test="${(requestDetails.travelRequestMasterId eq reqVersion.travelRequestMasterId) and (reqVersion.travelApproverId eq loginUserDetails.employeeDetailsId)}">
 									<input type="hidden" id="reqVersionId" value="${reqVersion.travelRequestVersionId}"/>
-									<input type="hidden" id="reqMasterId" value="${reqVersion.travelRequestMasterId}"/>									
+									<input type="hidden" id="reqMasterId" value="${reqVersion.travelRequestMasterId}"/>	
+									<c:set var="reqVersionId" value="${reqVersion.travelRequestVersionId}"/>
+									<c:set var="reqMasterId" value="${reqVersion.travelRequestMasterId}"/>
+									<c:set var="requestApproverId" value="${reqVersion.travelApproverId}" />
 								</c:if>
+								<div class="replyToApproverEmail${reqVersion.travelRequestVersionId}">
+									<input type="hidden" id="recieverMailId${reqVersion.travelRequestVersionId}" value="${reqVersion.approverEmpDetails.emailId}"/>
+								</div>
 								</c:forEach>							
 							</table>
-							<form id="requestProcess" action="UpdateTravelRequest" method="POST"></form>
-													
+							<form id="requestProcess" action="UpdateTravelRequest" method="POST"></form>													
+						</div>
+						<div class="commentsMainDiv">
+							<div class="contentSubHead">Comments</div>
+							<c:choose>
+							<c:when test="${not empty requestDetails.reqCommentList && requestDetails.reqCommentList ne null}">
+							<c:set var="commentListSize" value="${requestDetails.reqCommentList.size()}"/>
+								<div class="" style="float:left;width:100%;padding-bottom:10px;padding-top:5px;">
+									<div class="" style="float:left;width:20%;padding-right:2%;font-weight:bold;color:#530594;">Comments By</div>
+									<div class="" style="float:left;width:78%;font-weight:bold;color:#530594;">Details</div>
+								</div>
+								<c:forEach items="${requestDetails.reqCommentList}" var="reqComment" varStatus="status">
+								<div class="commentDiv replyToApprover${reqComment.requestVersionId}" style="float:left;width:100%;padding-bottom:15px;">
+									<div class="senderName" style="float:left;width:20%;padding-right:2%;">${reqComment.senderName}</div>
+									<div class="commentDiv" style="float:left;width:78%;">
+										<div class="comment" style="float:left;width:100%;">${reqComment.comment}</div>
+										<div class="date" style="float:left;width:100%;padding-top:5px;">
+											<span>date: 
+											<fmt:formatDate type="both" dateStyle="medium" timeStyle="medium" value="${reqComment.createdDate}" />
+											</span>											
+											<c:if test="${commentListSize-1 eq status.index}">
+											&nbsp;&nbsp;<span id="${reqComment.requestVersionId}" class="replyBtn">reply</span>
+											</c:if>
+										</div>
+										<input type="hidden" id="reqVersionId0" value="${reqComment.requestVersionId}"/>
+										<input type="hidden" id="reqMasterId0" value="${reqComment.requestMasterId}"/>
+										<input type="hidden" id="recieverId0" value="${reqComment.senderId}"/>
+										<input type="hidden" id="recieverName0" value="${reqComment.senderName}"/>
+									</div>
+								</div>						
+								</c:forEach>
+							</c:when>
+							<c:otherwise>							
+								<div class="" style="float:left;width:100%;">
+									No Comments.&nbsp;&nbsp;
+									<c:if test="${requestApproverId eq loginUserDetails.employeeDetailsId}"><span style="pointer:cursor;" class="replyBtn">Write a comment</a></c:if>
+								</div>
+							</c:otherwise>							
+							</c:choose>
+							<div class="clarificationTextDiv">																						
+								<div class="" style="float:left;width:26%;padding-top:18px;">Please enter your comments</div>
+								<div class="" style="float:left;width:70%;">
+									<textarea name="commentTextArea" id="commentTextArea" style="margin-right:10px;width:300px;height:50px;float:left;"></textarea>
+									<button id="submitCommentBtn" style="float:left;margin-top:15px;">submit</button>
+								</div>
+								
+							</div>
+							<form id="saveComment" action="SaveTRComments" >
+								<c:choose>
+								<c:when test="${requestDetails.requestedEmpDetails.employeeDetailsId eq loginUserDetails.employeeDetailsId}">
+									<input type="hidden" name="commentsBy" id="commentsBy" value="requestOwner" />
+									<input type="hidden" name="senderName" id="senderName" value="${loginUserDetails.employeeName}" />
+									<input type="hidden" name="senderId" id="senderId" value="${loginUserDetails.employeeDetailsId}" />
+									
+									<input type="hidden" name="reqVersionId1" id="reqVersionId1" value="" />								
+									<input type="hidden" name="reqMasterId1" id="reqMasterId1" value="" />									
+									<input type="hidden" name="recieverId" id="recieverId" value="" />																
+									<input type="hidden" name="recieverName1" id="recieverName1" value="" />
+									<input type="hidden" name="recieverMailId1" id="recieverMailId1" value="" />
+									<input type="hidden" name="comment" id="comment" value="" />
+								</c:when>							
+								<c:otherwise>
+									<input type="hidden" name="commentsBy" id="commentsBy" value="requestApprover" />
+									
+									<input type="hidden" name="reqVersionId1" id="reqVersionId1" value="${reqVersionId}" />								
+									<input type="hidden" name="reqMasterId1" id="reqMasterId1" value="${reqMasterId}" />								
+									<input type="hidden" name="senderName" id="senderName" value="${loginUserDetails.employeeName}" />
+									
+									<input type="hidden" name="recieverId" id="recieverId" value="${requestDetails.requestedEmpDetails.employeeDetailsId}" />
+									<input type="hidden" name="senderId" id="senderId" value="${loginUserDetails.employeeDetailsId}" />
+																								
+									<input type="hidden" name="recieverMailId1" id="recieverMailId1" value="${requestDetails.requestedEmpDetails.emailId}" />								
+									<input type="hidden" name="recieverName1" id="recieverName1" value="${requestDetails.requestedEmpDetails.employeeName}" />
+									<input type="hidden" name="comment" id="comment" value="" />
+								</c:otherwise>
+								</c:choose>
+							</form>	
 						</div>
 					</div>
 				</div>
@@ -376,8 +444,7 @@
 	</div>
 	<jsp:include page="footer.jsp" />
 </div>
-</body>
-</html>
+
 <script>
 $("#approveBtn").click(function(){	
 	var action = $("#requestProcess").attr("action") + "?action=approve&travelRequestVersionId="+$("#reqVersionId").val()+"&reqMasterId="+$("#reqMasterId").val();	
@@ -390,16 +457,34 @@ $("#rejectBtn").click(function(){
 	$("#requestProcess").submit();
 	
 });
-$("#clarifyBtn").click(function(){
-	$(".clarificationTextDiv").show();	
+$(".replyBtn").click(function(){
+	$(".clarificationTextDiv").show();
+	<c:if test="${requestDetails.requestedEmpDetails.employeeDetailsId eq loginUserDetails.employeeDetailsId}">
+		reqVersionId = $(this).attr("id");		
+		$("#recieverMailId1").val($("#recieverMailId"+reqVersionId).val());
+		$("#reqVersionId1").val($(".replyToApprover"+reqVersionId).children().find("#reqVersionId0").val());
+		$("#reqMasterId1").val($(".replyToApprover"+reqVersionId).children().find("#reqMasterId0").val());
+		$("#recieverId").val($(".replyToApprover"+reqVersionId).children().find("#recieverId0").val());
+		$("#recieverName1").val($(".replyToApprover"+reqVersionId).children().find("#recieverName0").val());	
+	</c:if>
 });
 $("#submitCommentBtn").click(function(){
+<c:if test="${requestDetails.requestedEmpDetails.employeeDetailsId ne loginUserDetails.employeeDetailsId}">
 	$("#reqVersionId1").val($("#reqVersionId").val());
 	$("#reqMasterId1").val($("#reqMasterId").val());
-	if(IsEmpty($("#comment")))
+</c:if>
+	
+	<!--<c:if test="${requestDetails.requestedEmpDetails.employeeDetailsId eq loginUserDetails.employeeDetailsId}">
+		//$("#recieverMailId1").val($("#recieverMailId").val());
+		//$("#recieverName1").val($("#recieverName").val());
+	</c:if>-->
+	//return false;
+	if(IsEmpty($("#commentTextArea")))
 		return false;
-	else
-		return true;
+	else{
+		$("#comment").val($("#commentTextArea").val());
+		$("#saveComment").submit();
+	}
 });
 </script>
 </body>

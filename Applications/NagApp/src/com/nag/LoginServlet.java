@@ -48,7 +48,7 @@ public class LoginServlet extends HttpServlet {
 		// TODO Auto-generated method stub		
 		DataBaseConnection dbHandler = new DataBaseConnection();		
 		HttpSession session = request.getSession(true);	
-		session.setMaxInactiveInterval(10);
+		session.setMaxInactiveInterval(900);
 		RequestDispatcher rd;
 		//ConstantInfoFromDB constantInfoFromDB = new ConstantInfoFromDB();		
 		String username = request.getParameter("username");

@@ -49,13 +49,27 @@
 	float:left;
 	width:60%;
 }
-.rightSection input{    
+.travelRequest input{    
     box-sizing: border-box;
     display: block;
     outline: medium none;
     padding: 2px;
     transition: all 0.3s ease 0s;
-    width: 207px;
+    width: 146px;
+}
+#expenses{
+	width:200px;
+}
+.values{
+	padding-right:18px;
+}
+.values input{    
+    box-sizing: border-box;
+    display: block;
+    outline: medium none;
+    padding: 2px;
+    transition: all 0.3s ease 0s;
+    width: 150px;
 }
 #purpose{
 	width:200px;
@@ -70,7 +84,7 @@
 	float:left;
 	width:100%;
 }
-.approverList{
+.approverRowTable{
 	float:left;
 	width:100%;
 }

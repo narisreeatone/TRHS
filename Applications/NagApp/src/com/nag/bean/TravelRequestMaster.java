@@ -20,10 +20,17 @@ public class TravelRequestMaster {
 	private Date actionDate;
 	private boolean isMultipleRequest;
 	private List<TravelRequestVersion> reqVersionList;
+	private List<TravelRequestComment> reqCommentList;
 	private Map<Integer,MultipleRequest> multipleRequestMap;
 	private EmployeeDetails requestedEmpDetails;
 	
 	
+	public List<TravelRequestComment> getReqCommentList() {
+		return reqCommentList;
+	}
+	public void setReqCommentList(List<TravelRequestComment> reqCommentList) {
+		this.reqCommentList = reqCommentList;
+	}
 	public String getEmployeeId() {
 		return employeeId;
 	}

@@ -11,8 +11,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.nag.dao.DataBaseConnection;
+import com.nag.mail.MailHandler;
 import com.nag.util.ValidateUserSession;
-
+import com.nag.bean.TravelRequestMaster;
 /**
  * Servlet implementation class SaveTRComments
  */
@@ -45,16 +46,28 @@ public class SaveTRComments extends HttpServlet {
 		String senderId = request.getParameter("senderId");
 		String recieverId = request.getParameter("recieverId");
 		String reqVersionId = request.getParameter("reqVersionId1");
-		String comments = request.getParameter("comment");
-		String recieverName = request.getParameter("recieverName");
-		String reqMasterId = request.getParameter("reqMasterId");
+		String reqMasterId = request.getParameter("reqMasterId1");
+		String comments = request.getParameter("comment");		
+		
+		//String reqOwnerName = request.getParameter("reqOwnerName");
+		String senderName = request.getParameter("senderName");
+		String commentsBy = request.getParameter("commentsBy");
+		String recieverName = request.getParameter("recieverName1");		
+		String recieverMailId = request.getParameter("recieverMailId1");		
+		
 		ValidateUserSession validateUserSession = new ValidateUserSession();
 		HttpSession session = request.getSession(false);
 		if(!validateUserSession.checkUserSession(session)){
 			DataBaseConnection dbHandler = new DataBaseConnection();
-			boolean dbStatus = dbHandler.saveComment(senderId,recieverId,reqMasterId,reqVersionId,comments);
-			if(dbStatus){			
-				request.setAttribute("displayMessage", "Clarification request has been sent to "+recieverName);	
+			boolean dbStatus = dbHandler.saveComment(senderId,senderName,recieverId,reqMasterId,reqVersionId,comments);
+			if(dbStatus){	
+				TravelRequestMaster requestDetails = dbHandler.getTravelRequestDetails(reqMasterId);
+				MailHandler mailHandler = new MailHandler();
+				mailHandler.sendTRComments(recieverMailId, senderName, comments, commentsBy, requestDetails);
+				if("requestApprover".equals(commentsBy))
+					request.setAttribute("displayMessage", "Clarification request has been sent to "+recieverName);
+				if("requestOwner".equals(commentsBy))
+					request.setAttribute("displayMessage", "Your clarification on travel request has been sent to "+recieverName);
 			}else{
 				request.setAttribute("displayMessage", "There is a problem in sending clarification request to "+recieverName);	
 			}

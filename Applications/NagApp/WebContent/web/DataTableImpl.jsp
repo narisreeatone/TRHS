@@ -10,6 +10,7 @@
 }
 </style>
 <script>
+$('#resultTable').hide();
 $("document").ready(function(){
 $.extend( $.fn.dataTable.defaults, {
     searching: false,
@@ -28,6 +29,7 @@ var datatable = $('#resultTable').DataTable( {
     "pageLength": 10
     
 } );
+$('#resultTable').show();
 $("table.dataTable, table.dataTable th, table.dataTable td").css("padding", "5px 5px 5px 0");
 });
 //$('#resultTable').DataTable().page.len(5).draw();

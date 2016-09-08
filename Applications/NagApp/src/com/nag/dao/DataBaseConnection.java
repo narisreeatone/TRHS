@@ -3,6 +3,9 @@ package com.nag.dao;
 import java.sql.*;
 import java.sql.Date;
 import java.util.*;
+
+import org.apache.commons.lang.StringUtils;
+
 import com.nag.bean.*;
 import com.nag.*;
 import com.nag.formbean.*;
@@ -139,7 +142,7 @@ public class DataBaseConnection {
 		Map<String, Object> map = new HashMap<String, Object>();
 		//boolean isempActive =false;
 		try{
-			stmt=conn.prepareStatement("select Emp.*, Dept.DEPARTMENTNAME, Desi.DESIGNATIONNAME   from TEMPLOYEEDETAILS Emp, TDEPARTMENTS Dept, TDESIGNATION Desi where Emp.DESIGNATIONID = Desi.DESIGNATIONID AND Emp.DEPARTMENTID = Dept.DEPARTMENTID and Emp.ISACTIVE = 'Y'");						
+			stmt=conn.prepareStatement("select Emp.*, Dept.DEPARTMENTNAME, Desi.DESIGNATIONNAME   from TEMPLOYEEDETAILS Emp, TDEPARTMENTS Dept, TDESIGNATION Desi where Emp.DESIGNATIONID = Desi.DESIGNATIONID AND Emp.DEPARTMENTID = Dept.DEPARTMENTID and Emp.ISACTIVE = 'Y' ORDER BY EMPLOYEENAME");						
 			rs = stmt.executeQuery();
 	
 			while(rs.next()){
@@ -394,7 +397,7 @@ public class DataBaseConnection {
 		return status;
 	}
 	
-	public boolean saveComment(String senderId, String recieverId, String reqMasterId, String reqVersionId, String comments){
+	public boolean saveComment(String senderId, String senderName, String recieverId, String reqMasterId, String reqVersionId, String comments){
 		PreparedStatement ps = null;
 		PreparedStatement ps1 = null;
 		ResultSet rs = null;
@@ -407,18 +410,27 @@ public class DataBaseConnection {
 			if(rs.next())	
 				if(rs.getString(1) != null)
 					reqCommentId = rs.getInt("NUMBEROFRECORDS");
-			ps1=conn.prepareStatement("insert into TTRAVELREQUESTCOMMENTS(TRAVELREQUESTCOMMENTSID,TRAVELREQUESTMASTERID,TRAVELREQUESTVERSIONID,SENDERID,RECEIVERID,COMMENTS,ACTIONDATE) values (?,?,?,?,?,?sysdate)");
+			ps1=conn.prepareStatement("insert into TTRAVELREQUESTCOMMENTS(TRAVELREQUESTCOMMENTSID,TRAVELREQUESTMASTERID,TRAVELREQUESTVERSIONID,SENDERID,RECEIVERID,COMMENTS,SENDERNAME,CREATEDDATE) values (?,?,?,?,?,?,?,sysdate)");
 			ps1.setInt(1, reqCommentId+1);
 			ps1.setString(2, reqMasterId);
 			ps1.setString(3, reqVersionId);
 			ps1.setString(4, senderId);
 			ps1.setString(5, recieverId);
 			ps1.setString(6, comments);
+			ps1.setString(7, senderName);
 			ps1.executeQuery();
 			status=true;
 		}catch(Exception e){
-			System.out.println("Exception in saving request commments for sender id:::"+senderId);
+			System.out.println("Exception in saving request commments for sender id:::"+senderId+" reqMasterId:::"+reqMasterId);
 		}
+		finally{
+			try{
+				ps.close();
+				ps1.close();
+				rs.close();
+				conn.close();
+			}catch(Exception e){}
+		}	
 		return status;
 	}
 	
@@ -768,7 +780,13 @@ public class DataBaseConnection {
 	
 	public TravelRequestMaster getTravelRequestDetails(String travelRequestMasterId){		
 		PreparedStatement ps = null;
+		PreparedStatement ps1 = null;
+		PreparedStatement ps2 = null;
+		PreparedStatement ps3 = null;
 		ResultSet rs = null;
+		ResultSet rs1 = null;
+		ResultSet rs2 = null;
+		ResultSet rs3 = null;
 		TravelRequestMaster reqMaster = null;
 		
 		try{
@@ -796,9 +814,9 @@ public class DataBaseConnection {
 				reqMaster.setMultipleRequest(isMultiReq);
 				
 				TravelRequestVersion reqVersion = null;
-				PreparedStatement ps1 = conn.prepareStatement("select * from TTRAVELREQUESTVERSION where TRAVELREQUESTMASTERID = ? ORDER BY APPROVERORDER");
+				ps1 = conn.prepareStatement("select * from TTRAVELREQUESTVERSION where TRAVELREQUESTMASTERID = ? ORDER BY APPROVERORDER");
 				ps1.setString(1, reqMasterId);			
-				ResultSet rs1 = ps1.executeQuery();	
+				rs1 = ps1.executeQuery();	
 				List<TravelRequestVersion> reqVersionList = new ArrayList<TravelRequestVersion>();
 				while(rs1.next()){
 					reqVersion = new TravelRequestVersion();
@@ -817,9 +835,9 @@ public class DataBaseConnection {
 				reqMaster.setReqVersionList(reqVersionList);
 				if(reqMaster.isMultipleRequest()){
 					MultipleRequest multipleRequest = null;
-					PreparedStatement ps2 = conn.prepareStatement("select * from TMULTIPLETRAVELREQUEST where TRAVELREQUESTMASTERID = ? ORDER BY TRAVELORDER");
+					ps2 = conn.prepareStatement("select * from TMULTIPLETRAVELREQUEST where TRAVELREQUESTMASTERID = ? ORDER BY TRAVELORDER");
 					ps2.setString(1, reqMasterId);			
-					ResultSet rs2 = ps2.executeQuery();	
+					rs2 = ps2.executeQuery();	
 					Map<Integer, MultipleRequest> multipleRequestMap = new HashMap<Integer,MultipleRequest>();
 					while(rs2.next()){
 						multipleRequest = new MultipleRequest();
@@ -834,6 +852,24 @@ public class DataBaseConnection {
 					}
 					reqMaster.setMultipleRequestMap(multipleRequestMap); 
 				}
+				
+				
+				ps3 = conn.prepareStatement("select * from TTRAVELREQUESTCOMMENTS where TRAVELREQUESTMASTERID = ? ORDER BY CREATEDDATE");
+				ps3.setString(1, reqMasterId);			
+				rs3 = ps3.executeQuery();	
+				List<TravelRequestComment> reqCommentList = new ArrayList<TravelRequestComment>();
+				while(rs3.next()){
+					TravelRequestComment reqComment = new TravelRequestComment();
+					reqComment.setSenderName(rs3.getString("SENDERNAME"));
+					reqComment.setComment(rs3.getString("COMMENTS"));
+					reqComment.setCreatedDate(rs3.getDate("CREATEDDATE"));
+					reqComment.setRequestVersionId(rs3.getString("TRAVELREQUESTVERSIONID"));
+					reqComment.setRequestMasterId(rs3.getInt("TRAVELREQUESTMASTERID"));
+					reqComment.setSenderId(rs3.getString("SENDERID"));
+					reqComment.setRecieverId(rs3.getString("RECEIVERID"));
+					reqCommentList.add(reqComment);
+				}
+				reqMaster.setReqCommentList(reqCommentList); 
 				EmployeeDetails empDetails = getEmployeeDetailsById(reqMaster.getEmployeeDetailsId());				
 				reqMaster.setRequestedEmpDetails(empDetails);				
 			}
@@ -946,7 +982,7 @@ public class DataBaseConnection {
 				empDetailsId = empDetailsId + 1;
 				ps.setInt(1, empDetailsId);	
 				ps.setString(2, registerEmployeeForm.getEmployeeId());
-				ps.setString(3, registerEmployeeForm.getEmployeeName());
+				ps.setString(3, StringUtils.capitalize(registerEmployeeForm.getEmployeeName()));
 				
 				ps.setString(4, registerEmployeeForm.getEmail());
 				ps.setString(5, registerEmployeeForm.getMobile());
