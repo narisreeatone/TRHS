@@ -65,7 +65,7 @@ public class ChangePassword extends HttpServlet {
 			rd = request.getRequestDispatcher("/web/ChangePassword.jsp");
 			displayMessage = "Entered new password and re-enter new password doesn't match.";
 		}
-		session.setAttribute("displayMessage", displayMessage);
+		request.setAttribute("displayMessage", displayMessage);
 		rd.forward(request,response);
 	}
 

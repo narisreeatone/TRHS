@@ -92,10 +92,10 @@
 }
 .popupDiv{
 	left: 0;
-    min-width: 590px;
+    min-width: 147px;
     position: absolute;
     text-align: left;
-    top: 39px;
+    top: 22px;
     display:none;
 }
 .popupBox{
@@ -109,6 +109,10 @@
     list-style-type: none;
     margin: 0;
     padding: 0;
+}
+.popupList li{    
+    padding: 0 0 3px 2px;
+    cursor:pointer;
 }
 .ui-datepicker-trigger{
 	position: absolute;
@@ -189,27 +193,16 @@
 											<td class="labels"></td>									
 										</tr>
 										<tr>
-											<td class="values">
-												<select class="empIdList" id=empIdList name="approveEmpId" onchange="javascript:populateEmpDetails.call(this);">
-													<option value="Select">Select</option>
-													<c:if test="${empDetailsMap != null}">
-														<c:forEach items="${empDetailsMap}" var="empDetails" varStatus="status">													
-															<option value="${empDetails.key}">${empDetails.value.employeeName}</option>
-														</c:forEach>
-													</c:if>
-												</select>
-												<!-- <input type="text" value="" id="approverName" name="approverName" class="approverName" onkeyup="javascript:getEmployeeName.call(this);">
+											<td class="values" style="position:relative;">
+												<input type="text" value="" id="approverName" name="approverName" class="approverName" onkeyup="javascript:getEmployeeName.call(this);">
 												<div class="popupDiv">
 													<div class="popupBox"> 
 														<div class="popup" style="">
-															<ul class="popupList">
-																<li id="1"></li>
-																<li id="2"></li>
-																<li id="3"></li>
+															<ul class="popupList">																
 															</ul>
 														</div>
 													</div>
-												</div> -->
+												</div>
 											</td>
 											<td class="values"><input type="text" value="" id="approverMailId" name="approverMailId" class="approverMailId"/></td>
 											<td class="values"><input type="text" value="" id="approverDept" name="approverDept" class="approverDept"/></td>
@@ -373,20 +366,29 @@ $("#submitBtn").click(function(){
 
 function getEmployeeName(){
 	getEmpName = this;
+	
 	if($(getEmpName).val().length > 2){
+		$(".popupList").html();
 		getEmployeeNamesByAjax($(getEmpName).val());
 	}
 }
 function getEmployeeNamesByAjax(empName){
 	$.ajax({
 		type: "POST",	
-		url: "AjaxServlet?action=getAccountDetails&empName" + empName,
+		url: "AjaxServlet?action=getEmpNames&empName=" + empName,
 		dataType: "json",
 		success:function(data){
-			
+			var empNamesList = data;			
+			for(i=0; i<empNamesList.length; i++){
+				$(".popupList").append("<li onclick='javascript:selectEmp.call(this);'>"+empNamesList[i]+"</li>");
+			}
+			$(".popupDiv").show();
 		}
 	});
 }
+function selectEmp(){
+		alert("select");
+}		
 </script>
 
 

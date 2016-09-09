@@ -8,13 +8,13 @@
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
-	<classpathentry kind="lib" path="C:/Program Files/Tomcat 8.0/lib/servlet-api.jar"/>
-	<classpathentry kind="lib" path="D:/ProgramFiles/oracle/app/oracle/product/11.2.0/server/jdbc/lib/ojdbc6.jar"/>
-	<classpathentry kind="lib" path="D:/Nagarjuna/drivers/jstl.jar"/>
-	<classpathentry kind="lib" path="D:/Nagarjuna/drivers/commons-lang-2.4.jar"/>
-	<classpathentry kind="lib" path="D:/Nagarjuna/drivers/gson-1.3.jar"/>
-	<classpathentry kind="lib" path="D:/Nagarjuna/drivers/mail.jar"/>
-	<classpathentry kind="lib" path="D:/Nagarjuna/drivers/mailapi.jar"/>
+	<classpathentry kind="lib" path="D:/elclipse_workspace/NagApp/WebContent/WEB-INF/lib/servlet-api.jar"/>
+	<classpathentry kind="lib" path="D:/elclipse_workspace/NagApp/WebContent/WEB-INF/lib/ojdbc6.jar"/>
+	<classpathentry kind="lib" path="D:/elclipse_workspace/NagApp/WebContent/WEB-INF/lib/jstl.jar"/>
+	<classpathentry kind="lib" path="D:/elclipse_workspace/NagApp/WebContent/WEB-INF/lib/commons-lang-2.4.jar"/>
+	<classpathentry kind="lib" path="D:/elclipse_workspace/NagApp/WebContent/WEB-INF/lib/gson-1.3.jar"/>
+	<classpathentry kind="lib" path="D:/elclipse_workspace/NagApp/WebContent/WEB-INF/lib/mail.jar"/>
+	<classpathentry kind="lib" path="D:/elclipse_workspace/NagApp/WebContent/WEB-INF/lib/mailapi.jar"/>
 	<classpathentry kind="lib" path="D:/elclipse_workspace/NagApp/WebContent/WEB-INF/lib/poi-3.14-20160307.jar"/>
 	<classpathentry kind="lib" path="D:/elclipse_workspace/NagApp/WebContent/WEB-INF/lib/poi-ooxml-3.14-20160307.jar"/>
 	<classpathentry kind="lib" path="D:/elclipse_workspace/NagApp/WebContent/WEB-INF/lib/poi-ooxml-schemas-3.14-20160307.jar"/>

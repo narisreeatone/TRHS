@@ -1,6 +1,8 @@
 package com.nag;
 
 import java.io.IOException;
+import java.util.List;
+
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -57,8 +59,11 @@ public class AjaxServlet extends HttpServlet {
 	
 	private void getEmployeeDetails(HttpServletRequest request, HttpServletResponse response) throws IOException{
 		String empName = request.getParameter("empName");
+		DataBaseConnection dbHandler = new DataBaseConnection();
+		List<String> empNamesList;
 		if(empName != null){
-			
+			empNamesList = dbHandler.getEmployeeName(empName);
+			ServletUtil.writeJSONResponse(response, empNamesList);
 		}
 	}
 	private void saveComment(HttpServletRequest request, HttpServletResponse response) throws IOException{
@@ -68,11 +73,11 @@ public class AjaxServlet extends HttpServlet {
 		String reqMasterid = request.getParameter("reqMasterid");
 		String comments = request.getParameter("comments");
 		DataBaseConnection dbHandler = new DataBaseConnection();
-		boolean dbStatus = dbHandler.saveComment(senderId,recieverId,reqMasterid,reqVersionId,comments);
+		/*boolean dbStatus = dbHandler.saveComment(senderId,recieverId,reqMasterid,reqVersionId,comments);
 		if(dbStatus)
 			ServletUtil.writeJSONResponse(response, "true");
 		else
-			ServletUtil.writeJSONResponse(response, "false");
+			ServletUtil.writeJSONResponse(response, "false");*/
 	}
 
 }

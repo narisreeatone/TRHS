@@ -377,7 +377,9 @@
 											<fmt:formatDate type="both" dateStyle="medium" timeStyle="medium" value="${reqComment.createdDate}" />
 											</span>											
 											<c:if test="${commentListSize-1 eq status.index}">
+											<c:if test="${isAdmin eq false}">
 											&nbsp;&nbsp;<span id="${reqComment.requestVersionId}" class="replyBtn">reply</span>
+											</c:if>
 											</c:if>
 										</div>
 										<input type="hidden" id="reqVersionId0" value="${reqComment.requestVersionId}"/>

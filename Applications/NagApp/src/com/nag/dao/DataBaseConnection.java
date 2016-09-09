@@ -184,8 +184,8 @@ public class DataBaseConnection {
 		List <String> empNamesList = new ArrayList<String>();
 		if( empName != null){
 			try{
-				ps=conn.prepareStatement("select EMPLOYEENAME from TEMPLOYEEDETAILS where EMPLOYEENAME like ?%");
-				ps.setString(1, empName);			
+				ps=conn.prepareStatement("select EMPLOYEENAME from TEMPLOYEEDETAILS where EMPLOYEENAME like ?");
+				ps.setString(1, empName+"%");			
 				rs = ps.executeQuery();				
 				while(rs.next()){					
 					String empolyeeName = rs.getString("EMPLOYEENAME");
@@ -388,6 +388,7 @@ public class DataBaseConnection {
 				ps1.close();
 				ps2.close();
 				ps3.close();
+				ps4.close();
 				rs.close();
 				rs1.close();
 				rs2.close();

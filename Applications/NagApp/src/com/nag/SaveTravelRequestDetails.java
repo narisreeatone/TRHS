@@ -130,35 +130,6 @@ public class SaveTravelRequestDetails extends HttpServlet {
 					
 					dbHandler = new DataBaseConnection();
 					reqSavingStatus = dbHandler.saveTravelRequestForm(requestForm);
-				/*else{
-					String source = request.getParameter("source0");
-					String destination = request.getParameter("destination0");
-					travelType = request.getParameter("travelMode0");
-					travelDate = request.getParameter("travelDate0");
-					String expenses = request.getParameter("expenses");					
-					String purpose = request.getParameter("purpose");		
-					String approveEmpOrder[] = request.getParameterValues("approveOrder");				
-					travelDateobj = null;			   
-				    try{
-				    	travelDateobj = df.parse(travelDate);		        
-				    }
-				    catch ( Exception ex ){
-				        System.out.println(ex);
-				    }			
-					requestForm = new TravelRequestForm();
-					requestForm.setSource(source);
-					requestForm.setDestination(destination);
-					requestForm.setTravelType(travelType);
-					requestForm.setExpenses(expenses);
-					requestForm.setTravelDate(travelDateobj);
-					requestForm.setPurpose(purpose);
-					requestForm.setApproveEmpOrder(approveEmpOrder);
-					requestForm.setEmployeeId(empDetails.getEmployeeDetailsId());
-					requestForm.setMultipleRequest(false); 
-					
-					dbHandler = new DataBaseConnection();
-					reqSavingStatus = dbHandler.saveTravelRequestForm(requestForm);	
-				}*/
 			}
 			String displayMessage = "";
 			if(reqSavingStatus){
@@ -168,6 +139,7 @@ public class SaveTravelRequestDetails extends HttpServlet {
 				for(int i=0; i < aproveEmpOrder.length; i++){
 					String[] empIdAndOrder = aproveEmpOrder[i].split("-");
 					EmployeeDetails approverEmpDetails = dbHandler.getEmployeeDetailsById(empIdAndOrder[0]);
+					String employeeId=approverEmpDetails.getEmailId();
 					boolean mailstatus = false;
 					try{
 						mailstatus = mailHandler.sendNewTravelRequestMail(empDetails, requestForm, approverEmpDetails.getEmailId());
@@ -175,9 +147,9 @@ public class SaveTravelRequestDetails extends HttpServlet {
 						displayMessage = "Request has been successfully saved but unable to sent mail to approver(s).";
 					}
 					if(mailstatus)
-						System.out.println("New travel request mail sent successfully for "+approverEmpDetails.getEmployeeName());
+						System.out.println("New travel request mail sent successfully for "+employeeId);
 					else
-						System.out.println("New travel request mail failed for "+approverEmpDetails.getEmployeeName());
+						System.out.println("New travel request mail failed for "+employeeId);
 				}
 			}
 			rd = request.getRequestDispatcher("/web/employeeHome.jsp");
